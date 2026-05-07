@@ -359,6 +359,50 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
   .tabs{gap:0}.tab{padding:7px 10px;font-size:11px}
   .stats-grid,.dash-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+/* ── TOAST NOTIFICATIONS ─────────────────────────────── */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface);
+  border:1px solid var(--border);border-left:4px solid var(--moss);border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:260px;max-width:380px;
+  pointer-events:all;animation:toastIn .2s ease}
+.toast.error{border-left-color:var(--red)}.toast.warning{border-left-color:var(--gold)}.toast.info{border-left-color:var(--sky)}
+.toast-ic{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:12px;font-weight:700;color:#fff;background:var(--moss)}
+.toast.error .toast-ic{background:var(--red)}.toast.warning .toast-ic{background:var(--gold)}.toast.info .toast-ic{background:var(--sky)}
+.toast-msg{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.4}
+.toast-sub{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.toast-x{border:none;background:none;cursor:pointer;color:var(--ink4);font-size:18px;padding:0 0 0 4px;flex-shrink:0;line-height:1;font-family:inherit}
+@keyframes toastIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── QUICK ORDER CTA ─────────────────────────────────── */
+.qo-cta{background:linear-gradient(135deg,var(--pine),var(--moss));border-radius:var(--r2);
+  padding:16px 20px;display:flex;align-items:center;gap:14px;color:#fff;
+  box-shadow:var(--shadow-md);margin-bottom:14px}
+.qo-cta-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.qo-cta-btn{padding:10px 18px;border-radius:8px;border:none;background:#fff;color:var(--pine);
+  font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
+.qo-cta-btn:hover{background:var(--moss4)}
+
+/* ── TAB BADGES ──────────────────────────────────────── */
+.tab-badge{display:inline-block;background:var(--gold);color:#fff;border-radius:10px;
+  padding:1px 6px;font-size:10px;font-weight:700;margin-left:4px;vertical-align:middle;line-height:1.6}
+
+/* ── QUICK ORDER PRODUCT PICKER ──────────────────────── */
+.qo-product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.qo-product-row{display:flex;align-items:center;gap:8px;padding:7px 10px;
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;transition:border-color .15s}
+.qo-product-row.on{background:rgba(61,107,74,.08);border-color:var(--moss2)}
+.qo-product-aroma{font-size:16px;line-height:1;flex-shrink:0}
+.qo-product-name{flex:1;min-width:0;font-size:12px;font-weight:500;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qo-product-price{font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.qo-qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--surface)}
+.qo-qty button{width:24px;height:24px;border:none;background:none;cursor:pointer;color:var(--ink3);font-size:16px;line-height:1;padding:0}
+.qo-qty button:hover{color:var(--moss)}
+.qo-qty span{width:26px;text-align:center;font-size:12px;font-weight:600;
+  font-family:"IBM Plex Mono",monospace;color:var(--pine)}
 </style>
 </head>
 <body>
@@ -366,7 +410,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 <div style="background:var(--gold);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 14px;border-radius:0 0 8px 8px;margin:-14px -14px 12px;text-align:center;opacity:.92;">🔧 ATIK DEV &nbsp;·&nbsp; Firestore: <code style="background:rgba(0,0,0,.18);padding:1px 6px;border-radius:3px;font-size:10px;">shared/dev</code></div>
 
 <div class="header">
-  <div id="header-logo-wrap"></div>
+  <div id="header-logo-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZEAAAEhCAYAAAC+650iAAAQAElEQVR4Aeydjb3eNNLF790GNlsB2Qo2VLChAkIFQAVABYQKCBUAFQAVABUAFQAVvGwFec//xn5wfP0h25I9sk9+VuzH1sfojDxHM7J9/3Hnf0bgBAi8fv36udILpZdKr5R+6iX9fP2X/uue/16/yf+R9s9PAIO7YAR2R8AksjvkbnArAjL4T5Uw/N9o/6vSa9X5o9J3Sp8rfaL0317Sz7t/6r/u+ff1m/xfa/8j9ShRHyQEIT3ReW9GwAhMIGASmQDHl+IgIOP+TAnj/quk+l0Jw/+h9v9RyrlRHyQEIf2f2sRb+ShnA3euzAicCAGTyImUebauyIDjcUAcf6hvvyhh3DHyOtxtw1v5WrIQCiP09XS3lt2QEagAAZNIBUq6mogy2ISqflK/8Tggjnd0fPRGKIzQ1++SjzCaQ11Ha8Tth0CgEhIJgZWFKIiADPMTJWb6eB2Eqli7KNjipqoJo/2BvJtqcWEjcAIETCInUGLNXZAhfiAP9QHyYKYfweuQOLPbg2ci+VmIfzab2xmMwEkRMImcVLE1dEsG+KXkbMkDo6yf1W2s0fzS9KU64acE9jUjkIKASSQFJefJioAMLo/P1k4efUw+V794kstrJX1k/PvUCJhETq3eWJ2TkeVpKxbMeXy2lrDVEhB5kouXGU0kS1Bz3qoRMInkVJ/rGkVABPKpLvKOR+QFc4m4eSO8ZSLZDKMrqAUBk0gtmqpUTpEH3gfk8aW6UOu6h0RftJlIFsHlzDUjYBKpWXvBZReB8KY3BIJRDS5tdvHosz2S7LA+qtAnDkbAJHKwAs7YvMiDx3a/V9943+Mq3oe6+2iDSL55dNYnjMCJEDCJnEiZEboiAuGdCRbPWWSOINLRMrwvTHiU+Wg53L4RKIKASaQIrLErLSWdjCXhKwiEGXipZmqsl8d//an5GjVnmWcRMInMQuQMKQiIQJhtXz18NQWVv7c1hY6vVYuASaRa1cURXARC3J9PlsQRKp4kvBfDY87xJLNEOyBw3iZMIufVbfGeiTxYQCd8xQcJi7d3ggY+FWb+lPwJFOku/I2ASeRvLHy0AAEZQ97KhkDO/vLgAlRms/KkGmG/2YzOYARqQcAkUoumAsnZIZCSC+iBepxVlA+Fn72RrJC6siMRMIkciX6FbcsAth6ICWS9/rw2sh47lwyGgEkkmEIii2MCyaYd/nIjZJytQldkBLIgsKISk8gK0K5YxASSVeusjbzIWqMrMwIHIWASOQj4mpo1gRTRlkmkCKyudG8ETCJ7I15ZeyaQOYWtvs7nUBzSWg2fC0ZBwCQSRRNx5Xgl0byILhAKbP4USgFQXeW+CJhE9sW7qtbkhfAmul8kLKc1h7TKYeuad0LgCBLZqWtuZgsCIhA+pmgC2QLifFm+eDyfyzmMQGAETCKBlXOUaCIQZsh8TPEoEa7SrsOEV9H0iftpEjmxctd0TQTC7Jgw1priLrMQAeG9z7rIQrmc3QikImASSUXqAvlk0HhaCALhPYYL9DhEF/0JlBBqsBBrETCJrEXunOUgEIdY9tWtSWRfvN1aZgRMIqOAXuuCvBC+5/T+tXodorcmkRBqsBBrETCJrEXuROVEIMTlvzxRl2rqikmkJm1Z1kcImEQeQXKtEyIQ1kG+v1av3duoCFiu+hAwidSns9wSsw7ihfTcqLo+I3ARBEwiF1H0UDflhXgdZAgYnzMCRiAZAZNIMlRBM64USwTC+yBeB1mJn4sZASPwBgGTyBscLvW/CIR1EMJYl+q3O2sEjEB+BEwi+TGtocaXEtLvgwgEb0ZgBQIu0kHAJNIB4wqH8kJ4nPeTK/TVfTQCRqA8AiaR8hiHaUEEQhjLj/OG0YgFMQL1I2ASqV+HS3rAOsghj/MuEXKHvH+qjZ+V2Gt36PbToa27cSOwEQGTyEYAaykuL4TPu1/1sya/SU+fKb17/+bfU+2eK7G/1/n3lL5S+p+SNyNgBBYgYBJZAFatWUUghLHwQmrtwlq5f1BBiOOZCOOV0q/6/WjT+Z+UeGeGT5B88ShD2RODMpVt0rVfA4F9emkS2Qfno1uBQK4UxsLzeE/E8EIp2Ugr719KPLmGZ7KXV/LX0YPD7RuBLQiYRLagV0FZeSFXC2MRliJUtXqtQURCWZ5iK04kTVsVjCSLaASGETCJDONyirMikKuFsT6WUf5Uae3s/qZ31YEHU5pI8JhubfrACNSIgEmkRq2ly0xo5gphLDwG1j4I26WjM5OzIRIwnMm5+jJEtbqwCxqBCAiYRCJooYAM8kKYRV/hpUIIhPBVEYMsInkl9fA4sHbZtyIyZ5fSFRqBCQQ2k8hE3b50LAJZZ+XHdmWy9UWL55M1jV8s5Y2w9jLeqq8YgQoQMIlUoKSlIsoLwei9s7RchflZAyluiOWN0EZub+R/qteeSIWDziK/jYBJ5G08qv8lAuFdh8+r78h8B76SEd7T28rdFsQ038vBHD5pBOIgYBKJo4tckuQ2drnkylnPbyIQXg7MWedcXbm/OZa7vjn5fd0IFEHAJFIE1mMqlRfykVr+r9KZNxbSefdl1z6KtHhsOGdIy57Irhp0Y6UQuAqJlMIvTL0iEN4J4UmiMDIVEuSlDPofheqeqzaX4ceTOqoPc330dSOwCAGTyCK4QmeGQM7+TsjPIhD6eZQici2EXyHkeJSO3O7OCJhEdga8RHPyQngn5MMSdQerc+91kH73CWn1z635fY31kDXIuEx1CJhEqlPZoMBHzs4HBSpw8lt5Ibk8gVXiqf0c4awfVI9DWas04EIRETCJRNTKApnkhTA7/8+CIjVmZTGdftYoe19meyF9RPy7agRMIqHUt0wYEQiL6bxYuKxgfbn5WyC5QklH9p4XDL0ecqQG3HZ2BEwi2SHdtULCWGdfTMcLoZ+7AluoMRNIIWBd7XEImESOw35Ty/JCrrKYfhYvBH2fhQzpy2mSO7INAZPINvyOLH2FMNaZvBAeDPCC+pF3jNsugoBJpAisZSuVF3KFN9MB8fv7+/szrIXQF4eyQMHpdAiYRCpTqQiExfRjwyL7YXYWb4uXJHM8Hrwf8m7JCCQiYBJJBCpQNh51PftiOnBjeEOFf0TgzxBsRToLGa7ououcHQGTSEUalhG7ymfe0UrE8A9eILItSZChvZAliDnvEAJhz5lEwqpmULCrhLGivk+xxhOxFzI4lH3yLAiYRCrRpLwQHul9vxJxt4oZ9a3upSRiL2TrSHD58AiYRMKr6CZgxPDOTbjMB1k8rswyUd1SErEXAmpOp0bAJFKBeuWFsJj+TgWi5hDxz/v7+0M/tDjUCemA9ZAl3yjjvRCvhQyB6XOnQsAkElydjfG60ow2aiiLcGLqaOElySvpLBUX5zshAm+TyAk7eIIu4YVc4ZHeVlVRw3ZLSIRPtYR6PLkF13sjkBsBk0huRDPWJy/kSo/0glzIUBaCKb1QStnog72QFKSc5xQImERiqzHqAnMp1EKuIYjMWVBPXZPikzRL8HFeI1A1AiaRDeqTcXmh9I0SHsOGmh4XVZ2ET67ySG8LQNT1kFRi4K8WhiTCFmDvjUBuBEwiCxGVcX+q9EqJDwN+p+J/3d/fl4h/XzEkEtUAp5AIi+kp+TRkvBmB8yBQJYkcAb9I47kSM+Xf1f4nSix2/6l9dmOvdjBG/1XdV9p4MQ9iDtXnRhfoek6ujzSZCCf/nNC+bgS2ImASmUFQRuSZEjPkH5W1H14qZTiyE5Nkj76BcUQZIfQ5uXgnhAnGXD5fNwKnQ8AkMqJSEccTJR43/UVZhrwCDEd2w6c2IZDURVyJdpotO5ZbkZEuWJca0n23arxRHsPunjvhsbtkBIYRMIkM4CLjgVFgnePDgcucIv5NHo6zJbXLW9HZ680mYMGKFAoKRyLqbooX8kKyO4wlsLxdEwGTSEfvGHEljNmXOj0VB39ZyHDghUy1K7FOuf0crVcaBzxxNzaJaMX9TOMg3CdaWuG8NwJ7IGASaVCW0eBlMryPufDFbzIcKe9vNDWn7dQ+RosF+7QC58oV0RATypxCmXBm9nEw1aCvGYGICJhEpBUZcIwBj+umeAGlwk3IIGkuueH9hem4xsPcWshvErbUOFDV3oxAPQhcmkRkLFg8x4ClegBFXiaTHBit/pNf9Yyi7ZJG80SmCJ31sOfyRr0Osl3v+WtwjbsjcFkSkeHmUxYQyFz4qquUUrNP1kK67VzpmL9iSBgxRJ81LtDx2CffTSAhtGQhIiFwSRKRoWgJZMxYDOmIGHh2YydZWItZQmRDstV8LowXIl3wdNwUoeOBhJG3ZqVb9vMgcDkSkaFoCSRl/aPVNDNQZqjt75z7qdBJznZG6jr8NN7g4UI0ArCYPjYuPlYIywTSAOWdEWgRuBSJrCQQsOLvQ2SPgUse3kO44ouFYNqmEIZZusAjHFuXgkAgmFZm742AEWgQuAyJyEis8UCACS8ku7cgeQidZK8XgStL2UOES/vf6GKMJEwgSwF1/lkEzpThEiQiI7GWQNB1ES9EFRMeGwud6PI1tiAhIr571dcFk4cPJN8YuVxDQe6lEZhB4PQkspFAgC+7EZFMeCGQCPVfOfG+xaH9ly7QQ//BBgiERXTI5VD53LgRiI7AqUlEBgJjjSHozzJT9VLkiSw1ThhrrUwqfpotPZRVoMsaH3iofOKmWzvE9kweSIi1mq5gPjYCERE4NYkIcJ782bJwPfW4p6pfvslw8XmTuW8yLa+4zhKHGWrpgQkG46OL3Lf6gQdyKLlJBm9GoBoETksiMhKEoZa8B9JXGn8kqYQxyU5MfcEX/CZssyB79qwl8E0VEgJpvUFwYAG91N+HSZXJ+YxAJASSZDkliYhAeHR262yfkFMSiKmZJBefN9kqV2pzc/kwnId5Ao1wh5CI9NCdYPAFYcJXnGvE8s4IGIFUBE5HIjIQxLm/TgVgJN+fiomzljJyefXpSF4IJNlfUF7dsZUFdycxjY92gsEfk+LpK4evVirPxYwACJyKRGQgiHPnMP7ZZ6WSDS/kaKONzkl4IYRzOD4siaizv8A51RnpAAKByAldPVX7OcbKW036hxG4GgKnIhEpj9n1loV0VfGwZScR1Yps2oXY6B8L/EcKw1NQe7f/h4gD8qD/e7ft9ozAKRE4DYlolslnK3KsN/BHp7LG6iUbM+Ati/y5Bx+ERtgvd71L6tvVC0EwEcjh3hdyOBmBMyFwPIlkQFNGmjBWrtllrnq6PSOE0v195HH77svRJJKVqI8E1G0bgSsjcAoSkQKZWbePa+rnpi1rnFwExxvROUJsmzrVKQxW/DSJgIKTETACmxConkRkpFmwzhHGAsisoSzJhocUyQvh3ZdfJRfrIblIF9zWpN3DWWuEPGkZd8sIZEOgehIREu3MWoebt9yhLLyQo411F5SW0I72QpBp98d7aXRNEukyUVlT1GWMwOkRqJpEdHNjpHMuWGdbeJVseCHIF2UQ4WW1/YtAuhG9uAAAEABJREFUIlFwmZRDeoykw0lZfdEIHIFAtSSimxsj3c6sc2DH3/oenR2vaAAPKZIXgjxtNyKQSPiFdY0xwn6MsfCytor13gjsjUC1JCKgmCHmNNLtLF1Vb9sa45NrnWabMG9K8wZ+N1R3OInc39/XYJgh3n9WIusbTft/I7AzAlWSSGOkIZGccGUjEQnF7FW7MFtfnkhPi4UBqSuIxhjvHfHncvm2VveSj3dDwA3VgECVJCJgMYo5vRBVeZcllCXjwyJsJC+EMN3NC2nkuzv4H9+tOliE8eaFEWGsFrMs42K8NV8xAnUjUB2J6AZnLSS7kVbIIpcnAsFFGhWEZLryYCC7v484jh7KgkDaSUqucXEEzm7TCBRHoDoSESK5w1iq8i7Ld5xEcHghR35kkb50Ex9ajEgiXRlDHUuHTAK6OrQnEkpDFiYaAlWRiG5wvJASJJLrxbe+wT5a36/kYfX7BtEdLVfI9jW+wObzjnA8kBDda+qI60MjsD8CVZGI4GGxsw0z6Ge2bXPIQgYo2kcWAWeI1BzOAplekv7Apf/Jm83joteMf54RgYv3qTYSIdQQVWXRZONDi30vBOwiPJkVanYvAsHDhUD6ExSTCCPGyQhMIFANiehGJ9RQygBuintLNkJspWSbUN/kpUekJjnBcLLQRS/isQ19+QBiuSgk7rYRSEOgGhJRdwgXaVdkG5qxJzUkw8ws9pHBTipcLhNeyNBsH1nLtZpcc5yM0h8EMvS0H5+JWT0u4vTQkhiBsghUQSK60TF+Qzd6WXTSascL6YdB0kqWyzVGaoe/qV6uy8tr1rhiYvLJSEl7ISPA+LQR6CJQBYlIYBbUtYu1yQhBbpBIJMHGvBBkZPGY/eWTdAeBfD0BhElkAhxfqg+BUhKbRLYhSygkmhfCi3JjvYpCIocuWItA8MimCIRHezetk40pwOeNwNkQCE8iuuGZ7fMNo1DYSy4McrQQG390aspAYzxD4bi3MNIbGExhhEj2QkDByQgkIBCeRNSHPUJZEIKaWrThhSwqsEPmsbWQtuloXlMr1y77DoHM4fDGm9tFKjdiBOpGoAYS2eOx1EUkImOETNG8o0kvpJG57tG6QXr1v/VA5gjEoawNOLvo9RAwibzR+SISUZG5Gb+y7L5FlGl3EIYaXEAgFHcoCxScjEAiAplJJLHVxGzNzb/HS3zJJCKZ8EK6H+hL7E3RbJNeSNMycjeH19lJXzyF9Yt6POeBKMvDFjFM+SCY/zMCEREITSICbC/Dt4QUIsbLU7wQHlAQpNfZGgKZegqrDwYvGA69pNnP599GwAg0CEQnEeLYjahldzI4s4SlPMxq9/CMlnSWGP7c00bUtxuWNHZ0kq7wKJYQCCJThn1VycIagSMRMIn8jf7kU2AySszkU2b8f9e4z1FEmfbp+UAr6EkJb3HsTfSBUg+n+NsrXg95gML/GYF0BKKTyNBH8dJ7tyznJImoKt5Mj+iFYDAl3uy2JGQ3W1nEDCIP1rbwyta8v/P9wN9eidhNy2QEQiEQlkRkEGbDS6uRHC74zlibOo8XAokMlzzurL2QBnvpiPHCW+ZrJx7GssHSOyOwBIGwJKJOMKvUbteNNY+hBjEwqU/3DJUvcY61kCQvRAb21Osh6h/6+VEgr9URT7d5QV0AejMCSxEwibyN2IcySG+RV/N7aXz97VrL/MJwptaMJ5Wat5p80s0TJcJX3T9pu0b+JViuqd9l7u6MwUkRiEwiR82e+wYl4hM7yV5IM25PRyIiD9aw8B62rvXwWC9E1EDlnREwAksQiEwiRxk+vBHi63cyVOyjfd4E/faJjnNT6ShCnpJp1TXpBO8DYv9OFawNX6nobaOu2w8fGAEjsAwBk8gwXt9grHRpqbFWkXzbSE1LvZCRag49DTkvFkA6oRyL57nCi2fAcjGOLmAEciIQmUTWPmWTAx8e5eWdga2hkhyy9OtYQ2xvrfP0K4z+W+SB94E+WDxHN7lEXoNlrrZdjxE4BQKRSeRogCMSyNqZc7UkIgLh0WrWPnKHFddiefS4dPtFEXDlSxEwiSxF7Nj8l5k5izyeKxG6+lKQ51j7UDVvbZfB8q1e+4cRyIyASSQzoAWr412GpPdCBmSoxhMRcTxT4mkpQlelQppbsByA16eMwHURMInUo/stM+ec6wh9xNb8fvTknYjjqRIkyWfbS4cSt2C5pr8hy4C3EuHCkPJZqDoQMInUoSdmzszO65B2XsrbI8cyYi15/K5ia755pWKLth/u7+/PhOWizreZhTuEDd5jX2los3pvBCYRMIlMwhPm4ulmzjJirHlgzPciD5TJl3ovP/MW9i2BgMkjr5CTTsERCCSeSSSQMkZE2eSFyGDcZv0j9R9xmnAVax7s92z/lbwQnvTas80wbWks8Kg0DyvggbRyXRaPFgDvtyEQmUSYNW7r3TlKb/VCPNN8Mw54pHcrlm9qqvB/EUj7mZj+wwp4gxX2yCJHQSAyiTBjioLTUXJs8kKOEjpmu3eXjP2LPFhz4kXNsc/EENq68z8jsBaByCSytk9nKndJw1dAgV8pjHWpGbfIg9AVnheTsbEXNZmkOJxVYMBdqcrIJHKpm35g0H0rw+cbfACYhaf+VH6MqXbn30QeeB58VJKxwyfyp17UvPxDBucfEeV7OEUi5VufbuGv6cunv3oZw1dYkx+JjK80lghP8YHKKfIA8i+EC14Kx05GYDUCkUnkygOc8AszydWK7RTky7edn5c6BMfLeLR4IdJuyhNv/A0VT1IElrftCIQlEc2SLnPzD6lRBuGFEu9SVPPJkqF+HHgOQ1lfuGYbYCn9/U1NXHlioe57y4lAWBJpOsmAbw4vtSMcwdM0vEvxu8ik3f7QwU+9xN8+ealzQ4nY+BUX53k8/Ir9nuvzAy6aoF0pvHcpw3FEZ6OTyKW9kYEBwTewCFd0Ey+OsYA6lCAjygxUdepTn8pQXiocqkkEBDK1DgKBPL8aLqce5UE6dwISCYKkxYiCAOsgLC5HkWcvOSCRsbbw6J+ZQMbg8fktCIQmEQ16XpJiBrWljy57HQR47yFlXeBUiMgLYd0M73SoXxAIHkiuBzWG2vC5CyMQmkQavUAkzaF3RmAUAYwln/YYzXDiC2PEybtGeCDZ10BOjKW7thABk8hCwJw9JAJ4q1d7H6SriH4oCzw+liffP98t42MjkAWB8CSiGwFPhLeOs3TYlZwOAQwm4ZpLLaS3WlQoC6LoLqjjkYHHFdeFWli83xGB8CTSYFH/DdF0xLvsCFzuSawegt1QFm+hE766JKH2cPHPnRCohUR434EZ506wuJlKECBkc9kJhrwQ/lYMn3bH+3hPXrvfQq9k4J5JzCpIRDcHC4MQyZmwd1+2IXBpAmmgwwtpvQ+/U9WA0tn5cAcEqiCRBgdIxN5IA8bFdyYQDQBNrniYwN6HsPB2HALVkIhuGHsjx42TSC2bQCJpw7JcHoFqSARNiUiYdflJLcAolIJXawIJriCLdz0EqiKRRj080tgcencRBAhjsnB82UX0i+jZ3awQgepIRN4IC4hfVYi1RV6HAATCew/ofV0NLmUEQiNQt3DVkQhwi0h4KoXHGvnpdF4E0PFT6dvvPZxXx+5Z5QhUSSIN5nwniVlq89O7kyHwrfqDB8IDFTr0ZgSMQEQEqiURzU75Kil/oc1EEnFkbZPpM+mXx1fHCGRb7S5tBIxANgSqJREQkKEhzEFoi59O9SPAk3fvSq+8E1R/bwr04PXr10+UPlX6Vam78Vcv8c4LtDpepQRAno+0H5Ln5XjJvFfU/nOlV0p9OXTqNed2x2ZrDyX4UyWwpV/8RVP9HN3+0hXy8BdO+ZLB1uaTy1dNIvRSBocndj7m2KlqBAhf+btPEyqUkWDChAf+pbLxuRPtbht/wfI75cE7v50seaC2MMxM5L5WO0PyfK483J+6XGZT/RhZMOFPSfOXPPty0DDnwCb85ET9gZQfJgkS/HclsKVfY38vRlkeNj7CSR7+wukvqodJBX9n5uFilv9GKqmeRJp++Uu/DRCV7vhjUg5fjShPBuGZEsYa8sBYjOR8OF3cUEoWDB333HdqEfLSbnT7UPmzE5vqbMkDIzsnQyvcJyqXXZa28i17yYXXAeFCiOgZ4ttS5U+aYFPXljqSyp6FRF6qt6kDSVm9BUNgV/c7WN8nxZFx4b0oHm9ONSr/UZliM1DVja4gtPcnBX/7In14+8zKX7SvBB5LyKPbGt5c9/ehx+oLhIz9wuv4UMLMTRKUZXbjqcbd+lk9iUgJzCxw92aRdYawCPxTesQ4hRVwnWDbSgkTvAqM5VLDUgRLyQMZYMCXTti4R7eBodJqH2P7iw4J22i3antf9TxZVTJzIcnRhgMJQeWqnXXFXZ9qrJ5EhDw3mnbeKkegiOGrERMZF2anhDbWTo6yYymZIJA1hIYKlpIOZW5JbYMH5JXL2GbH5yZswkHTH/SbEg5MqPGWhSdVXyiMtetTjVWTiJTBzCTVzb8h7YOQCGSZrYbs2QKhNKaZJWMwCW0sKFkuq2TiPoNAyjUyUrPaxuAT29/iffRrLxbu6zfU/63+0HYp/bKuSKix32zR39FIJLmzUgaDK9fMJLldZyyGwOVJRGO6JZAwEyPJxIz5kPtMbeP9EL5aGs6bG6QY8rk82a+rP9gsjHwJ/fJuFQ87ZJd7rsJqSUQdY3Br5+0kCLyjm+yQmzsCfur7EIEQ3/5M8r2n9IES4QrtZjdmurOZ5jJIJjyQvkfEo9jIgkwcz1Wz6rraJkx9iPezSuCZQuoPhIhehggRvYJlq2uw7SZeYfhCTfysNLR9qxAWeA1dK36uShKRQhjcJdi8OOBuYBKBS3ojGs9DBIJR4b2ZVzIQPK7JLLPMxGlAJZIJo9f1QDB0fEmZkMn3jUzk4fxADetPqW36ObQeRFvgglHtGtnQH2RVf8AJQuwTCKTwgbB8ogSura7Rdzd9o+svlVgwvxeykDg4gMfD4/E6d9hWHYlIIRia7uA+DDw3nB0BnlbJXmkFFTKL7E6KCE1gVPoLpKwNpHQnNd9gXc09htFrr2OsMGDMpNtz7Z7wTHs8tsejGrt2O692WUCHLPveD+X5WzKtscWodo0sj7MuIZI+rjcZch+oT4zpLpY0AZ6QB5jSX84lJ5EJJA4x4blTf3LZEhmrIhEphBkbs5QSWLjO4xFggnC8FDtKoDGNAewazanQRBI5yMgk5RvqpuThHusaNgwexm6MLIaIpV/1rDxNu9TVff+Etr9Qf/iS89x9DxH32x37PdaXsfyrzqtPrIH05eYdDjzMLsar6hcuf5FWFc5YqCoSUb8JY216XFB1ZNhcRSEEeF/kMkTSGBneTm7hnAtNYJTavGN7Zu1j11LOY9y6YRc8oqJGVzhAXBBI1xvD2EJe3POzcsuYQlRb+z7bTmoG9Qld0aculm2fkDW1qvD5qiERKQW3bShOGh5kC7gIAfS8qOG/MYUAABAASURBVEDFmbuzZ2bdOfq+2kA191j3UVq8IkhlCmIIYOo61zCm7McSOHQJ5AdlhECWkldq31PzSYzlm3AEEzyQIQLZLZS2XPJ1JaogkY5S1vXSpWpCIIchDd9fjWlmql2DzYx/zsAQA5/r21LD262vO+uH1Ai1da8PHdOPofNJ54QDxrYfzht8YS6pwoRMjdeSkHN1FvrUJUWwTNHv6gaPLFgFiQgglNJldZ3ydlIErvKoLwujrQoJY83N+MmbQiJzREQ9j5KMOXV3Dd+nMrar6npU+d3dYD1qEw+kTyBdXO4K/Csa8lKfIN7uug5d4MmqLeROHWFTeBIZUUoEQJld8Kgdjxu2z3AXHaAROr2TDFfwRroz+FTD2S0zpoq1xgoSaeuE1Ji4tb+37h/JpPuaPnfD04TOOLelLcJIc+WLhbLUJ/TTXeNClj9FxpAlx6dMoUlkRClRFIHLzaN2PG7ITIMYLk+R8Bz3uxKS59ghFxIxXp4JJ+lSsQ1iow3SV3d3d7QNySHLvzSYka1Y4xkr3mpMMopSrKrW8/hKekk1bCne+OCsP6EXGHrGD1m7YS1+TyUM59T1R9d0Xz/Xye5jrz8Igxw673pSamJwS8V6sPDMySHizdGvmWaPvRyWRDTQmFUMKeVYxN60zmOHo4uFuiF+VeI5dsiFBOFAMiRderOpqn8pYeC3pH+/qe3hf56jpw0S4QjahuSQpTUuEIyaDb0V/Zx5hJ5LW8xOeVonyWDrfsDwzoquekfH5VRhlWN8YPDwQpbUMUtsqvtWn/qBx9MSKCKBAe1yvEcqQiLqF3rskxheyK3ve3TuiDbCkojA4CbrK0WnD9+YNTFgNguim4vnvDHwW9LSm6J7A2/uQ8EKiC0XrP74qqV/3hfAeKcIw6QqJd/qPJIHzzqJrGhEhhNC4HAqtd7NnfLTB8ZfSzxcy7Lg3NQ9JUd7LbtRV9vg0L4A3bbDPoudoKLIKSSJSCnMTLoLblEw3HvWVKLf2W+iEkKqziusi6ibyVtK2GhvLxPjOdcBwmRtnv7EEALpXm/zrdmn4EO9qaRN3tQ0FjGBMFPrqDZfOBIRgTAYGGzRQM02azqyY5ptctPW8AAAT2klz4qPxHSntlMMdgkDOdU9PIup61x7kEn3dX9iyFrQ7ka2Gf/IlSWpX4zR7qPabb1ELB763p446z4UiUghDEpYvXV3I+Gec9Z0dL92v3mnOjxxDcMzcflSl1JIhAnCnqAw4Ztr71fd18jenRgyickd6sGYz8lCu3N5ll4f60ct99jS/j7KH4pEJB0EEnEdhA/inWlQgLPgDr+9kAFiYhFe0B0ETDHYS9fHdhD7jtk49053YsiEjPN3O//Lio/GJsQ15IXQrVrCxsi6KYUhESmEhdT+SzqbOpepMM+vd2dRmao9rprGpS8xK8vdKQyPvZE3qILFm6Px/7MayfFmblcworcfIwesbXUnhtxPJQxsiiy5PbUxL+R/usf21sUI/GOn850PQSIiEAZA/yWdfL1cX9NvGgxnNWK1eCNMLtZr8AQlm/sjpSe5jWRKm3N5ujN11hVL6TPFY83m/UgneIbdvnVxiKiHrnxZjw8nkUYZuLtZO5ahMp7EgtwyVBWyilpIxAvsd3cpBvJOE55sRvIu7d+YER0rzR9dKiVj19sZaz+nBzRFhjnbGetLmPOHkogIhJsDY5biqu8JGjOmo+K2u/RTBgd3mzfpd2lvYyNjYYON1S4qfmRmZr1z7e/9eO+cPP3rvHhXRI+yIyzc99sb+s2YHzq/5hxhurFypYhyrL1Dzx9KIuo5HkjKDEJZd9sgEN74voJLCoHvBuyGhv67wFBsaCZs0RQjuavhkj5SiK0LaBECaRpIwQdPLQuJqO+EuKcmvlewHQ30d3eHkYgUgQFb6g7fBC94wCdKLjEI5I1A4jUssKPukkaI+iOnFCO595glipCKGQvN3O+p+ZfmSwk7E55eWu9Y/ikvZKzMac8XJZEx1EQgMHnEN9I/lmG9VDxTOqrFOH+ocZNiTNWl020ps/4ss+wFyC3RRemnG1MILaenNkdaexP6ArXlz7o7icgQQCDdL3jm79W6GiGQkrOldVIVLiXSpM/2RgrjvLH6qdBJW/WVSSSFZLNMDmW/IJBJfeieyklYrX7D7nclESkAZZtA4g0HeyPxdPIgke4ZjNbD8cx/DYnM5Mp3OdUT2ePzHymy5DLsqfrIh3TwmnYjEd0MEEiW2UBmTC/pgXQx1MypJm+kdGikC02E45RQTbZF4wUdTjHcVMfYYl8yvZNQea4Qk0mkB/YuJNIhkEk3sCfbHj8vTyAdkGvxRt7XeLrSjczkq6OmwcOci8aDDQycTCE3FtR5eGOgeJ5TGgsp+NBYLk8ttT3avEQqTiKNkvFAohLIJRQ918nGG4n+rkHbjSt5Iykz/lyhmhbflH3Ko/nc9yl1bcmTQmZZPDXZMtqKZse2YJelbFESEeiwNgMpGvD2QIaHz9RbuMMljjnLXz6sRdatCKWQCPfY1nZKlC/qhTQCp3iluTw17FnTrHctAsVIJCiB8CLhB82su8XA+wYB4ULcmL/L3pwJvXupMcbMMLSQGYRLMVy7eiLCPcVw0/VxcuNqnpRCsrlCWSlt3S3AJw8CB9dShEQEIgOfARTJA4FAeBN9j9nRwWpd37yIhLWRXDO39YLMl2Rs7bFoOy9J2Rz0c64FyH8uz97X+cxJLuM9JXuKYc+FT0pbU7Ke8lp2EglKIBjFpzKQuQbTKQdDp1O8y9P5GfaQRfbTvj2seyl1xr+Hse4OghS59rrXmLB2ZRs63hufFJmG5KzyXFYS0aAHvGgeCB8ZxAPZ1eXPPxr2q7Eh28/2a3FTS99o3J01rJXUL+lrbyOZorC9SCTFU8uFT6ongh1MwegUebKRiG5kZq+/CJUUpSrbLtsXusH4FpYJZCHcwo0noL5dWOyI7Iy3s4YoU4zREU/UpchVnERkc1I8IsZkLllCkYj6zwTq8AdMspCIOkMcPdKb6Kx/sICOXAwip3UIMEAJBa4rvV8pvvKLrPu1uE9LKUYreYLEfarE3zxP8nAmuphSPlmuiXbmLqXIwbsqq2WZE2DkOk8Ppsg2Unz+tPTI2OD7g4c/YLKJRNSRJ0rMAj+f7/ZuOTB6hK+Qa7dGz9iQvBFuPmZ7YBq9i19qLCJrdDmXyIehmMufNMsWNhg1iJb3O/Ay5+qdup5NrqlGEq5l94iEEySb44GN0mt17QQZTzwFhwQ412VZTSICG8EZwO+va7pIKcIvEAhyFWngapU2REKoEu8ueve/17hMMXDR+9HKl9KX1Hg/BILBoW4Ihf3aNPuZkWbcrK0/tVxKP5gIJdWnsQNGkCxfjN46IeGeSWp3aSbJie3FC1latEj+VSSiTgA26x+zg6mI1I8rxcDxAuGp/xrh427vc0YGAVLmpgLn6UaPvYqRhEhSjMuxkqa1nnJ/zZKI7lfw4J5tW13tpauuFGLby3PFmLZ9Gtszdseu3c43/Wpn97fzvYOkupoyhFi5Z5qfWXd9T2l2DKS0LgyILOGJkRgzKcWW/VEqNfJUiaevvkyqfZ9MDFi8jz6w+7R+kVYqIhJmkozRqjWj+yzFQNLHFANC+AqCJT/vb2y5V1JIJHn2j0BBEpi0GCHSEK5L+zVHSrSzKGlcUCdjvC2HPodkba8n7VUvpMF9Q92kn5pzs+WTPRFViPAwcaS/RviVegiBIJcOvZVEoCESjAjEXbKprXWzsIlR2FrPkeW5qWfbl04mDYjuW2bD3dBH1yOZrX8gQ4pce92PKbZoVhZhBCbdun4ewXUS6wGs8EayrY1ITnTZX39mnA80nX5K9aLTlkDagslEMksiauAjJcBD+C5Tt40dsSes8p4U/anS0tnBEfKeps0GbwYz799E7hdx7c032IEdTPFEuA/mRMQLafPwtz1Wh7KaSlLkinRPTsoi20Z/mCA33XvY9X8/nNR/2EHtFm08houRXlSon7mRs6879N/Vb7/Y7G/Vi2x9AmnLQST9Nttrt/0oiajyljx4dDclNnurtPABxou3z+l44aZc/RACEIkSM6zo39mqmUi4uYfg756bnGXrHsbAYAgog8EptthLA500KVcn3+pD9Q2PeHV5CqoOMGai0Z0cQ7SDtkVjfvA8dU0k6k4ODQ3VIzmZtNE2dXWzbFoDVr30n3rbMdKtuz3Gm2Ictb8f7d8iEVX6TOmVEuwdjTz4E654H3558JEajzmhm4oZ23tqHd1oF3KDSB4tFIaU9G2hmCG/fWbBL93DEMYnnSK57hsMWqfawUPsx+CFjCc3kYjwGTKgKUS75uVOjPQqIpGchNp+FG59AvlK99+sl6Byg5vqZXzNEUhb9hPlH9X7P7iohMuFq8YTVwy8vsBtZUftWft4JtDo9FEyuN0BBBqdMCDR0UCOEKfamxg5QwiUIARGLiHb4yy6nyEQJoHtRb7csOe9gy1p2w63Fz5giwfCuOjKx/rqHAGuNdy09YfaRjfdNgePle+FEh7d0ENMrNlALoNl506qXu4DxgMyzWVvr8MR4Nb+vu3xRACNhbdIIatWQFj/XRkqr320iATcSz9/KTGoI3sl3DDMBgnDBUTxkUgpM+1HN7UMBHroEgjhGTzGRw2sPNFdgB6sQmMhEolgMG9yCh9wxYD232/jFQGM9i3vyAHkM3Jp9jST868lA2TCm+bPddxNEAeRIPD7TrUxZrV7a+OhltVjWO2BB/1HlrcqnvkBPzC2HmX7hxQOcPMf23tUtOgJwiMolZkB8hVtzJXnQUBj6SclbtKPVSOhAe1Cbdw43+lGmozxBpGYm3ZOFJ5C+1T9wRCxholx6M5cMThJM9+5hhZc595dkH111kcEOlIT+GCcwQi9Y0/6xhlbk0QOGt9MunmpeaS5pNPolgeVCFN1E8RBJIjrQxUxqcYmIsPQ9clzGidrCaSt93PVwf3d/n7Y44nwpyMBdyswDxVu/A/Dg+vNwnmSUje25+IFENCNhu4YbCy872VUlvSEGC/rJKNx3iWVHZwX0sAQ4X10vQTupVzrIA9dlAHBCD0cT/zHLHricrZLKbLQGAYZ4wxGGGgmEpxvUzKBtAW0z+nZqbqk7VvdV6sJpGkB8oFEm5+Ld0xKqOOtgg8kwhkJyIzlKCJhwGNwII8jFAQEThkR0HgixPVSe8gEz4QBmLGFzVUxG/1RhnE01ru5he0VrK2B+wmDk9ugp8z+c7e5FoOUcmsIhEk3fcRepbSRI89nuo+wz5vqUh1/KDFxWmPnuX8ZU+MkgnRqAEHXNEDxNYlZKqG0B/JQ+48EXFOpy8RCQHr9RomZ47uSjPGFkdNhiI31wDZGnWIkQwg9IQTYcrNvmXGOVc+EYOxaex4D2x6X3BO6W1s/GPGVbzzmVXVoPDPZxbCuKp9YCDl5IpVIUWKR+WySfamdp5+MqUH7fPNE2qabBpg50oH2dO4973odNupcAAAGLUlEQVSgRMjjldocFC53o67vWASk51+VeLYdY/2BpIFQmEjo8NCNEAcx6trJhHuWm70EgaCgFBKJfi+3GK19ygoc2sSsnvra3zn32Ejs4xayHJWH+1AXuf+0m9wmCYSSj0iEk2oAhmbApDRCkZSEMHgd/1b9xGpzKPFRuz5RBwIaA98rQSiMMzwUxgY3zpGk0pLJ/ynMlXX2t0IrS3Hg/ipJIHQBXbEfShhT7AW2Y+h61nMaO2uMKwvTGOYsJCsZIMzcRAKOTLCxkdSfFbduZZIfj4Rx0z3dPeYaY2pSjkESoRY1QEybRv6t39zgVKjD5I2bAKOAVwNx8J4HXsde7m6yoM54LAIaa3gojA1uHAwVY47HhYk7Y5i4+bm5SgrK+KYd2qPdLIZmg8BLJlncZ9zspWVGN/0ugRlrC0+kRyYFkwanX3jjb3SVWgUP7IBRVvnUZzAHF3BIlWUoH+ObcQfJLdH9UF1LzmHjh/JzPyThNUoiba0CicUYbnBi2v/S+fbmpsP9BNlw/V8qBxgYBeLhJg4B5y0NAY0dxhyPC7Mwj2FiMGOk7lUDXgtjjMR464/Bud9MaihL4h0kNfewMcmhHdqj3V1m1OrP2EbMHcMydp3zTNR2mbXSmBJhSO3uaBecmRw+v7+/PwqrFIww7shJXmTPnjR6mHDjkTAe53TWb7/FEnvJuMtKcv3G+r8lOySILruXkgmEQrMkQqY2qUHAam9uOtxPkA3XdwWilc/78yOgMYjXwhgjMd76Y3DuN5MaypK4gUKCpn5yD2GYMIJdGTFSeB7M/jE8e85awQvSol1wPnRyKIxofwgjDDNeCpMEJgbk62JY5FjyMB4hWiYq6Ag5htpCp3zhoYsl+h7Ku8c5QretrIsIBOEWkQgFnIyAEdgHARklCBMjqMPbhkf24OHvI8XfrUgCvLQ9SevvxkeOJNMQRpAcskJ6IyXLnZZMTFTQEXLo56MNnfIVjhBYSjoIDE8N4kU2ficDZBJJhiprRldmBIyAEQiDgIgE4oN4FxEIHTCJgIKTETACRsAIrELAJLIKNhcyAkagOgQscBEETCJFYHWlRsAIGIFrIGASuYae3UsjYASMQBEETCJFYD1Lpe6HETACRmAaAZPIND6+agSMgBEwAhMImEQmwPElI2AEjMDeCNTWnkmkNo1ZXiNgBIxAIARMIoGUYVGMgBEwArUhYBKpTWOW9zECPmMEjMBhCJhEDoPeDRsBI2AE6kfAJFK/Dt0DI2AEjMDeCNzaM4ncoPCBETACRsAILEXAJLIUMec3AkbACBiBGwImkRsUPjACZRFw7UbgjAiYRM6oVffJCBgBI7ATAiaRnYB2M0bACBiBMyIQm0TOiLj7ZASMgBE4EQImkRMp010xAkbACOyNgElkb8TdnhGIjYClMwKLEDCJLILLmY2AETACRqCLgEmki4aPjYARMAJGYBECJpFFcA1n9lkjYASMwFURMIlcVfPutxEwAkYgAwImkQwgugojYAT2RsDtRUHAJBJFE5bDCBgBI1AhAiaRCpVmkY2AETACURAwiUTRRHk53IIRMAJGIDsCJpHskLpCI2AEjMB1EDCJXEfX7qkRMAJ7I3CB9kwiF1Cyu2gEjIARKIWASaQUsq7XCBgBI3ABBEwiF1ByXV20tEbACNSEgEmkJm1ZViNgBIxAMARMIsEUYnGMgBEwAnsjsKU9k8gW9FzWCBgBI3BxBEwiFx8A7r4RMAJGYAsCJpEt6LnsdRFwz42AEXhAwCTyAIP/MwJGwAgYgTUImETWoOYyRsAIGAEj8IDAjiTy0J7/MwJGwAgYgRMhYBI5kTLdFSNgBIzA3giYRPZG3O0ZgR0RcFNGoDQCJpHSCLt+I2AEjMCJETCJnFi57poRMAJGoDQCJpE+wv5tBIyAETACyQiYRJKhckYjYASMgBHoI2AS6SPi30bACOyNgNurGAGTSMXKs+hGwAgYgaMRMIkcrQG3bwSMgBGoGAGTSKXKs9hGwAgYgQgImEQiaMEyGAEjYAQqRcAkUqniLLYRMAJ7I+D2hhAwiQyh4nNGwAgYASOQhIBJJAkmZzICRsAIGIEhBEwiQ6j4XC4EXI8RMAInR+D/AQAA//+JQri4AAAABklEQVQDABvGlgZqINmrAAAAAElFTkSuQmCC" alt="ATIK" style="height:48px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))"></div>
   <div class="header-text">
     <h1>🌿 All trees I know</h1>
     <p>ФОП Савчук Анастасія Борисівна &nbsp;·&nbsp; Облік, склад, продажі</p>
@@ -388,11 +432,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 </div>
 
 <div class="tabs">
-  <button class="tab active"   onclick="switchTab('dashboard')">🏠</button>
+  <button class="tab active"   onclick="switchTab('dashboard')">🏠 Головна</button>
   <button class="tab"          onclick="switchTab('docs')">📝 Документи</button>
-  <button class="tab"          onclick="switchTab('warehouse')">📦 Склад</button>
+  <button class="tab"          id="tab-warehouse" onclick="switchTab('warehouse')">📦 Склад</button>
   <button class="tab"          onclick="switchTab('sales')">🏪 Продажі</button>
-  <button class="tab"          onclick="switchTab('orders')">📬 Замовлення</button>
+  <button class="tab"          id="tab-orders" onclick="switchTab('orders')">📬 Замовлення</button>
   <button class="tab"          onclick="switchTab('retail')">🏬 Точки</button>
   <button class="tab"          onclick="switchTab('catalog')">📋 Довідники</button>
   <button class="tab"          onclick="switchTab('settings')">⚙️</button>
@@ -400,6 +444,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 
 <!-- ═══ DASHBOARD ═══ -->
 <div id="pane-dashboard">
+  <!-- Quick Order CTA -->
+  <div class="qo-cta">
+    <div class="qo-cta-icon">⚡</div>
+    <div style="flex:1">
+      <div style="font-size:14px;font-weight:700;margin-bottom:2px">Швидке замовлення</div>
+      <div style="font-size:12px;opacity:.85">Інстаграм, сайт, дзвінок — оберіть аромати і одразу створіть накладну</div>
+    </div>
+    <button class="qo-cta-btn" onclick="openQuickOrder()">+ Створити</button>
+  </div>
   <div id="dash-kpi" class="dash-grid"></div>
   <div class="card" id="dash-alerts-card" style="display:none">
     <div class="card-title">⚠️ Потребує уваги</div>
@@ -1784,10 +1837,10 @@ function hideLoader(){if(_plt){clearInterval(_plt);_plt=null;}var el=document.ge
 // ============================================================
 function generate(){
   var filled=items.filter(function(i){return i.productId&&i.qty>0;});
-  if(!filled.length){alert("Додайте хоча б один товар");return;}
+  if(!filled.length){showToast("Додайте хоча б один товар","warning");return;}
   var sel=document.getElementById("buyer-select");
   var buyer=buyers.find(function(b){return b.id===sel.value;});
-  if(!buyer){alert("Оберіть покупця");return;}
+  if(!buyer){showToast("Оберіть покупця","warning");return;}
   var dt=document.querySelector('input[name="doctype"]:checked').value;
   var total=getTotal();
 var priceLabel={
@@ -1961,7 +2014,7 @@ function exportJournalExcel(){
   var list=filterByPeriod(journal,period);
   if(dtype!=="all")list=list.filter(function(j){return j.docType===dtype;});
   if(q)list=list.filter(function(j){return(j.buyer&&j.buyer.name||"").toLowerCase().indexOf(q)>=0||(j.invoiceNum||"").indexOf(q)>=0;});
-  if(!list.length){alert("Немає документiв");return;}
+  if(!list.length){showToast("Немає документів","warning");return;}
   var rev=list.reduce(function(s,j){return s+j.total;},0);
   var cogs=list.reduce(function(s,j){return s+j.items.reduce(function(ss,it){return ss+(it.cogs||0)*it.qty;},0);},0);
   var gross=rev-cogs,margin=rev>0?(gross/rev*100).toFixed(1):"0";
@@ -2003,7 +2056,60 @@ function exportJournalExcel(){
     +Object.entries(bmap).sort(function(a,b){return b[1].t-a[1].t;}).map(function(e){
       return '<tr><td style="'+H.td+'">'+esc(e[0])+'</td><td style="'+H.td+';'+H.R+'">'+e[1].n+'</td>'
         +'<td style="'+H.td+';'+H.R+';'+H.B+'">'+e[1].t.toFixed(2)+'</td></tr>';
-    }).join("")+'</table></body></html>';
+    }).join("")+'</table>
+<!-- ── TOAST CONTAINER ───────────────────────────── -->
+<div id="toast-container"></div>
+
+<!-- ── QUICK ORDER MODAL ─────────────────────────── -->
+<div id="modal-qo" class="modal-overlay" style="display:none">
+<div class="modal" style="max-width:720px;max-height:90vh;overflow-y:auto">
+  <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h3 style="font-size:15px;font-weight:700;color:var(--pine);margin:0">⚡ Швидке замовлення</h3>
+    <button class="modal-close" onclick="closeQuickOrder()" style="border:none;background:var(--surface3);border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>
+  </div>
+
+  <!-- Source + note -->
+  <div style="display:grid;grid-template-columns:180px 1fr;gap:12px;margin-bottom:14px">
+    <div>
+      <label style="font-size:11px;font-weight:700;color:var(--ink3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Джерело</label>
+      <div style="display:flex;gap:6px">
+        <button id="qo-src-ig" onclick="setQoSource('instagram')" class="btn btn-sm"
+          style="flex:1;background:var(--moss4);color:var(--pine);border:1.5px solid var(--moss2);font-weight:700">Instagram</button>
+        <button id="qo-src-site" onclick="setQoSource('site')" class="btn btn-sm"
+          style="flex:1;background:var(--surface2);color:var(--ink3);border:1px solid var(--border)">Сайт</button>
+      </div>
+    </div>
+    <div>
+      <label style="font-size:11px;font-weight:700;color:var(--ink3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">
+        Примітка <span style="font-weight:400;text-transform:none;color:var(--ink4)">(нікнейм або коментар)</span>
+      </label>
+      <input id="qo-note" placeholder="@nickname або деталі" style="width:100%;padding:7px 10px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:inherit;background:var(--surface)">
+    </div>
+  </div>
+
+  <!-- Product picker -->
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:14px">
+    <div style="font-size:11.5px;font-weight:700;color:var(--ink3);margin-bottom:10px;display:flex;justify-content:space-between">
+      <span>Оберіть аромати та кількість</span>
+      <span style="font-weight:400;color:var(--ink4)">Ціна полиці 100%</span>
+    </div>
+    <div id="qo-product-list"></div>
+  </div>
+
+  <!-- Summary + submit -->
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px;background:rgba(61,107,74,.08);border:1px solid var(--moss3);border-radius:var(--r2)">
+    <div>
+      <div style="font-size:11px;color:var(--ink3);font-weight:500">Підсумок · <span id="qo-item-count">0</span> шт.</div>
+      <div id="qo-total" style="font-size:22px;font-weight:700;color:var(--pine);font-family:'IBM Plex Mono',monospace;line-height:1.2">0 ₴</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="closeQuickOrder()" class="btn btn-gray">Скасувати</button>
+      <button onclick="submitQuickOrder()" class="btn btn-moss" id="qo-submit-btn" disabled>✓ Створити накладну</button>
+    </div>
+  </div>
+</div>
+</div>
+</body></html>';
   var blob=new Blob(["﻿",xls],{type:"application/vnd.ms-excel;charset=utf-8"});
   var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;
   a.download="ATIK_Journal_"+new Date().toISOString().slice(0,10)+".xls";a.click();URL.revokeObjectURL(url);
@@ -2240,7 +2346,7 @@ function copyInvoiceText(g){
   var lines=[docTitleStr(g)+" від "+formatDate(g.invoiceDate),"","Покупець: "+(b.fullName||b.name)];
   g.items.forEach(function(it,i){lines.push((i+1)+". "+it.name+" — "+it.qty+" шт. × "+it.price.toFixed(2)+" = "+it.sum.toFixed(2)+" грн");});
   lines.push("","Всього: "+g.total.toFixed(2)+" грн",g.totalWords);
-  navigator.clipboard.writeText(lines.join("\n")).then(function(){alert("Скопійовано!");});
+  navigator.clipboard.writeText(lines.join("\n")).then(function(){showToast("Скопійовано!","success");});
 }
 
 // ============================================================
@@ -2412,13 +2518,13 @@ function receiveGoods(){
   var rawQty=parseFloat(document.getElementById("recv-raw-qty").value)||0;
   var priceUah=parseFloat(document.getElementById("recv-raw-price").value)||0;
   var supplier=document.getElementById("recv-supplier").value;
-  if(rawQty<=0){alert("Вкажіть кількість");return;}
-  if(priceUah<=0){alert("Вкажіть ціну в ₴");return;}
+  if(rawQty<=0){showToast("Вкажіть кількість","warning");return;}
+  if(priceUah<=0){showToast("Вкажіть ціну в ₴","warning");return;}
 
   var rawKey, unit, sticks=0, aroma=null;
   if(t==="sticks"){
     aroma=document.getElementById("recv-aroma").value;
-    if(!aroma){alert("Оберіть аромат");return;}
+    if(!aroma){showToast("Оберіть аромат","warning");return;}
     rawKey="sticks_"+aroma; unit="кг";
     sticks=Math.round(rawQty*2000);
   } else if(t==="tubes")  {rawKey="tubes";  unit="шт";}
@@ -2448,7 +2554,7 @@ function receiveGoods(){
     priceUah:priceUah,totalUah:totalUah,supplier:supplier,
     aroma:aroma,note:note,savedAt:new Date().toISOString()});
   save();renderRawMaterials();renderReceiveHistory();
-  alert("✅ Прийнято "+rawQty+" "+unit+(t==="sticks"?" "+aromaLabel+" (≈"+sticks+" паличок)":"")+" за "+priceUah+" ₴/"+unit);
+  showToast("✅ Прийнято "+rawQty+" "+unit+(t==="sticks"?" "+aromaLabel+" (≈"+sticks+" паличок)":"")+" за "+priceUah+" ₴/"+unit);
 }
 
 
@@ -2713,7 +2819,7 @@ function saveRawEdits(){
   save();
   renderRawMaterials();
   document.getElementById("raw-edit-panel").style.display="none";
-  alert("✅ Залишки оновлено");
+  showToast("✅ Залишки оновлено","success");
 }
 
 function renderReceiveHistory(){
@@ -2984,7 +3090,7 @@ function renderSalesReportItems(){
 function saveSalesReport(){
   var bid=document.getElementById("sales-buyer-id").value;
   var month=document.getElementById("sales-month").value;
-  if(!bid||!month){alert("Оберіть точку та місяць");return;}
+  if(!bid||!month){showToast("Оберіть точку та місяць","warning");return;}
 
   // Aggregate by productId — multiple rows with same pid get summed
   var soldMap={};
@@ -2997,7 +3103,7 @@ function saveSalesReport(){
   });
 
   var reportItems=Object.keys(soldMap).map(function(k){return soldMap[k];});
-  if(!reportItems.length){alert("Введіть хоча б одну продану позицію");return;}
+  if(!reportItems.length){showToast("Введіть хоча б одну продану позицію","warning");return;}
 
   // Deduct from retail stock
   reportItems.forEach(function(item){
@@ -3016,7 +3122,7 @@ function saveSalesReport(){
   var buyerObj=buyers.find(function(b){return b.id===bid;});
   salesReports.unshift({id:uid(),buyerId:bid,buyerName:buyerObj&&buyerObj.name||bid,
     month:month,items:reportItems,savedAt:new Date().toISOString()});
-  save();closeModal("modal-sales");renderRetailTab();alert("✅ Звіт збережено!");
+  save();closeModal("modal-sales");renderRetailTab();showToast("✅ Звіт збережено!","success");
 }
 
 // ============================================================
@@ -3129,6 +3235,7 @@ function renderDashboard(){
   var tubesDash=Math.round(rawStock.tubes&&rawStock.tubes.qty||0);
   var possible20=Math.floor(Math.min(totalSticksDash/20, tubesDash));
   var possible40=Math.floor(Math.min(totalSticksDash/40, tubesDash));
+  updateTabBadges();
   document.getElementById("dash-warehouse-summary").innerHTML='<div class="card-title">📦 Сировина (зведення)</div>'
     +'<div style="display:flex;gap:16px;flex-wrap:wrap">'
     +'<div><div style="font-size:11px;color:var(--ink4)">Палички (всього)</div><div style="font-size:20px;font-weight:700;color:var(--pine)">'+totalSticksDash.toLocaleString("uk-UA")+'</div></div>'
@@ -3500,7 +3607,7 @@ function saveBuyer(){
   var name=document.getElementById("nb-name").value.trim();
   var fullName=document.getElementById("nb-fullName").value.trim();
   var receiver=document.getElementById("nb-receiver").value.trim();
-  if(!name||!fullName||!receiver){alert("Заповніть обов'язкові поля: Коротка назва, Повна назва, ПІБ отримувача");return;}
+  if(!name||!fullName||!receiver){showToast("Заповніть обов'язкові поля: Коротка назва, Повна назва, ПІБ отримувача","warning");return;}
   // Auto-extract retail name from parentheses: "ФОП Сибіга Яна (Інтегралісt)" → "Інтегралісt"
   var retailNameInput=document.getElementById("nb-retailname").value.trim();
   var autoRetailName=name.match(/\(([^)]+)\)/);
@@ -3541,7 +3648,7 @@ function renderSuppliersList(){
 }
 function addSupplier(){
   var name=document.getElementById("new-supplier-name").value.trim();
-  if(!name){alert("Введіть назву постачальника");return;}
+  if(!name){showToast("Введіть назву постачальника","warning");return;}
   var aromasStr=(document.getElementById("new-supplier-aromas").value||"").trim();
   var aromas=aromasStr?aromasStr.split(",").map(function(a){return a.trim().toLowerCase();}).filter(function(a){return AROMAS[a];}):[];
   suppliers.push({id:uid(),name:name,aromas:aromas,custom:true});
@@ -3624,7 +3731,7 @@ function saveProduct(){
   var editId=document.getElementById("edit-product-id").value;
   var name=document.getElementById("np-name").value.trim();
   var shelf=parseFloat(document.getElementById("np-shelf").value)||0;
-  if(!name||!shelf){alert("Вкажіть назву і ціну полиці");return;}
+  if(!name||!shelf){showToast("Вкажіть назву і ціну полиці","warning");return;}
   var pack=parseInt(document.getElementById("np-pack").value)||null;
   var group=document.getElementById("np-group").value||"other";
   var data={id:editId||uid(),name:name,shelf:shelf,price:Math.round(shelf*0.6),unit:"шт.",pack:pack,group:group,custom:true};
@@ -3847,7 +3954,7 @@ function mergeImportBackup(input){
   reader.readAsText(file);
 }
 
-function clearJournal(){if(!confirm("Очистити журнал?"))return;journal=[];save();renderJournal();alert("Журнал очищено");}
+function clearJournal(){if(!confirm("Очистити журнал?"))return;journal=[];save();renderJournal();showToast("Журнал очищено","info");}
 function resetAll(){if(!confirm("Скинути ВСІ дані?"))return;if(!confirm("Підтвердіть!"))return;localStorage.clear();location.reload();}
 // ============================================================
 // MODAL
@@ -4081,7 +4188,7 @@ function saveCogsMaterials() {
   onBomChange();
   saveCogsPrices();
   // also update warehouseStock avgCogs for products that have 0 recorded cogs
-  alert("✅ Збережено! Собівартість оновлено.");
+  showToast("✅ Збережено! Собівартість оновлено.","success");
   renderCogsResult();
 }
 
@@ -4425,6 +4532,229 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js');
   });
 }
+
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+function showToast(msg, type, sub) {
+  type = type || "success";
+  var icons = {success:"✓", error:"!", warning:"⚠", info:"ℹ"};
+  var c = document.getElementById("toast-container");
+  if (!c) { c = document.createElement("div"); c.id = "toast-container"; document.body.appendChild(c); }
+  var t = document.createElement("div");
+  t.className = "toast " + type;
+  t.innerHTML = '<div class="toast-ic">' + (icons[type]||"✓") + '</div>'
+    + '<div style="flex:1"><div class="toast-msg">' + msg + '</div>'
+    + (sub ? '<div class="toast-sub">' + sub + '</div>' : '') + '</div>'
+    + '<button class="toast-x" onclick="this.parentNode.remove()">×</button>';
+  c.appendChild(t);
+  setTimeout(function(){ if(t.parentNode) t.remove(); }, 4200);
+}
+
+// ============================================================
+// TAB BADGES
+// ============================================================
+function updateTabBadges() {
+  // Orders badge
+  var ordersTab = document.getElementById("tab-orders");
+  if (ordersTab) {
+    var newCount = (typeof ordersData !== "undefined") ? ordersData.filter(function(o){ return o.status === "new"; }).length : 0;
+    var ex = ordersTab.querySelector(".tab-badge");
+    if (newCount > 0) {
+      if (!ex) { var b = document.createElement("span"); b.className = "tab-badge"; ordersTab.appendChild(b); ex = b; }
+      ex.textContent = newCount;
+    } else if (ex) { ex.remove(); }
+  }
+  // Warehouse badge (low raw stock)
+  var whTab = document.getElementById("tab-warehouse");
+  if (whTab) {
+    var lowCount = 0;
+    if (typeof rawStock !== "undefined" && typeof AROMAS !== "undefined") {
+      Object.keys(AROMAS).forEach(function(a) {
+        var k = "sticks_" + a;
+        var rs = rawStock[k];
+        if (!rs) return;
+        var qty = rs.qty || 0;
+        var min = rs.min || 0;
+        if (min > 0 && qty < min) lowCount++;
+      });
+    }
+    var exw = whTab.querySelector(".tab-badge");
+    if (lowCount > 0) {
+      if (!exw) { var bw = document.createElement("span"); bw.className = "tab-badge"; bw.style.background = "var(--cedar)"; whTab.appendChild(bw); exw = bw; }
+      exw.textContent = "!";
+    } else if (exw) { exw.remove(); }
+  }
+}
+
+// ============================================================
+// QUICK ORDER MODAL
+// ============================================================
+var _qoPicks = {};
+var _qoSource = "instagram";
+
+function openQuickOrder() {
+  _qoPicks = {};
+  _qoSource = "instagram";
+  var note = document.getElementById("qo-note");
+  if (note) note.value = "";
+  setQoSource("instagram");
+  renderQoProducts();
+  updateQoSummary();
+  var m = document.getElementById("modal-qo");
+  if (m) { m.style.display = "flex"; m.classList.add("open"); }
+}
+
+function closeQuickOrder() {
+  var m = document.getElementById("modal-qo");
+  if (m) { m.style.display = "none"; m.classList.remove("open"); }
+}
+
+function setQoSource(src) {
+  _qoSource = src;
+  var ig = document.getElementById("qo-src-ig");
+  var si = document.getElementById("qo-src-site");
+  if (!ig || !si) return;
+  if (src === "instagram") {
+    ig.style.background = "var(--moss4)"; ig.style.color = "var(--pine)"; ig.style.borderColor = "var(--moss2)"; ig.style.fontWeight = "700";
+    si.style.background = "var(--surface2)"; si.style.color = "var(--ink3)"; si.style.borderColor = "var(--border)"; si.style.fontWeight = "400";
+  } else {
+    si.style.background = "var(--moss4)"; si.style.color = "var(--pine)"; si.style.borderColor = "var(--moss2)"; si.style.fontWeight = "700";
+    ig.style.background = "var(--surface2)"; ig.style.color = "var(--ink3)"; ig.style.borderColor = "var(--border)"; ig.style.fontWeight = "400";
+  }
+}
+
+function renderQoProducts() {
+  var el = document.getElementById("qo-product-list");
+  if (!el) return;
+  var aromaEmoji = {osmanthus:"🌼",cherry:"🌸",sandalwood:"🪵",camphor:"🌳",hydrangea:"💠",
+    blacksandal:"⚫",musk:"🦌",frankincense:"🕯",temple:"⛩",honeysandal:"🍯",gardentree:"🌲",agarwood:"🪨"};
+  var groups = [
+    { label: "Палички 20шт", filter: function(p){ return p.group === "tube20"; } },
+    { label: "Палички 40шт", filter: function(p){ return p.group === "tube40"; } },
+    { label: "Підставки",    filter: function(p){ return p.group === "stand" || p.group === "other"; } },
+  ];
+  var prods = (typeof products !== "undefined") ? products : [];
+  var html = "";
+  groups.forEach(function(g) {
+    var grpProds = prods.filter(g.filter);
+    if (!grpProds.length) return;
+    html += '<div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;margin-top:10px">' + g.label + '</div>';
+    html += '<div class="qo-product-grid">';
+    grpProds.forEach(function(p) {
+      var emoji = p.aroma ? (aromaEmoji[p.aroma] || "🌿") : "🪴";
+      var qty = _qoPicks[p.id] || 0;
+      var on = qty > 0 ? " on" : "";
+      html += '<div class="qo-product-row' + on + '" id="qo-row-' + p.id + '">'
+        + '<span class="qo-product-aroma">' + emoji + '</span>'
+        + '<div style="flex:1;min-width:0">'
+        + '<div class="qo-product-name" title="' + esc(p.name) + '">' + esc(p.name) + '</div>'
+        + '<div class="qo-product-price">' + (p.shelf||0) + ' ₴/шт</div>'
+        + '</div>'
+        + '<div class="qo-qty">'
+        + '<button onclick="qoSetQty('' + p.id + '',' + (qty-1) + ')">−</button>'
+        + '<span id="qo-qty-' + p.id + '">' + qty + '</span>'
+        + '<button onclick="qoSetQty('' + p.id + '',' + (qty+1) + ')">+</button>'
+        + '</div>'
+        + '</div>';
+    });
+    html += '</div>';
+  });
+  el.innerHTML = html || '<div style="color:var(--ink4);font-size:12px">Немає товарів</div>';
+}
+
+function qoSetQty(pid, qty) {
+  qty = Math.max(0, qty);
+  if (qty === 0) delete _qoPicks[pid]; else _qoPicks[pid] = qty;
+  // Update just this row qty display
+  var qtyEl = document.getElementById("qo-qty-" + pid);
+  if (qtyEl) qtyEl.textContent = qty;
+  var rowEl = document.getElementById("qo-row-" + pid);
+  if (rowEl) { if (qty > 0) rowEl.classList.add("on"); else rowEl.classList.remove("on"); }
+  updateQoSummary();
+}
+
+function updateQoSummary() {
+  var prods = (typeof products !== "undefined") ? products : [];
+  var total = 0, count = 0;
+  Object.keys(_qoPicks).forEach(function(pid) {
+    var p = prods.find(function(x){ return x.id === pid; });
+    if (p) { total += (p.shelf || 0) * _qoPicks[pid]; count += _qoPicks[pid]; }
+  });
+  var totEl = document.getElementById("qo-total");
+  var cntEl = document.getElementById("qo-item-count");
+  var btn = document.getElementById("qo-submit-btn");
+  if (totEl) totEl.textContent = fmt(total) + " ₴";
+  if (cntEl) cntEl.textContent = count;
+  if (btn) btn.disabled = (count === 0);
+}
+
+function submitQuickOrder() {
+  var prods = (typeof products !== "undefined") ? products : [];
+  var picks = Object.keys(_qoPicks).filter(function(pid){ return _qoPicks[pid] > 0; });
+  if (!picks.length) { showToast("Оберіть хоча б один товар", "warning"); return; }
+  var note = (document.getElementById("qo-note")||{}).value || "";
+  var today = new Date().toISOString().slice(0, 10);
+  var srcName = _qoSource === "instagram" ? "📷 Інстаграм" : "🌐 Сайт";
+  var buyer = {
+    id: "d2c_" + _qoSource,
+    name: srcName + (note ? " (" + note + ")" : ""),
+    fullName: srcName + " — пряма реалізація",
+    isRetail: false,
+    receiver: note
+  };
+  // Use the app's #inv-num input (stays in sync with the whole app)
+  var invNumEl = document.getElementById("inv-num");
+  var invNum = invNumEl ? invNumEl.value : "1";
+  var docItems = picks.map(function(pid) {
+    var p = prods.find(function(x){ return x.id === pid; });
+    var qty = _qoPicks[pid];
+    var price = p ? (p.shelf || 0) : 0;
+    var cogs = (typeof getWHCogs === "function") ? (getWHCogs(pid) || 0) : 0;
+    return {
+      id: pid,
+      name: p ? p.name : pid,
+      qty: qty,
+      priceType: "shelf",
+      price: price,
+      shelf: p ? (p.shelf || 0) : 0,
+      sum: price * qty,
+      cogs: cogs
+    };
+  });
+  var total = docItems.reduce(function(s, it){ return s + it.sum; }, 0);
+  var itemCount = docItems.reduce(function(s, it){ return s + it.qty; }, 0);
+  var doc = {
+    id: uid(),
+    invoiceNum: invNum,
+    invoiceDate: today,
+    docType: "invoice",
+    status: "created",
+    priceType: "shelf",
+    priceLabel: "Полична",
+    buyer: buyer,
+    items: docItems,
+    total: total,
+    totalWords: mkWords(total),
+    note: note,
+    source: _qoSource,
+    savedAt: new Date().toISOString()
+  };
+  // Deduct raw materials — same as regular invoice submit
+  deductRawForItems(doc.items);
+  journal.unshift(doc);
+  // Auto-increment invoice number — same logic as regular submit
+  if (settings.autoincrement && invNumEl) {
+    invNumEl.value = (parseInt(invNum) || 0) + 1;
+  }
+  save();
+  closeQuickOrder();
+  renderDashboard();
+  showToast("Накладну " + doc.invoiceNum + " створено", "success",
+    itemCount + " шт. на " + fmt(total) + " ₴ · списано зі складу");
+  updateTabBadges();
+}
+
 </script>
 </body>
 </html>
