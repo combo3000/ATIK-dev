@@ -1987,6 +1987,13 @@ function pushCloudState(isManual){
 function uid(){return "c_"+Math.random().toString(36).substr(2,9);}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function fmt(n){return (n||0).toLocaleString("uk-UA",{minimumFractionDigits:0,maximumFractionDigits:0});}
+function getPriceType(){return document.querySelector('input[name="pricetype"]:checked')&&document.querySelector('input[name="pricetype"]:checked').value||"shelf";}
+function calcPrice(p){
+  var base=p.shelf||p.price||0, pt=getPriceType();
+  if(pt==="shelf") return base;
+  if(pt==="real")  return Math.round(base*0.70);
+  return Math.round(base*0.60);
+}
 function getItemPrice(item){
   var p=products.find(function(x){return x.id===item.productId;});
   if(!p) return 0;
@@ -1994,6 +2001,28 @@ function getItemPrice(item){
   return calcPrice(p);
 }
 function getTotal(){return items.filter(function(i){return i.productId&&i.qty>0;}).reduce(function(s,i){return s+getItemPrice(i)*i.qty;},0);}
+function getWHCogs(pid){return (warehouseStock[pid]&&warehouseStock[pid].avgCogs)||0;}
+function getEstItemCogs(it){
+  if(it.cogs && it.cogs > 0) return it.cogs;
+  var whCogs = getWHCogs(it.id);
+  if(whCogs > 0) return whCogs;
+  var p = products.find(function(x){ return x.id === it.id; });
+  if(!p) return 0;
+  var c = calcCogsForProduct(it.id);
+  return c.totalCost;
+}
+function numberToWords(n){
+  if(n===0)return"нуль";
+  var ones=["","один","два","три","чотири","п'ять","шість","сім","вісім","дев'ять","десять","одинадцять","дванадцять","тринадцять","чотирнадцять","п'ятнадцять","шістнадцять","сімнадцять","вісімнадцять","дев'ятнадцять"];
+  var tens=["","","двадцять","тридцять","сорок","п'ятдесят","шістдесят","сімдесят","вісімдесят","дев'яносто"];
+  var hunds=["","сто","двісті","триста","чотириста","п'ятсот","шістсот","сімсот","вісімсот","дев'ятсот"];
+  function thForm(n){if(n%100>=11&&n%100<=19)return"тисяч";if(n%10===1)return"тисяча";if(n%10>=2&&n%10<=4)return"тисячі";return"тисяч";}
+  function cvt(n,fem){if(!n)return"";var r=hunds[Math.floor(n/100)]?hunds[Math.floor(n/100)]+" ":"";var rem=n%100;if(rem<20){if(rem>0){if(fem&&rem===1)r+="одна ";else if(fem&&rem===2)r+="дві ";else r+=ones[rem]+" ";}}else{r+=tens[Math.floor(rem/10)]+" ";if(rem%10>0){if(fem&&rem%10===1)r+="одна ";else if(fem&&rem%10===2)r+="дві ";else r+=ones[rem%10]+" ";}}return r.trim();}
+  var i=Math.floor(n),th=Math.floor(i/1000),rem=i%1000,res="";
+  if(th>0)res+=cvt(th,true)+" "+thForm(th)+" ";
+  if(rem>0)res+=cvt(rem,false);
+  return res.trim();
+}
 function mkWords(total){var w=numberToWords(Math.floor(total));return w.charAt(0).toUpperCase()+w.slice(1)+" грн 00 коп. без ПДВ";}
 function formatDate(s){
   var months=["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
