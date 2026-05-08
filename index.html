@@ -572,6 +572,50 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
   box-shadow:0 1px 3px rgba(0,0,0,.2);
 }
 .settings-toggle.on .toggle-knob{left:18px;}
+
+/* ── Journal table ── */
+.jth{
+  padding:9px 12px;text-align:left;
+  font-size:10.5px;font-weight:700;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.05em;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+.jtr{border-bottom:1px solid var(--border);transition:background .1s;}
+.jtr:last-child{border-bottom:none;}
+.jtr:hover{background:var(--tableHover);}
+.jtd{padding:10px 12px;font-size:12.5px;color:var(--ink);vertical-align:middle;}
+.jtd-mono{font-family:ui-monospace,monospace;font-weight:600;}
+.jtd-muted{color:var(--ink3);font-size:12px;}
+/* Status badge */
+.status-badge{
+  display:inline-block;padding:2px 9px;border-radius:20px;
+  font-size:10.5px;font-weight:600;cursor:pointer;
+  transition:opacity .12s;white-space:nowrap;
+}
+.status-badge:hover{opacity:.8;}
+.status-created{background:#fff3e0;color:#a86b00;}
+.status-paid{background:#e8f5e9;color:#2e7d32;}
+.status-shipped{background:#e3f2fd;color:#1565c0;}
+/* Type pill */
+.type-invoice{background:rgba(61,107,74,.1);color:var(--pine);padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;}
+.type-bill{background:rgba(90,138,165,.12);color:var(--sky);padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;}
+/* Filter pills */
+.jf-btn{
+  padding:6px 11px;border:none;background:none;cursor:pointer;
+  font-size:11.5px;font-family:inherit;color:var(--ink3);
+  transition:all .12s;white-space:nowrap;
+}
+.jf-btn:hover:not(.jf-active){background:var(--surface2);color:var(--ink);}
+.jf-btn.jf-active{background:var(--accent-light);color:var(--pine);font-weight:600;}
+/* Icon action buttons */
+.jact{
+  width:26px;height:26px;padding:0;border:1px solid var(--border);
+  background:var(--surface);border-radius:5px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:border-color .12s,background .12s;
+}
+.jact:hover{border-color:var(--ink3);background:var(--surface2);}
 /* ── Toast notifications ── */
 #atik-toast-container{
   position:fixed;bottom:24px;right:24px;
@@ -821,201 +865,309 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
     </div>
     <div class="preview-box" id="preview-content"></div>
   </div>
-  <div id="docs-journal" style="display:none">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-      <strong style="font-size:13px;color:var(--pine)">Журнал документiв</strong>
-      <button class="btn btn-excel btn-sm" onclick="exportJournalExcel()">Експорт в Excel</button>
-    </div>
-    <div class="row" style="margin-bottom:10px">
-      <div class="field"><input id="j-search" placeholder="Пошук за покупцем або №..." oninput="renderJournal()"></div>
-      <div class="field" style="flex:0 0 150px">
-        <select id="j-period" onchange="onJournalPeriodChange()">
-          <option value="all">Весь час</option>
-          <option value="month">Цей місяць</option>
-          <option value="quarter">Квартал</option>
-          <option value="year">Рік</option>
-          <option value="custom">Свiй дiапазон...</option>
-        </select>
+  <div id="docs-journal" style="display:none;padding:16px 20px 20px;">
+    <!-- Filters row -->
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+      <!-- Search -->
+      <div style="position:relative;flex:1;min-width:200px;max-width:320px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"
+          style="position:absolute;left:9px;top:50%;transform:translateY(-50%);pointer-events:none;">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="j-search" placeholder="Пошук за номером або покупцем" oninput="renderJournal()"
+          style="width:100%;padding:7px 10px 7px 30px;border:1px solid var(--border);border-radius:var(--r);
+          background:var(--surface);color:var(--ink);font-size:12.5px;font-family:inherit;">
       </div>
-      <div id="j-custom-range" style="display:none;flex:0 0 auto">
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-          <input type="month" id="j-date-from" onchange="renderJournal()" style="width:135px;padding:6px 8px;font-size:12px">
-          <span style="color:var(--ink4)">--</span>
-          <input type="month" id="j-date-to" onchange="renderJournal()" style="width:135px;padding:6px 8px;font-size:12px">
+      <!-- Status filter pills -->
+      <div style="display:flex;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;flex-shrink:0;">
+        <button id="jf-all"      onclick="setJournalStatusFilter('all')"      class="jf-btn jf-active">Всі</button>
+        <button id="jf-created"  onclick="setJournalStatusFilter('created')"  class="jf-btn">Створено</button>
+        <button id="jf-paid"     onclick="setJournalStatusFilter('paid')"     class="jf-btn">Оплачено</button>
+        <button id="jf-shipped"  onclick="setJournalStatusFilter('shipped')"  class="jf-btn">Відвантажено</button>
+      </div>
+      <!-- Period -->
+      <select id="j-period" onchange="onJournalPeriodChange()"
+        style="padding:7px 10px;border:1px solid var(--border);border-radius:var(--r);
+        background:var(--surface);color:var(--ink);font-size:12.5px;font-family:inherit;flex-shrink:0;">
+        <option value="all">Весь час</option>
+        <option value="month">Цей місяць</option>
+        <option value="quarter">Квартал</option>
+        <option value="year">Рік</option>
+        <option value="custom">Свій діапазон...</option>
+      </select>
+      <div id="j-custom-range" style="display:none;">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <input type="month" id="j-date-from" onchange="renderJournal()" style="padding:6px 8px;font-size:12px;border:1px solid var(--border);border-radius:var(--r);">
+          <span style="color:var(--ink4)">—</span>
+          <input type="month" id="j-date-to" onchange="renderJournal()" style="padding:6px 8px;font-size:12px;border:1px solid var(--border);border-radius:var(--r);">
         </div>
       </div>
-      <div class="field" style="flex:0 0 140px">
-        <select id="j-doctype" onchange="renderJournal()">
-          <option value="all">Всі типи</option><option value="invoice">Накладні</option>
-          <option value="bill">Рахунки</option>
-        </select>
+      <!-- Type (hidden — controlled by sub-nav) -->
+      <select id="j-doctype" onchange="renderJournal()" style="display:none;">
+        <option value="all">Всі типи</option>
+        <option value="invoice">Накладні</option>
+        <option value="bill">Рахунки</option>
+      </select>
+    </div>
+    <!-- Table -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow);">
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;min-width:600px;">
+          <thead>
+            <tr style="background:var(--surface2);">
+              <th class="jth">№ документа</th>
+              <th class="jth">Дата</th>
+              <th class="jth">Тип</th>
+              <th class="jth">Покупець</th>
+              <th class="jth" style="text-align:center;">Позицій</th>
+              <th class="jth" style="text-align:right;">Сума</th>
+              <th class="jth">Статус</th>
+              <th class="jth" style="width:80px;"></th>
+            </tr>
+          </thead>
+          <tbody id="journal-list"></tbody>
+        </table>
+      </div>
+      <div id="journal-empty" style="display:none;padding:40px 20px;text-align:center;color:var(--ink3);font-size:13px;">
+        Немає документів за цими фільтрами
       </div>
     </div>
-    <div id="journal-list"></div>
-  </div>
   </div>
 </div>
 
-<div id="pane-warehouse" style="display:none">
-  <!-- RECEIVE goods -->
-  <div class="card">
-    <div class="card-title">📥 Прийом товару / сировини</div>
-    <div class="row">
-      <div class="field">
-        <label>Тип надходження</label>
-        <select id="recv-type" onchange="onRecvTypeChange()">
-          <option value="sticks">Палички — сировина (кг)</option>
-          <option value="tubes">Тубуси (шт)</option>
-          <option value="labels">Наліпки / Етикетки (шт)</option>
-          <option value="stands">Підставки (шт)</option>
-        </select>
-      </div>
-      <div class="field" id="recv-supplier-wrap">
-        <label>Постачальник</label>
-        <select id="recv-supplier" onchange="onRecvSupplierChange()"></select>
-      </div>
-      <div class="field" id="recv-aroma-wrap">
-        <label>Аромат</label>
-        <select id="recv-aroma"></select>
-      </div>
-    </div>
-    <div id="recv-raw-fields">
-      <div class="row">
-        <div class="field" style="flex:0 0 120px"><label id="recv-qty-label">Кількість (кг)</label><input id="recv-raw-qty" type="number" min="0.1" step="0.1" value="5"></div>
-        <div class="field" style="flex:0 0 150px"><label id="recv-price-label">Ціна (₴/кг)</label><input id="recv-raw-price" type="number" min="0" step="0.01" placeholder="₴"></div>
-      </div>
-      <div id="recv-sticks-info" class="hint" style="display:none"></div>
-    </div>
-    <div class="row">
-      <div class="field" style="flex:0 0 160px"><label>Дата</label><input id="recv-date" type="date"></div>
-      <div class="field"><label>Примітка (необов'язково)</label><input id="recv-note" placeholder="Партія №5..."></div>
-    </div>
-    <button class="btn btn-moss" onclick="receiveGoods()">📥 Прийняти на склад</button>
-  </div>
+<div id="pane-warehouse" style="display:none;">
+  <!-- Sub-tab panels -->
 
-  <!-- STOCK TABLE -->
-  <div class="card">
-    <div class="card-title">📦 Залишки сировини
-      <div style="margin-left:auto">
+  <!-- RAW MATERIALS -->
+  <div id="wh-raw" style="padding:18px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0;">Сировина</h2>
+        <div id="wh-raw-meta" style="font-size:12px;color:var(--ink3);margin-top:3px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;">
         <button class="btn btn-gray btn-sm" onclick="toggleRawEdit()">✏️ Коригувати</button>
+        <button class="btn btn-moss btn-sm" style="color:#fff;" onclick="switchSubTab('warehouse','receive')">
+          + Прийом
+        </button>
       </div>
     </div>
     <div id="raw-materials-cards"></div>
-    <div id="raw-edit-panel" style="display:none" class="manage-form">
-      <div class="card-title" style="font-size:13px">Коригування залишків</div>
-      <div class="hint">Змінюйте кількість та ціну для внесення стартового балансу або коригувань.</div>
+    <div id="raw-edit-panel" style="display:none;margin-top:14px;" class="manage-form">
+      <div style="font-size:13px;font-weight:700;color:var(--pine);margin-bottom:8px;">Коригування залишків</div>
+      <div class="hint">Змінюйте кількість та ціну для стартового балансу або коригувань.</div>
       <div id="raw-edit-fields"></div>
       <button class="btn btn-moss btn-sm" style="margin-top:10px" onclick="saveRawEdits()">💾 Зберегти</button>
     </div>
   </div>
 
-  <!-- RECEIVE HISTORY -->
-  <div class="card">
-    <div class="card-title">📋 Журнал надходжень <span style="font-weight:normal;font-size:11px;color:var(--ink4)">(останні 30)</span></div>
-    <div id="receive-history"></div>
+  <!-- FINISHED GOODS -->
+  <div id="wh-finished" style="display:none;padding:18px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0;">Готова продукція</h2>
+        <div id="wh-finished-meta" style="font-size:12px;color:var(--ink3);margin-top:3px;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow);">
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;min-width:600px;">
+          <thead>
+            <tr style="background:var(--surface2);">
+              <th class="jth">Аромат</th>
+              <th class="jth">SKU</th>
+              <th class="jth">Тип</th>
+              <th class="jth" style="text-align:right;">Залишок</th>
+              <th class="jth" style="text-align:right;">Опт</th>
+              <th class="jth" style="text-align:right;">Дистр.</th>
+              <th class="jth" style="text-align:right;">Полиця</th>
+              <th class="jth" style="text-align:center;">Статус</th>
+            </tr>
+          </thead>
+          <tbody id="wh-finished-tbody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <!-- COGS / Собівартість -->
-  <div class="card">
-    <div class="card-title">💰 Витрати на виробництво</div>
-    <div class="hint">Ціни паличок, тубусів та наліпок беруться з прийомки сировини. Тут лише накладні витрати.</div>
-    <div id="cogs-materials-form"></div>
-    <button class="btn btn-moss btn-sm" style="margin-top:10px" onclick="saveCogsMaterials()">💾 Зберегти витрати</button>
+  <!-- RECEIVE FORM -->
+  <div id="wh-receive" style="display:none;padding:18px;">
+    <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 16px;">Прийом сировини</h2>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:20px;max-width:560px;box-shadow:var(--shadow);">
+      <div class="row">
+        <div class="field">
+          <label>Тип надходження</label>
+          <select id="recv-type" onchange="onRecvTypeChange()">
+            <option value="sticks">Палички — сировина (кг)</option>
+            <option value="tubes">Тубуси (шт)</option>
+            <option value="labels">Наліпки / Етикетки (шт)</option>
+            <option value="stands">Підставки (шт)</option>
+          </select>
+        </div>
+        <div class="field" id="recv-supplier-wrap">
+          <label>Постачальник</label>
+          <select id="recv-supplier" onchange="onRecvSupplierChange()"></select>
+        </div>
+        <div class="field" id="recv-aroma-wrap">
+          <label>Аромат</label>
+          <select id="recv-aroma"></select>
+        </div>
+      </div>
+      <div id="recv-raw-fields">
+        <div class="row">
+          <div class="field" style="flex:0 0 120px"><label id="recv-qty-label">Кількість (кг)</label><input id="recv-raw-qty" type="number" min="0.1" step="0.1" value="5"></div>
+          <div class="field" style="flex:0 0 150px"><label id="recv-price-label">Ціна (₴/кг)</label><input id="recv-raw-price" type="number" min="0" step="0.01" placeholder="₴"></div>
+        </div>
+        <div id="recv-sticks-info" class="hint" style="display:none"></div>
+      </div>
+      <div class="row">
+        <div class="field" style="flex:0 0 160px"><label>Дата</label><input id="recv-date" type="date"></div>
+        <div class="field"><label>Примітка</label><input id="recv-note" placeholder="Партія №5..."></div>
+      </div>
+      <button class="btn btn-moss" style="width:100%;padding:12px;justify-content:center;" onclick="receiveGoods()">
+        ✓ Провести прийом
+      </button>
+    </div>
   </div>
-  <div class="card">
-    <div class="card-title">📋 Рецепти (BOM)</div>
-    <div class="hint">Скільки одиниць кожного матеріалу витрачається на одну пачку.</div>
-    <div id="cogs-bom-table"></div>
+
+  <!-- JOURNAL -->
+  <div id="wh-journal" style="display:none;padding:18px;">
+    <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 16px;">Журнал руху складу</h2>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow);">
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;min-width:500px;">
+          <thead>
+            <tr style="background:var(--surface2);">
+              <th class="jth">Дата</th>
+              <th class="jth">Документ</th>
+              <th class="jth">Тип</th>
+              <th class="jth">Опис</th>
+              <th class="jth">К-сть позицій</th>
+            </tr>
+          </thead>
+          <tbody id="receive-history"></tbody>
+        </table>
+      </div>
+      <div id="receive-history-empty" style="display:none;padding:40px;text-align:center;color:var(--ink3);font-size:13px;">
+        Надходжень ще немає
+      </div>
+    </div>
+    <!-- COGS hidden but functional -->
+    <div style="display:none;">
+      <div id="cogs-materials-form"></div>
+      <div id="cogs-bom-table"></div>
+      <div id="cogs-result-table"></div>
+    </div>
   </div>
-  <div class="card">
-    <div class="card-title">📊 Собівартість по ароматах</div>
-    <div class="hint">Ціна з прийомки × рецепт + накладні витрати.</div>
-    <div id="cogs-result-table"></div>
-  </div>
+
 </div>
 
-<!-- ═══ SALES (Stats + Retail) ═══ -->
-<div id="pane-sales" style="display:none">
-  <div class="card">
-    <div class="row" style="margin-bottom:0">
-      <div class="field" style="flex:0 0 140px">
-        <select id="stats-period" onchange="renderStats()">
-          <option value="month">Цей місяць</option><option value="quarter">Квартал</option>
-          <option value="year">Рік</option><option value="all">Весь час</option>
+<!-- ═══ SALES ═══ -->
+<div id="pane-sales" style="display:none;">
+
+  <!-- ОГЛЯД sub-panel -->
+  <div id="sales-overview" style="padding:18px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0;">Продажі</h2>
+        <div id="sales-meta" style="font-size:12px;color:var(--ink3);margin-top:3px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="stats-period" onchange="renderStats()"
+          style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);
+          background:var(--surface);color:var(--ink);font-size:12.5px;font-family:inherit;">
+          <option value="month">Цей місяць</option>
+          <option value="quarter">Квартал</option>
+          <option value="year">Рік</option>
+          <option value="all">Весь час</option>
         </select>
       </div>
-      
-      <div class="field" style="flex:0 0 100%;margin-top:4px">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap">
-          <div style="font-size:11px;font-weight:600;color:var(--ink3)">OPEX за місяць (грн)</div>
-          <input type="month" id="opex-month" onchange="loadOpexForMonth()" style="padding:4px 8px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r);width:140px">
+    </div>
+
+    <!-- KPI tiles -->
+    <div id="stats-cards" class="stats-grid" style="margin-bottom:14px;"></div>
+    <div id="stats-margin-cards" class="stats-grid" style="margin-bottom:20px;"></div>
+
+    <!-- Chart card -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+      padding:16px;margin-bottom:14px;box-shadow:var(--shadow);" id="stats-chart-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--ink);">Виручка по місяцях</div>
+          <div id="dash-chart-subtitle" style="font-size:11px;color:var(--ink3);margin-top:2px;"></div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px">
-          <div><label style="font-size:10.5px;color:var(--ink4)">Реклама</label><input type="number" id="opex-ads" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px"></div>
-          <div><label style="font-size:10.5px;color:var(--ink4)">Оренда</label><input type="number" id="opex-rent" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px"></div>
-          <div><label style="font-size:10.5px;color:var(--ink4)">Зарплата</label><input type="number" id="opex-salary" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px"></div>
-          <div><label style="font-size:10.5px;color:var(--ink4)">Доставка</label><input type="number" id="opex-delivery" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px"></div>
-          <div><label style="font-size:10.5px;color:var(--ink4)">Інше</label><input type="number" id="opex-other" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px"></div>
-          <div style="display:flex;flex-direction:column;justify-content:flex-end">
-            <div style="font-size:10.5px;color:var(--ink4);margin-bottom:3px">Разом</div>
-            <div id="opex-total-display" style="font-size:18px;font-weight:700;color:var(--pine)">0 грн</div>
-            <input type="hidden" id="stats-opex" value="0">
+        <div style="display:flex;gap:5px;">
+          <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+            <button onclick="setChartPeriod(6)" id="chart-period-6"
+              style="padding:4px 10px;border:none;background:var(--pine);color:#fff;font-size:11px;cursor:pointer;font-family:inherit;">6м</button>
+            <button onclick="setChartPeriod(12)" id="chart-period-12"
+              style="padding:4px 10px;border:none;background:none;color:var(--ink3);font-size:11px;cursor:pointer;font-family:inherit;">12м</button>
+          </div>
+          <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+            <button onclick="setChartMode('revenue')" id="chart-mode-revenue"
+              style="padding:4px 9px;border:none;background:var(--pine);color:#fff;font-size:11px;cursor:pointer;font-family:inherit;">₴</button>
+            <button onclick="setChartMode('profit')" id="chart-mode-profit"
+              style="padding:4px 9px;border:none;background:none;color:var(--ink3);font-size:11px;cursor:pointer;font-family:inherit;">%</button>
+            <button onclick="setChartMode('units')" id="chart-mode-units"
+              style="padding:4px 9px;border:none;background:none;color:var(--ink3);font-size:11px;cursor:pointer;font-family:inherit;">шт</button>
           </div>
         </div>
       </div>
+      <div id="stats-chart-svg" style="width:100%;min-height:80px;"></div>
+    </div>
+
+    <!-- P&L -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+      padding:16px;margin-bottom:14px;box-shadow:var(--shadow);" id="stats-pl-wrap">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;">P&L за період</div>
+      <div id="stats-pl"></div>
     </div>
   </div>
 
-  <!-- MONTHLY CHART -->
-  <div class="card" id="stats-chart-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-      <div class="card-title" style="margin:0">Виручка по місяцях</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-gray btn-sm" id="chart-mode-revenue" onclick="setChartMode('revenue')">Виручка</button>
-        <button class="btn btn-gray btn-sm" id="chart-mode-profit" onclick="setChartMode('profit')">Прибуток</button>
-        <button class="btn btn-gray btn-sm" id="chart-mode-units" onclick="setChartMode('units')">Штуки</button>
+  <!-- МАРЖА sub-panel -->
+  <div id="sales-margin" style="display:none;padding:18px;">
+    <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 16px;">Маржинальність</h2>
+    <!-- OPEX форма -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+      padding:16px;margin-bottom:14px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+        <div style="font-size:13px;font-weight:600;color:var(--ink);">OPEX за місяць</div>
+        <input type="month" id="opex-month" onchange="loadOpexForMonth()"
+          style="padding:5px 8px;font-size:12px;border:1px solid var(--border);border-radius:var(--r);">
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;">
+        <div><label style="font-size:10.5px;color:var(--ink4);">Реклама</label><input type="number" id="opex-ads" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px;width:100%;"></div>
+        <div><label style="font-size:10.5px;color:var(--ink4);">Оренда</label><input type="number" id="opex-rent" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px;width:100%;"></div>
+        <div><label style="font-size:10.5px;color:var(--ink4);">Зарплата</label><input type="number" id="opex-salary" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px;width:100%;"></div>
+        <div><label style="font-size:10.5px;color:var(--ink4);">Доставка</label><input type="number" id="opex-delivery" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px;width:100%;"></div>
+        <div><label style="font-size:10.5px;color:var(--ink4);">Інше</label><input type="number" id="opex-other" value="0" min="0" oninput="updateOpexTotal()" style="padding:6px 8px;font-size:12px;width:100%;"></div>
+        <div style="display:flex;flex-direction:column;justify-content:flex-end;">
+          <div style="font-size:10.5px;color:var(--ink4);margin-bottom:3px;">Разом</div>
+          <div id="opex-total-display" style="font-size:18px;font-weight:700;color:var(--pine);font-family:ui-monospace,monospace;">0 ₴</div>
+          <input type="hidden" id="stats-opex" value="0">
+        </div>
       </div>
     </div>
-    <div id="stats-chart-svg" style="width:100%;overflow-x:auto;min-height:80px"></div>
-  </div>
-
-  <!-- MONTHLY CHART -->
-  <div class="card" id="stats-chart-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-      <div class="card-title" style="margin:0">Виручка по місяцях</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-gray btn-sm" id="chart-mode-revenue" onclick="setChartMode('revenue')">Виручка</button>
-        <button class="btn btn-gray btn-sm" id="chart-mode-profit" onclick="setChartMode('profit')">Прибуток</button>
-        <button class="btn btn-gray btn-sm" id="chart-mode-units" onclick="setChartMode('units')">Штуки</button>
-      </div>
+    <!-- Маржа по товарах -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+      padding:16px;box-shadow:var(--shadow);">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;">По товарах (виручка − COGS)</div>
+      <div id="stats-margin-products"></div>
     </div>
-    <div id="stats-chart-svg" style="width:100%;overflow-x:auto;min-height:80px"></div>
   </div>
 
-  <!-- KPI ROW 1: revenue basics -->
-  <div id="stats-cards" class="stats-grid"></div>
-
-  <!-- KPI ROW 2: margin & profit -->
-  <div id="stats-margin-cards" class="stats-grid" style="margin-bottom:14px"></div>
-
-  <!-- P&L WATERFALL -->
-  <div class="card" id="stats-pl-wrap">
-    <div class="card-title">📊 P&L за період</div>
-    <div id="stats-pl"></div>
+  <!-- ПО ПОКУПЦЯХ sub-panel -->
+  <div id="sales-buyers" style="display:none;padding:18px;">
+    <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 16px;">По покупцях</h2>
+    <div class="bar-wrap" id="stats-buyers-bar"></div>
   </div>
 
-  <!-- MARGIN BY PRODUCT -->
-  <div class="card">
-    <div class="card-title">🌿 Маржинальність по товарах (виручка − COGS)</div>
-    <div id="stats-margin-products"></div>
+  <!-- ПО ТОВАРАХ sub-panel -->
+  <div id="sales-products" style="display:none;padding:18px;">
+    <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 16px;">По товарах</h2>
+    <div class="bar-wrap" id="stats-products-bar"></div>
   </div>
 
-  <!-- TOP BUYERS & TOP PRODUCTS -->
-  <div class="row" style="gap:14px">
-    <div style="flex:1;min-width:260px"><div class="bar-wrap" id="stats-buyers-bar"></div></div>
-    <div style="flex:1;min-width:260px"><div class="bar-wrap" id="stats-products-bar"></div></div>
-  </div>
 </div>
 
 <!-- ═══ ORDERS ═══ -->
@@ -1971,8 +2123,8 @@ function updateBreadcrumb(tab, sub) { /* removed */ }
 /* Sub-nav definitions */
 var SUB_NAVS = {
   docs:      [{id:"all",    label:"Всі"},     {id:"form",    label:"Нова"},     {id:"journal", label:"Журнал"}],
-  warehouse: [{id:"raw",    label:"Сировина"},{id:"receive", label:"Прийом"},   {id:"history",  label:"Журнал"}],
-  sales:     [{id:"stats",  label:"Огляд"},   {id:"margin",  label:"Маржа"},    {id:"retail",   label:"Точки"}],
+  warehouse: [{id:"raw",label:"Сировина"},{id:"finished",label:"Готова продукція"},{id:"receive",label:"Прийом"},{id:"history",label:"Журнал"}],
+  sales:     [{id:"overview",label:"Огляд"},{id:"margin",label:"Маржа"},{id:"buyers",label:"По покупцях"},{id:"products",label:"По товарах"}],
   catalog:   [{id:"buyers", label:"Покупці"}, {id:"products",label:"Товари"},   {id:"suppliers",label:"Постачальники"}],
   orders:    [{id:"all",    label:"Всі"},     {id:"new",     label:"Нові"},     {id:"confirmed",label:"Підтверджені"}],
 };
@@ -2002,13 +2154,24 @@ function switchSubTab(tab, sub) {
     else { switchDocsSub("journal"); }
   }
   if (tab==="warehouse") {
-    if (sub==="raw")     { renderRawMaterials(); }
-    if (sub==="receive") { renderReceiveHistory(); }
-    if (sub==="history") { renderReceiveHistory(); }
+    // show/hide sub-panels
+    var panels = {raw:"wh-raw", finished:"wh-finished", receive:"wh-receive", history:"wh-journal"};
+    Object.keys(panels).forEach(function(k){
+      var el = document.getElementById(panels[k]);
+      if(el) el.style.display = k===sub ? "" : "none";
+    });
+    if (sub==="raw")      { renderRawMaterials(); }
+    if (sub==="finished") { renderFinishedGoods(); }
+    if (sub==="receive")  { /* form ready */ }
+    if (sub==="history")  { renderReceiveHistory(); renderCogs(); }
   }
   if (tab==="sales") {
-    if (sub==="stats")  renderStats();
-    if (sub==="retail") renderRetailTab();
+    var salesPanels = {overview:"sales-overview", margin:"sales-margin", buyers:"sales-buyers", products:"sales-products"};
+    Object.keys(salesPanels).forEach(function(k){
+      var el=document.getElementById(salesPanels[k]);
+      if(el) el.style.display = k===sub ? "" : "none";
+    });
+    renderStats();
   }
   if (tab==="catalog") {
     if (sub==="buyers")    { renderBuyersList(); }
@@ -2052,12 +2215,22 @@ function switchTab(tab){
   updateBreadcrumb(tab, currentSubTab[tab]);
   if(tab==="dashboard")  { renderDashboard(); updateNavBadges(); }
   if(tab==="docs")       { renderJournal(); checkDraftBanner(); switchDocsSub("journal"); }
-  if(tab==="warehouse")  { renderRawMaterials(); renderReceiveHistory(); renderCogs(); }
+  if(tab==="warehouse")  {
+    // init: show raw panel, hide others
+    ["wh-raw","wh-finished","wh-receive","wh-journal"].forEach(function(id,i){
+      var el=document.getElementById(id); if(el) el.style.display=i===0?"":"none";
+    });
+    renderRawMaterials();
+  }
   if(tab==="sales")      {
+    // init: show overview, hide others
+    ["sales-overview","sales-margin","sales-buyers","sales-products"].forEach(function(id,i){
+      var el=document.getElementById(id); if(el) el.style.display=i===0?"":"none";
+    });
     var nm=new Date(),ym=nm.getFullYear()+"-"+String(nm.getMonth()+1).padStart(2,"0");
     var om=document.getElementById("opex-month");if(om&&!om.value)om.value=ym;
-    loadOpexForMonth();renderStats();renderRetailTab();
-    setTimeout(function(){setChartMode(chartMode);},50);
+    loadOpexForMonth(); renderStats();
+    setTimeout(function(){setChartPeriod(chartPeriod||6);},50);
   }
   if(tab==="orders")     { loadOrders(); }
   if(tab==="retail")     { renderRetailStoreGrid(); renderRetailHistory(); }
@@ -2786,34 +2959,95 @@ function copyInvoiceText(g){
 // ============================================================
 // JOURNAL
 // ============================================================
+// Journal status filter state
+var journalStatusFilter = 'all';
+
+function setJournalStatusFilter(f){
+  journalStatusFilter = f;
+  document.querySelectorAll('.jf-btn').forEach(function(b){
+    b.classList.toggle('jf-active', b.id==='jf-'+f);
+  });
+  renderJournal();
+}
+
 function renderJournal(){
-  var q=(document.getElementById("j-search").value||"").toLowerCase();
-  var period=document.getElementById("j-period").value||"all";
-  var dtype=document.getElementById("j-doctype").value||"all";
-  var list=filterByPeriod(journal,period);
-  if(dtype!=="all")list=list.filter(function(j){return j.docType===dtype;});
-  if(q)list=list.filter(function(j){return(j.buyer&&j.buyer.name||"").toLowerCase().indexOf(q)>=0||(j.invoiceNum||"").indexOf(q)>=0;});
-  // Update page header meta
-  var metaEl=document.getElementById("docs-journal-meta");
+  var q      = (document.getElementById("j-search").value||"").toLowerCase();
+  var period = document.getElementById("j-period").value||"all";
+  var dtype  = document.getElementById("j-doctype").value||"all";
+  var list   = filterByPeriod(journal, period);
+  if(dtype!=="all") list = list.filter(function(j){return j.docType===dtype;});
+  if(journalStatusFilter!=="all") list = list.filter(function(j){return (j.status||"created")===journalStatusFilter;});
+  if(q) list = list.filter(function(j){
+    return (j.buyer&&j.buyer.name||"").toLowerCase().indexOf(q)>=0
+        || (j.invoiceNum||"").toLowerCase().indexOf(q)>=0;
+  });
+  // Page header meta
+  var metaEl = document.getElementById("docs-journal-meta");
   if(metaEl){
-    var total=list.reduce(function(s,j){return s+j.total;},0);
-    metaEl.innerHTML=list.length+" документів &nbsp;·&nbsp; сумарно <strong style='color:var(--ink);font-family:ui-monospace,monospace'>"+fmt(total)+" ₴</strong>";
+    var total = list.reduce(function(s,j){return s+j.total;},0);
+    metaEl.innerHTML = list.length+" документів &nbsp;·&nbsp; сумарно "
+      +"<strong style='color:var(--ink);font-family:ui-monospace,monospace'>"+fmt(total)+" ₴</strong>";
   }
-  var el=document.getElementById("journal-list");
-  if(!list.length){el.innerHTML='<div class="empty-state"><div class="icon">📚</div>Журнал порожній</div>';return;}
-  el.innerHTML='<div class="journal-list">'+list.map(function(j){
-    var icon=j.docType==="bill"?"🧾":"📦";
-    var docText=j.docType==="bill"?"Рахунок":"Накладна";
-    var st=j.status||"created";
-    var badgeText=st==="paid"?"оплачено":st==="shipped"?"відвантажено":"створено";
-    var badgeClass=st==="paid"?"badge-paid":st==="shipped"?"badge-shipped":"badge-created";
-    return '<div class="journal-item" onclick="openJournalItem(\''+j.id+'\')">'
-      +'<div class="journal-num">'+icon+' '+docText+' №'+esc(j.invoiceNum)+' <span class="badge '+badgeClass+'">'+badgeText+'</span></div>'
-      +'<div class="journal-info"><div class="journal-buyer">'+esc(j.buyer&&j.buyer.name||"—")+'</div>'
-      +'<div class="journal-date">'+formatDate(j.invoiceDate)+' · '+esc(j.priceLabel||'')+'</div></div>'
-      +'<div class="journal-amount">'+j.total.toLocaleString("uk-UA",{minimumFractionDigits:2})+' ₴</div>'
-      +'</div>';
-  }).join("")+'</div>';
+  var tbody   = document.getElementById("journal-list");
+  var emptyEl = document.getElementById("journal-empty");
+  if(!tbody) return;
+  if(!list.length){
+    tbody.innerHTML="";
+    if(emptyEl) emptyEl.style.display="";
+    return;
+  }
+  if(emptyEl) emptyEl.style.display="none";
+  tbody.innerHTML = list.map(function(j){
+    var isBill = j.docType==="bill";
+    var st     = j.status||"created";
+    var stTxt  = {created:"створено",paid:"оплачено",shipped:"відвантажено"}[st]||st;
+    var nextSt = isBill?(st==="created"?"paid":"created"):(st==="created"?"shipped":"created");
+    var nextTxt= {created:"створено",paid:"оплачено",shipped:"відвантажено"}[nextSt];
+    return '<tr class="jtr">'
+      +'<td class="jtd jtd-mono" style="color:var(--pine);white-space:nowrap;">'+esc(j.invoiceNum)+'</td>'
+      +'<td class="jtd jtd-muted" style="font-family:ui-monospace,monospace;white-space:nowrap;">'+esc(j.invoiceDate||"")+'</td>'
+      +'<td class="jtd"><span class="'+(isBill?"type-bill":"type-invoice")+'">'+(isBill?"РАХУНОК":"НАКЛАДНА")+'</span></td>'
+      +'<td class="jtd" style="max-width:200px;">'
+        +'<div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(j.buyer&&j.buyer.name||"—")+'</div>'
+        +(j.note?'<div style="font-size:10.5px;color:var(--ink3);margin-top:1px;">📝 '+esc(j.note)+'</div>':"")
+      +'</td>'
+      +'<td class="jtd jtd-muted" style="text-align:center;font-family:ui-monospace,monospace;">'+j.items.length+'</td>'
+      +'<td class="jtd jtd-mono" style="text-align:right;white-space:nowrap;">'+fmt(j.total)+' ₴</td>'
+      +'<td class="jtd"><span class="status-badge status-'+st+'" title="→ '+nextTxt
+        +'" onclick="cycleJournalStatus(\''+j.id+'\',event)">'+stTxt+'</span></td>'
+      +'<td class="jtd" style="text-align:right;">'
+        +'<div style="display:flex;gap:3px;justify-content:flex-end;">'
+          +'<button class="jact" title="PDF" onclick="doExportPDF(journal.find(function(x){return x.id===\''+j.id+'\';}))">'
+            +'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+          +'</button>'
+          +'<button class="jact" title="Редагувати" onclick="loadFromJournal(journal.find(function(x){return x.id===\''+j.id+'\';}))">'
+            +'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--pine)" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+          +'</button>'
+          +'<button class="jact" title="Видалити" onclick="deleteFromJournalById(\''+j.id+'\')">'
+            +'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>'
+          +'</button>'
+        +'</div>'
+      +'</td>'
+    +'</tr>';
+  }).join("");
+}
+
+function cycleJournalStatus(id,e){
+  e.stopPropagation();
+  var j=journal.find(function(x){return x.id===id;});if(!j)return;
+  var flow=j.docType==="bill"?["created","paid"]:["created","shipped"];
+  var ix=flow.indexOf(j.status||"created");
+  j.status=flow[(ix+1)%flow.length];
+  save(); renderJournal();
+  addToast(j.invoiceNum+" → "+{created:"створено",paid:"оплачено",shipped:"відвантажено"}[j.status],"success");
+}
+
+function deleteFromJournalById(id){
+  var j=journal.find(function(x){return x.id===id;});
+  if(!j||!confirm("Видалити "+j.invoiceNum+"?"))return;
+  journal=journal.filter(function(x){return x.id!==id;});
+  save(); renderJournal();
+  addToast("Документ видалено","info");
 }
 function openJournalItem(id){
   var g=journal.find(function(j){return j.id===id;});if(!g)return;
@@ -3043,87 +3277,150 @@ function deductRawForItems(invoiceItems){
 
 
 function renderRawMaterials(){
-  // Build aroma cards dynamically from AROMAS map
   var aromaKeys=Object.keys(AROMAS);
-  var html='<div style="font-weight:700;font-size:13px;color:var(--pine);margin-bottom:8px">🌿 Палички по ароматах</div>';
-  html+='<div class="raw-grid">';
+  var totalKg=0;
+  aromaKeys.forEach(function(a){totalKg+=(rawStock["sticks_"+a]&&rawStock["sticks_"+a].qty)||0;});
+  var metaEl=document.getElementById("wh-raw-meta");
+  if(metaEl) metaEl.textContent=aromaKeys.length+" ароматів · "+totalKg.toFixed(1)+" кг загалом";
+
+  var html='<div class="raw-grid">';
   aromaKeys.forEach(function(aId){
     var key="sticks_"+aId;
     var r=rawStock[key]||{qty:0,avgCostUah:0,sticks:0};
     var qty=r.qty||0;
     var sup=aromaSupplier(aId);
-    var supName=sup?sup.name:"—";
+    var supName=sup?sup.name.replace(/ \(.*\)/,""):"—";
     var reorderKg=reorderPoints[aId]||2;
-    var status, statusClass, barClass, barPct;
-    if(qty<=0){ status="Немає"; statusClass="raw-status-zero"; barClass="raw-card-bar-zero"; barPct=0; }
-    else if(qty<=reorderKg){ status="Мало!"; statusClass="raw-status-low"; barClass="raw-card-bar-low"; barPct=Math.round((qty/Math.max(reorderKg*2,4))*100); }
-    else { status="В нормі"; statusClass="raw-status-ok"; barClass="raw-card-bar-ok"; barPct=Math.min(100,Math.round((qty/Math.max(reorderKg*2,4))*100)); }
-    var stickCount=r.sticks||Math.round(qty*2000);
-    html+='<div class="raw-card" onclick="openAromaModal(\''+aId+'\')" style="cursor:pointer">'
-      +'<span class="raw-card-status '+statusClass+'">'+status+'</span>'
-      +'<div class="raw-card-icon">🌿</div>'
-      +'<div class="raw-card-name">'+esc(AROMAS[aId].en)+'</div>'
-      +'<div class="raw-card-sub">'+esc(AROMAS[aId].uk)+' · '+esc(supName)+'</div>'
-      +'<div class="raw-card-qty">'+qty.toFixed(2)+'</div>'
-      +'<div class="raw-card-unit">кг</div>'
-      +'<div style="font-size:13px;color:var(--moss);font-weight:600;margin-top:1px">≈ '
-      +stickCount.toLocaleString("uk-UA")+' паличок</div>'
-      +'<div class="raw-card-bar"><div class="raw-card-bar-fill '+barClass+'" style="width:'+barPct+'%"></div></div>'
-      +'<div class="raw-card-avg">Ср. ціна: '+(r.avgCostUah||0).toFixed(2)+' ₴/кг'
-      +(qty>0?' · '+((r.avgCostUah||0)/Math.max(1,2000)*1000).toFixed(2)+' ₴/1000шт':'')
-      +'</div></div>';
+    var isLow=qty>0&&qty<=reorderKg, isZero=qty<=0;
+    var barPct=isZero?0:Math.min(100,Math.round((qty/Math.max(reorderKg*2,4))*100));
+    var barColor=isZero?"var(--red)":isLow?"var(--gold)":"var(--accent)";
+    var borderColor=isLow?"var(--gold)":isZero?"var(--red)":"var(--border)";
+    var borderLeft=isLow?"4px solid var(--gold)":isZero?"4px solid var(--red)":"4px solid var(--accent)";
+    var pricePerKg=r.avgCostUah||matPrices["aroma_"+aId]||0;
+    var priceUSD=pricePerKg>0?(pricePerKg/41).toFixed(0):"—";
+
+    html+='<div class="raw-card" onclick="openAromaModal(\u0027'+aId+'\u0027)" style="cursor:pointer;border-left:'+borderLeft+';border-color:'+borderColor+';">'  
+      // Status badge
+      +(isZero?'<span class="raw-card-status raw-status-zero">НЕМАЄ</span>'
+        :isLow?'<span class="raw-card-status raw-status-low">МАЛО</span>':'')
+      // Emoji + назва
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'
+        +'<span style="font-size:22px;line-height:1;">🌿</span>'
+        +'<div>'
+          +'<div style="font-size:13px;font-weight:600;color:var(--ink);">'+esc(AROMAS[aId].uk)+'</div>'
+          +'<div style="font-size:10.5px;color:var(--ink3);">'+esc(AROMAS[aId].en)+'</div>'
+        +'</div>'
+      +'</div>'
+      // Кількість
+      +'<div style="font-size:26px;font-weight:700;color:'+(isZero?"var(--red)":isLow?"var(--gold)":"var(--ink)")+';font-family:ui-monospace,monospace;line-height:1;">'
+        +qty.toFixed(2)+'<span style="font-size:13px;color:var(--ink3);margin-left:4px;font-weight:400;">кг</span>'
+      +'</div>'
+      // Мін + постачальник
+      +'<div style="font-size:11px;color:var(--ink3);margin:3px 0 8px;">мін. '+reorderKg+' кг &nbsp;·&nbsp; '+esc(supName)+'</div>'
+      // Progress bar
+      +'<div style="height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;margin-bottom:8px;">'
+        +'<div style="height:100%;width:'+barPct+'%;background:'+barColor+';border-radius:3px;transition:width .4s;"></div>'
+      +'</div>'
+      // Ціна
+      +'<div style="font-size:11px;color:var(--ink3);display:flex;justify-content:space-between;">'
+        +'<span>Ср. ціна: <strong style="color:var(--ink);">'+pricePerKg.toFixed(0)+' ₴/кг</strong></span>'
+        +'<span style="color:var(--ink4);">≈ '+priceUSD+' $/кг</span>'
+      +'</div>'
+    +'</div>';
   });
   html+='</div>';
 
-  // Non-stick materials
-  html+='<div style="font-weight:700;font-size:13px;color:var(--pine);margin:16px 0 8px">📦 Інші матеріали</div>';
+  // Other materials
+  html+='<div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin:18px 0 10px;">Інші матеріали</div>';
   html+='<div class="raw-grid">';
-  [{key:"tubes",icon:"🧪",name:"Тубуси",sub:"Упаковка для паличок",minLow:200,minOk:500},
-   {key:"labels",icon:"🏷",name:"Наліпки / Етикетки",sub:"На кожну пачку — 1 шт",minLow:200,minOk:500}
+  [{key:"tubes",icon:"📦",name:"Тубуси",sub:"упаковка",minLow:200,minOk:500},
+   {key:"labels",icon:"🏷️",name:"Наліпки",sub:"на кожну пачку",minLow:200,minOk:500}
   ].forEach(function(def){
     var r=rawStock[def.key]||{qty:0,avgCostUah:0};
-    var qty=r.qty||0;
-    var status, statusClass, barClass, barPct;
-    if(qty<=0){ status="Немає"; statusClass="raw-status-zero"; barClass="raw-card-bar-zero"; barPct=0; }
-    else if(qty<def.minLow){ status="Мало!"; statusClass="raw-status-low"; barClass="raw-card-bar-low"; barPct=Math.round((qty/def.minOk)*100); }
-    else { status="В нормі"; statusClass="raw-status-ok"; barClass="raw-card-bar-ok"; barPct=Math.min(100,Math.round((qty/def.minOk)*100)); }
-    html+='<div class="raw-card">'
-      +'<span class="raw-card-status '+statusClass+'">'+status+'</span>'
-      +'<div class="raw-card-icon">'+def.icon+'</div>'
-      +'<div class="raw-card-name">'+esc(def.name)+'</div>'
-      +'<div class="raw-card-sub">'+esc(def.sub)+'</div>'
-      +'<div class="raw-card-qty">'+Math.round(qty).toLocaleString("uk-UA")+'</div>'
-      +'<div class="raw-card-unit">шт</div>'
-      +'<div class="raw-card-bar"><div class="raw-card-bar-fill '+barClass+'" style="width:'+barPct+'%"></div></div>'
-      +'<div class="raw-card-avg">Ср. ціна: '+(r.avgCostUah||0).toFixed(2)+' ₴/шт</div>'
-      +'</div>';
+    var qty=Math.round(r.qty||0);
+    var isZero=qty<=0, isLow=qty>0&&qty<def.minLow;
+    var barPct=isZero?0:Math.min(100,Math.round((qty/def.minOk)*100));
+    var barColor=isZero?"var(--red)":isLow?"var(--gold)":"var(--accent)";
+    html+='<div class="raw-card" style="border-left:'+(isZero?"4px solid var(--red)":isLow?"4px solid var(--gold)":"4px solid var(--border)")+'">'
+      +(isZero?'<span class="raw-card-status raw-status-zero">НЕМАЄ</span>':isLow?'<span class="raw-card-status raw-status-low">МАЛО</span>':"")
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'
+        +'<span style="font-size:22px;">'+def.icon+'</span>'
+        +'<div><div style="font-size:13px;font-weight:600;color:var(--ink);">'+def.name+'</div>'
+        +'<div style="font-size:10.5px;color:var(--ink3);">'+def.sub+'</div></div>'
+      +'</div>'
+      +'<div style="font-size:26px;font-weight:700;color:'+(isZero?"var(--red)":isLow?"var(--gold)":"var(--ink)")+';font-family:ui-monospace,monospace;line-height:1;">'
+        +qty.toLocaleString("uk-UA")+'<span style="font-size:13px;color:var(--ink3);margin-left:4px;">шт</span>'
+      +'</div>'
+      +'<div style="height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;margin:8px 0;">'
+        +'<div style="height:100%;width:'+barPct+'%;background:'+barColor+';border-radius:3px;"></div>'
+      +'</div>'
+      +'<div style="font-size:11px;color:var(--ink3);">Ср. ціна: <strong style="color:var(--ink);">'+(r.avgCostUah||0).toFixed(2)+' ₴/шт</strong></div>'
+    +'</div>';
   });
   html+='</div>';
 
-  // Mini summary bar
+  // Summary strip
   var totalSticks=0;
-  aromaKeys.forEach(function(a){
-    var k="sticks_"+a; totalSticks+=(rawStock[k]&&rawStock[k].sticks)||Math.round((rawStock[k]&&rawStock[k].qty||0)*2000);
-  });
-  // Also check legacy supplier-based keys and include them
-  ["yasuhito","ryo","hanna","yoko"].forEach(function(s){
-    var k="sticks_"+s; if(rawStock[k]&&rawStock[k].qty>0){
-      totalSticks+=(rawStock[k].sticks)||Math.round((rawStock[k].qty||0)*2000);
-    }
-  });
+  aromaKeys.forEach(function(a){totalSticks+=(rawStock["sticks_"+a]&&rawStock["sticks_"+a].sticks)||Math.round((rawStock["sticks_"+a]&&rawStock["sticks_"+a].qty||0)*2000);});
   var tubesQty=Math.round(rawStock.tubes&&rawStock.tubes.qty||0);
   var labelsQty=Math.round(rawStock.labels&&rawStock.labels.qty||0);
-  var possiblePacks20=Math.floor(Math.min(totalSticks/20, tubesQty, labelsQty));
-  html+='<div style="margin-top:12px;padding:12px 14px;background:var(--surface3);border-radius:var(--r2);'
-    +'border:1px solid var(--border);font-size:12px;color:var(--ink2)">'
-    +'<strong>🧮 Можливо зібрати зараз:</strong>'
-    +'<span style="margin-left:12px;font-size:15px;font-weight:700;color:var(--pine)">'+possiblePacks20.toLocaleString("uk-UA")+'</span>'
-    +' пачок 20шт (обмежено: паличок на '
-    +Math.floor(totalSticks/20).toLocaleString("uk-UA")+' пак, тубусів '+tubesQty.toLocaleString("uk-UA")+', наліпок '+labelsQty.toLocaleString("uk-UA")+')'
+  var possible20=Math.floor(Math.min(totalSticks/20, tubesQty, labelsQty));
+  html+='<div style="margin-top:16px;padding:12px 16px;background:var(--accent-light);border:1px solid var(--border);border-radius:var(--r2);display:flex;flex-wrap:wrap;gap:16px;">'
+    +'<div><div style="font-size:10.5px;color:var(--ink3);">Паличок всього</div><div style="font-size:20px;font-weight:700;color:var(--pine);font-family:ui-monospace,monospace;">'+totalSticks.toLocaleString("uk-UA")+'</div></div>'
+    +'<div><div style="font-size:10.5px;color:var(--ink3);">Тубуси</div><div style="font-size:20px;font-weight:700;color:var(--pine);font-family:ui-monospace,monospace;">'+tubesQty.toLocaleString("uk-UA")+'</div></div>'
+    +'<div><div style="font-size:10.5px;color:var(--ink3);">Наліпки</div><div style="font-size:20px;font-weight:700;color:var(--pine);font-family:ui-monospace,monospace;">'+labelsQty.toLocaleString("uk-UA")+'</div></div>'
+    +'<div style="border-left:1px solid var(--border);padding-left:16px;"><div style="font-size:10.5px;color:var(--ink3);">🧮 Можливо зібрати 20шт</div><div style="font-size:20px;font-weight:700;color:var(--moss);font-family:ui-monospace,monospace;">'+possible20.toLocaleString("uk-UA")+' пачок</div></div>'
     +'</div>';
 
   var el=document.getElementById("raw-materials-cards");
-  if(el)el.innerHTML=html;
+  if(el) el.innerHTML=html;
+}
+
+
+function renderFinishedGoods(){
+  var rows = products.filter(function(p){
+    return p.group==="tube20"||p.group==="tube40"||p.group==="stand"||p.group==="refill";
+  });
+  var metaEl = document.getElementById("wh-finished-meta");
+  if(metaEl) metaEl.textContent = rows.length + " позицій";
+
+  var tbody = document.getElementById("wh-finished-tbody");
+  if(!tbody) return;
+
+  var groupLabels = {tube20:"20шт",tube40:"40шт",stand:"підставка",refill:"рефіл"};
+
+  tbody.innerHTML = rows.map(function(p){
+    var stock = p.stock != null ? p.stock : "—";
+    var isLow = typeof stock==="number" && stock < (p.minStock||15);
+    var isZero= typeof stock==="number" && stock<=0;
+    var aromaId = PRODUCT_AROMA[p.id];
+    var emoji = aromaId ? qoAromaEmoji(aromaId) : "🪴";
+    var name = p.name.replace(/,?\s*All trees I know/i,"").trim();
+    // Short display: "Cherry Bloom · Цвіт Вишні · 20шт"
+    var parts = name.split(",").map(function(s){return s.trim();});
+    var displayName = parts.slice(0,2).join(" · ");
+
+    return '<tr class="jtr">'
+      +'<td class="jtd">'
+        +'<span style="margin-right:6px;font-size:14px;">'+emoji+'</span>'
+        +'<span style="font-weight:500;">'+esc(displayName)+'</span>'
+      +'</td>'
+      +'<td class="jtd jtd-muted" style="font-family:ui-monospace,monospace;font-size:11.5px;">'+esc(p.id)+'</td>'
+      +'<td class="jtd jtd-muted">'+esc(groupLabels[p.group]||p.group)+'</td>'
+      +'<td class="jtd" style="text-align:right;font-family:ui-monospace,monospace;font-weight:700;color:'
+        +(isZero?"var(--red)":isLow?"var(--gold)":"var(--ink)")+';">'
+        +(typeof stock==="number"?stock:"—")
+      +'</td>'
+      +'<td class="jtd jtd-muted" style="text-align:right;font-family:ui-monospace,monospace;">'+(p.wholesale||p.price||"—")+'</td>'
+      +'<td class="jtd jtd-muted" style="text-align:right;font-family:ui-monospace,monospace;">'+(p.distributor||"—")+'</td>'
+      +'<td class="jtd jtd-mono" style="text-align:right;">'+(p.shelf||"—")+'</td>'
+      +'<td class="jtd" style="text-align:center;">'
+        +(isZero?'<span style="background:rgba(176,64,64,.1);color:var(--red);padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600;">НЕМАЄ</span>'
+          :isLow?'<span style="background:rgba(200,168,75,.12);color:var(--gold);padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600;">МАЛО</span>'
+          :'<span style="background:var(--accent-light);color:var(--pine);padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600;">ОК</span>')
+      +'</td>'
+    +'</tr>';
+  }).join("");
 }
 
 function openAromaModal(aromaId){
@@ -3263,27 +3560,37 @@ function saveRawEdits(){
 }
 
 function renderReceiveHistory(){
-  var list=receiveHistory.slice(0,30);
-  if(!list.length){document.getElementById("receive-history").innerHTML='<div class="empty-state" style="padding:20px"><div class="icon">📥</div>Надходжень ще немає</div>';return;}
-  document.getElementById("receive-history").innerHTML=list.map(function(r){
-    var typeLabels={sticks:"🌿 Палички",tubes:"🧪 Тубуси",labels:"🏷 Наліпки",stands:"🪵 Підставки"};
-    var nameDisplay=r.name||r.rawKey||"";
-    if(r.type==="sticks"&&r.aroma&&AROMAS[r.aroma]){nameDisplay=AROMAS[r.aroma].en+" ("+AROMAS[r.aroma].uk+")";}
-    else if(r.type==="sticks"&&!r.aroma&&r.rawKey){
-      // legacy: try to extract supplier name
+  var list=receiveHistory.slice(0,50);
+  var emptyEl=document.getElementById("receive-history-empty");
+  var tbody=document.getElementById("receive-history");
+  if(!tbody) return;
+  if(!list.length){
+    tbody.innerHTML="";
+    if(emptyEl) emptyEl.style.display="";
+    return;
+  }
+  if(emptyEl) emptyEl.style.display="none";
+  var typeLabels={sticks:"Палички",tubes:"Тубуси",labels:"Наліпки",stands:"Підставки"};
+  tbody.innerHTML=list.map(function(r){
+    var nameDisplay="";
+    if(r.type==="sticks"&&r.aroma&&AROMAS[r.aroma]) nameDisplay=AROMAS[r.aroma].uk;
+    else if(r.type==="sticks"&&r.rawKey){
       var supId=r.rawKey.replace("sticks_","");
       var sup=suppliers.find(function(s){return s.id===supId;});
-      if(sup) nameDisplay=sup.name;
-    }
-    var priceInfo="";
-    if(r.priceUah>0) priceInfo=" · "+r.priceUah+"₴/"+(r.unit||"шт");
-    else if(r.priceUsd>0) priceInfo=" · $"+r.priceUsd+(r.rate?" ×"+r.rate:"");
-    return "<div style=\"display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px\">"
-      +"<span style=\"color:var(--ink4);min-width:92px\">"+r.date+"</span>"
-      +"<span style=\"color:var(--ink3);min-width:150px\">"+(typeLabels[r.type]||r.type)+"</span>"
-      +"<span style=\"flex:1\">"+esc(nameDisplay)+" · <strong>"+r.qty+"</strong> "+(r.unit||"шт.")+priceInfo+"</span>"
-      +(r.note?"<span style=\"color:var(--ink4)\">"+esc(r.note)+"</span>":"")
-      +"</div>";
+      nameDisplay=sup?sup.name:supId;
+    } else nameDisplay=r.name||r.rawKey||"";
+    var priceStr=r.priceUah>0?r.priceUah.toFixed(0)+"₴/"+(r.unit||"шт"):"—";
+    return '<tr class="jtr">'
+      +'<td class="jtd jtd-muted" style="font-family:ui-monospace,monospace;white-space:nowrap;">'+esc(r.date||"")+'</td>'
+      +'<td class="jtd"><span style="background:var(--accent-light);color:var(--pine);padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;">ПРИЙОМ</span></td>'
+      +'<td class="jtd jtd-muted">'+esc(typeLabels[r.type]||r.type)+'</td>'
+      +'<td class="jtd"><span style="font-weight:500;">'+esc(nameDisplay)+'</span>'
+        +(r.note?' <span style="font-size:11px;color:var(--ink4);">'+esc(r.note)+'</span>':"")+'</td>'
+      +'<td class="jtd" style="font-family:ui-monospace,monospace;white-space:nowrap;">'
+        +'<strong>'+r.qty+'</strong> '+(r.unit||"шт")
+        +(priceStr!=="—"?' <span style="color:var(--ink3);">· '+priceStr+'</span>':"")
+      +'</td>'
+    +'</tr>';
   }).join("");
 }
 
