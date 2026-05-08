@@ -8,7 +8,8 @@
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#2d4a3e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -46,10 +47,10 @@
   --kpi-g4:linear-gradient(135deg,#ece3f2,#ddd0e8);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Tahoma,"Segoe UI",Roboto,Verdana,Arial,sans-serif;
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   font-size:13px;background:var(--washi);color:var(--ink);min-height:100vh;
   background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8c4ba' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
-.app{max-width:1060px;margin:0 auto;padding:14px}
+.app{max-width:1060px;margin:0 auto;padding:0 14px 14px;}
 
 /* ── HEADER ───────────────────────────────────────────────── */
 .header{background:linear-gradient(135deg,var(--pine) 0%,var(--moss) 60%,var(--bamboo) 100%);
@@ -82,6 +83,42 @@ body{font-family:Tahoma,"Segoe UI",Roboto,Verdana,Arial,sans-serif;
   color:var(--nav-text-active);
   background:rgba(255,255,255,0.07);}
 .tab:disabled{opacity:.3;cursor:not-allowed}
+
+/* ── Nav badge ── */
+.nav-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--gold);color:#fff;
+  border-radius:10px;padding:1px 6px;
+  font-size:10px;font-weight:700;line-height:1.4;
+  margin-left:3px;flex-shrink:0;
+}
+
+/* ── Sub-nav ── */
+.sub-nav{
+  background:var(--navbar-sub);
+  border-bottom:1px solid var(--navbar-border);
+  padding:0 20px;
+  position:sticky;top:48px;z-index:99;
+}
+.sub-nav-inner{display:flex;gap:0;}
+.sub-tab{
+  padding:0 14px;height:34px;
+  background:none;border:none;
+  border-bottom:2px solid transparent;
+  color:rgba(255,255,255,0.55);
+  font-size:12px;font-weight:400;
+  cursor:pointer;white-space:nowrap;
+  transition:all .15s;font-family:inherit;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.sub-tab.active{
+  color:#fff;font-weight:600;
+  border-bottom-color:var(--nav-active);
+}
+.sub-tab:hover:not(.active){
+  color:rgba(255,255,255,0.85);
+  background:rgba(255,255,255,0.05);
+}
 
 /* ── CARDS ────────────────────────────────────────────────── */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
@@ -247,10 +284,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 .tag-low{background:rgba(176,64,64,.12);color:var(--red)}
 
 /* ── DASHBOARD ────────────────────────────────────────────── */
-.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:0;}
+@media(max-width:900px){
+  .dash-grid{grid-template-columns:repeat(2,1fr);}
+}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
-  padding:18px 20px;text-align:left;position:relative;overflow:hidden;
-  transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow);}
+  padding:14px 16px;text-align:left;position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow);min-width:0;}
 .kpi-card:nth-child(1){background:var(--kpi-g1);}
 .kpi-card:nth-child(2){background:var(--kpi-g2);}
 .kpi-card:nth-child(3){background:var(--kpi-g3);}
@@ -262,8 +302,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 .kpi-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,var(--pine),var(--moss2))}
 .kpi-icon{font-size:24px;margin-bottom:6px}
-.kpi-val{font-size:26px;font-weight:700;color:var(--pine);
-  font-family:"IBM Plex Mono",ui-monospace,monospace;line-height:1.1;}
+.kpi-val{font-size:22px;font-weight:700;color:var(--pine);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;line-height:1.1;
+  word-break:break-all;}
 .kpi-label{font-size:11px;color:var(--ink4);margin-top:3px}
 
 /* ── INVENTORY / WAREHOUSE ────────────────────────────────── */
@@ -295,6 +336,55 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,28,30,.55);
   z-index:1000;align-items:center;justify-content:center;padding:16px;
   backdrop-filter:blur(2px)}
+
+/* ── Quick Order Modal ── */
+.qo-modal{
+  width:100%;
+  max-width:680px;
+  max-height:92vh;
+  border-radius:var(--r3) var(--r3) 0 0;
+  padding:16px 16px 20px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.qo-top-row{
+  display:flex;gap:10px;align-items:flex-end;margin-bottom:12px;
+}
+.qo-source-block{flex-shrink:0;width:110px;}
+
+@media(min-width:600px){
+  .qo-modal{border-radius:var(--r3);max-height:90vh;}
+  .qo-source-block{width:160px;}
+}
+
+/* ── Quick Order product card ── */
+.qo-product{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:var(--r2);
+  border:1px solid var(--border);background:var(--surface);
+  transition:background .12s, border-color .12s;
+}
+.qo-product.sel{
+  background:var(--accent-light);
+  border-color:var(--moss2);
+}
+.qo-qty{
+  display:flex;align-items:stretch;
+  border:1px solid var(--border2);border-radius:6px;
+  overflow:hidden;background:var(--surface);flex-shrink:0;
+}
+.qo-qty-btn{
+  width:24px;height:28px;border:none;background:none;
+  color:var(--ink3);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .1s;font-weight:300;
+}
+.qo-qty-btn:hover{background:var(--accent-light);color:var(--pine);}
+.qo-qty-val{
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--ink);font-family:ui-monospace,monospace;
+}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border-radius:var(--r3);padding:20px;max-width:820px;
   width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
@@ -354,129 +444,341 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 .empty-state .icon{font-size:40px;margin-bottom:12px;opacity:.5}
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
-@media(max-width:600px){
-  .item-row{flex-wrap:wrap}.action-bar{gap:6px}.row{flex-wrap:wrap}
-  .tabs{gap:0}.tab{padding:7px 10px;font-size:11px}
-  .stats-grid,.dash-grid{grid-template-columns:repeat(2,1fr)}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE — Mobile First
+   ══════════════════════════════════════════════ */
+
+/* Tablet */
+@media(max-width:768px){
+  .app{padding:0 0 14px;}
+
+  /* Navbar — горизонтальний scroll, без переносу */
+  .tabs{
+    padding:0 4px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    flex-wrap:nowrap;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    padding:0 11px;
+    height:44px;
+    font-size:12px;
+    flex-shrink:0;
+  }
+
+  /* Sub-nav — scroll */
+  .sub-nav{padding:0 8px;}
+  .sub-tab{padding:0 10px;height:32px;font-size:11.5px;flex-shrink:0;}
+  .sub-nav-inner{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .sub-nav-inner::-webkit-scrollbar{display:none;}
+
+  /* Dashboard pane */
+  #pane-dashboard{padding:12px!important;gap:12px!important;}
+
+  /* KPI grid — 2 колонки на планшеті */
+  .dash-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;}
+
+  /* Chart + Recent — стек */
+  #pane-dashboard > div:nth-child(3){
+    grid-template-columns:1fr!important;
+  }
+
+  /* Bottom grids — стек */
+  #pane-dashboard > div:nth-child(5),
+  #pane-dashboard > div:nth-child(6){
+    grid-template-columns:1fr!important;
+  }
+
+  /* Header compact */
+  .header{padding:10px 14px;border-radius:0!important;}
+  .header-text h1{font-size:14px;}
+
+  /* Forms */
+  .item-row{flex-wrap:wrap;}
+  .action-bar{gap:6px;}
+  .row{flex-wrap:wrap;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
 }
 
-/* ── TOAST NOTIFICATIONS ─────────────────────────────── */
-#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--surface);
-  border:1px solid var(--border);border-left:4px solid var(--moss);border-radius:10px;
-  box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:260px;max-width:380px;
-  pointer-events:all;animation:toastIn .2s ease}
-.toast.error{border-left-color:var(--red)}.toast.warning{border-left-color:var(--gold)}.toast.info{border-left-color:var(--sky)}
-.toast-ic{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;font-size:12px;font-weight:700;color:#fff;background:var(--moss)}
-.toast.error .toast-ic{background:var(--red)}.toast.warning .toast-ic{background:var(--gold)}.toast.info .toast-ic{background:var(--sky)}
-.toast-msg{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.4}
-.toast-sub{font-size:11.5px;color:var(--ink3);margin-top:2px}
-.toast-x{border:none;background:none;cursor:pointer;color:var(--ink4);font-size:18px;padding:0 0 0 4px;flex-shrink:0;line-height:1;font-family:inherit}
-@keyframes toastIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+/* Phone */
+@media(max-width:480px){
+  /* KPI — 2 колонки, компактні */
+  .dash-grid{grid-template-columns:repeat(2,1fr)!important;gap:8px!important;}
+  .kpi-card{padding:12px 14px!important;}
+  .kpi-val{font-size:20px!important;}
 
-/* ── QUICK ORDER CTA ─────────────────────────────────── */
-.qo-cta{background:linear-gradient(135deg,var(--pine),var(--moss));border-radius:var(--r2);
-  padding:16px 20px;display:flex;align-items:center;gap:14px;color:#fff;
-  box-shadow:var(--shadow-md);margin-bottom:14px}
-.qo-cta-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.18);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
-.qo-cta-btn{padding:10px 18px;border-radius:8px;border:none;background:#fff;color:var(--pine);
-  font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
-.qo-cta-btn:hover{background:var(--moss4)}
+  /* Quick Order CTA */
+  #dash-quick-cta{padding:8px 12px!important;gap:8px!important;}
 
-/* ── TAB BADGES ──────────────────────────────────────── */
-.tab-badge{display:inline-block;background:var(--gold);color:#fff;border-radius:10px;
-  padding:1px 6px;font-size:10px;font-weight:700;margin-left:4px;vertical-align:middle;line-height:1.6}
+  /* Navbar icons hidden, text only — щоб влізти */
+  .tab svg{display:none;}
+  .tab{padding:0 9px;font-size:11.5px;height:42px;}
 
-/* ── QUICK ORDER PRODUCT PICKER ──────────────────────── */
-.qo-product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
-.qo-product-row{display:flex;align-items:center;gap:8px;padding:7px 10px;
-  background:var(--surface);border:1px solid var(--border);border-radius:8px;transition:border-color .15s}
-.qo-product-row.on{background:rgba(61,107,74,.08);border-color:var(--moss2)}
-.qo-product-aroma{font-size:16px;line-height:1;flex-shrink:0}
-.qo-product-name{flex:1;min-width:0;font-size:12px;font-weight:500;color:var(--ink);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.qo-product-price{font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
-.qo-qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--surface)}
-.qo-qty button{width:24px;height:24px;border:none;background:none;cursor:pointer;color:var(--ink3);font-size:16px;line-height:1;padding:0}
-.qo-qty button:hover{color:var(--moss)}
-.qo-qty span{width:26px;text-align:center;font-size:12px;font-weight:600;
-  font-family:"IBM Plex Mono",monospace;color:var(--pine)}
+  /* Modal full-screen */
+  .modal{border-radius:var(--r2) var(--r2) 0 0!important;
+    position:fixed!important;bottom:0!important;left:0!important;
+    right:0!important;max-width:100%!important;max-height:92vh!important;
+    margin:0!important;}
+  .modal-overlay{align-items:flex-end!important;padding:0!important;}
+
+  /* Журнал таблиця — hide less important cols */
+  .inv-table th:nth-child(3),
+  .inv-table td:nth-child(3){display:none;}
+
+  /* App padding */
+  .app{padding:0;}
+
+  /* Toast — full width */
+  #atik-toast-container{left:12px;right:12px;bottom:16px;}
+  .atik-toast{min-width:unset;max-width:100%;}
+
+  /* Forms — single column */
+  .frow{grid-template-columns:1fr!important;}
+  .dash-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+}
+
+
+
+/* ── Dashboard grid classes ── */
+@media(max-width:768px){
+  .dash-chart-row{grid-template-columns:1fr!important;}
+  .dash-two-col{grid-template-columns:1fr!important;}
+}
+
+/* ── Settings ── */
+.settings-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+.settings-key{color:var(--ink3);flex-shrink:0;min-width:80px;}
+.settings-val{color:var(--ink);font-weight:500;text-align:right;}
+.toggle-row{gap:12px;}
+.settings-toggle{
+  width:38px;height:22px;border-radius:11px;
+  background:var(--border2);position:relative;
+  cursor:pointer;transition:background .15s;flex-shrink:0;
+}
+.settings-toggle.on{background:var(--accent);}
+.toggle-knob{
+  position:absolute;top:2px;left:2px;
+  width:18px;height:18px;border-radius:50%;
+  background:#fff;transition:left .15s;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.settings-toggle.on .toggle-knob{left:18px;}
+/* ── Toast notifications ── */
+#atik-toast-container{
+  position:fixed;bottom:24px;right:24px;
+  display:flex;flex-direction:column;gap:8px;
+  z-index:9999;pointer-events:none;
+}
+.atik-toast{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 14px;min-width:280px;max-width:380px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);
+  box-shadow:0 4px 20px rgba(0,0,0,.12);
+  pointer-events:auto;
+  animation:atikToastIn .22s cubic-bezier(.16,1,.3,1);
+}
+.atik-toast.removing{animation:atikToastOut .18s ease forwards;}
+.atik-toast-ico{
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.atik-toast-body{flex:1;}
+.atik-toast-msg{font-size:13px;font-weight:500;color:var(--ink);}
+.atik-toast-sub{font-size:12px;color:var(--ink3);margin-top:2px;}
+.atik-toast-close{
+  background:none;border:none;cursor:pointer;
+  color:var(--ink3);padding:0;font-size:16px;line-height:1;
+  flex-shrink:0;margin-left:4px;
+}
+.atik-toast-close:hover{color:var(--ink);}
+@keyframes atikToastIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+@keyframes atikToastOut{to{opacity:0;transform:translateX(20px);}}
 </style>
 </head>
 <body>
 <div class="app">
-<div style="background:var(--gold);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 14px;border-radius:0 0 8px 8px;margin:-14px -14px 12px;text-align:center;opacity:.92;">🔧 ATIK DEV &nbsp;·&nbsp; Firestore: <code style="background:rgba(0,0,0,.18);padding:1px 6px;border-radius:3px;font-size:10px;">shared/dev</code></div>
+<div style="background:var(--gold);color:#fff;font-size:10px;font-weight:600;letter-spacing:.06em;padding:3px 12px;text-align:center;opacity:.85;flex-shrink:0;">🔧 DEV · shared/dev</div>
 
 <div class="header">
-  <div id="header-logo-wrap"><img src="data:image/png;base64,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" alt="ATIK" style="height:48px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))"></div>
-  <div class="header-text">
-    <h1>🌿 All trees I know</h1>
-    <p>ФОП Савчук Анастасія Борисівна &nbsp;·&nbsp; Облік, склад, продажі</p>
-  </div>
-</div>
-<div class="card" style="margin-top:-4px">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <img src="data:image/png;base64,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" alt="ATIK" style="height:34px;width:auto;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));">
     <div>
-      <div style="font-size:14px;font-weight:700;color:var(--pine)">☁️ Онлайн-синхронізація</div>
-      <div id="cloud-status" style="font-size:12px;color:var(--ink4);margin-top:2px">Локальний режим. Підключіть Firebase.</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:.02em;">All trees I know</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.65);line-height:1.3;">Облік · склад · продажі</div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <span id="cloud-user" style="font-size:12px;color:var(--ink3)"></span>
-      <button class="btn btn-gray btn-sm" id="btn-signin" onclick="cloudSignIn()">Увійти через Google</button>
-      <button class="btn btn-gray btn-sm" id="btn-signout" onclick="cloudSignOut()" style="display:none">Вийти</button>
-      <button class="btn btn-moss btn-sm" id="btn-cloud-sync" onclick="manualCloudSync()" style="display:none">Синхронізувати зараз</button>
-    </div>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0">
+    <div id="cloud-status" style="font-size:11px;color:rgba(255,255,255,0.65);white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis"></div>
+    <span id="cloud-user" style="font-size:11px;color:rgba(255,255,255,0.7);white-space:nowrap"></span>
+    <button class="btn btn-sm" id="btn-signin" onclick="cloudSignIn()" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);font-size:11px;padding:5px 10px;">Google →</button>
+    <button class="btn btn-sm" id="btn-signout" onclick="cloudSignOut()" style="display:none;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.2);font-size:11px;padding:5px 10px;">Вийти</button>
+    <button class="btn btn-sm" id="btn-cloud-sync" onclick="manualCloudSync()" style="display:none;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);font-size:11px;padding:5px 10px;">↻ Sync</button>
   </div>
 </div>
 
-<div class="tabs">
-  <button class="tab active"   onclick="switchTab('dashboard')">🏠 Головна</button>
-  <button class="tab"          onclick="switchTab('docs')">📝 Документи</button>
-  <button class="tab"          id="tab-warehouse" onclick="switchTab('warehouse')">📦 Склад</button>
-  <button class="tab"          onclick="switchTab('sales')">🏪 Продажі</button>
-  <button class="tab"          id="tab-orders" onclick="switchTab('orders')">📬 Замовлення</button>
-  <button class="tab"          onclick="switchTab('retail')">🏬 Точки</button>
-  <button class="tab"          onclick="switchTab('catalog')">📋 Довідники</button>
-  <button class="tab"          onclick="switchTab('settings')">⚙️</button>
+<div class="tabs" id="main-tabs">
+  <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Головна
+  </button>
+  <button class="tab" data-tab="docs" onclick="switchTab('docs')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Документи
+  </button>
+  <button class="tab" data-tab="warehouse" onclick="switchTab('warehouse')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/><path d="M2 11h20"/></svg>
+    Склад
+    <span class="nav-badge" id="badge-warehouse" style="display:none"></span>
+  </button>
+  <button class="tab" data-tab="sales" onclick="switchTab('sales')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Продажі
+  </button>
+  <button class="tab" data-tab="orders" onclick="switchTab('orders')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5 19.79 19.79 0 01.12 1.18 2 2 0 012.1 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.27 7.58A16 16 0 0013 14.3l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 15.08z"/></svg>
+    Замовлення
+    <span class="nav-badge" id="badge-orders" style="display:none"></span>
+  </button>
+  <button class="tab" data-tab="retail" onclick="switchTab('retail')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l1.5-4h17L22 7"/><path d="M2 7v13a1 1 0 001 1h18a1 1 0 001-1V7"/><path d="M9 11h6"/></svg>
+    Точки
+  </button>
+  <button class="tab" data-tab="catalog" onclick="switchTab('catalog')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    Довідники
+  </button>
+  <button class="tab" data-tab="settings" onclick="switchTab('settings')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+  </button>
+</div>
+<!-- Sub-nav -->
+<div class="sub-nav" id="sub-nav" style="display:none">
+  <div class="sub-nav-inner" id="sub-nav-inner"></div>
 </div>
 
 <!-- ═══ DASHBOARD ═══ -->
-<div id="pane-dashboard">
+<div id="pane-dashboard" style="padding:18px;display:flex;flex-direction:column;gap:16px;">
+
   <!-- Quick Order CTA -->
-  <div class="qo-cta">
-    <div class="qo-cta-icon">⚡</div>
-    <div style="flex:1">
-      <div style="font-size:14px;font-weight:700;margin-bottom:2px">Швидке замовлення</div>
-      <div style="font-size:12px;opacity:.85">Інстаграм, сайт, дзвінок — оберіть аромати і одразу створіть накладну</div>
+  <div id="dash-quick-cta" style="
+    background:linear-gradient(135deg,var(--pine),var(--moss2));
+    border-radius:var(--r2);padding:10px 16px;
+    display:flex;align-items:center;gap:10px;color:#fff;
+    box-shadow:0 2px 12px rgba(45,74,62,.2);flex-wrap:wrap;">
+    <span style="font-size:16px;flex-shrink:0;">⚡</span>
+    <div style="flex:1;min-width:0;">
+      <span style="font-size:13px;font-weight:600;">Швидке замовлення</span>
+      <span style="font-size:11px;opacity:.7;white-space:nowrap;">Instagram · сайт · дзвінок</span>
     </div>
-    <button class="qo-cta-btn" onclick="openQuickOrder()">+ Створити</button>
+    <button onclick="openQuickOrder()"
+      style="padding:6px 14px;border-radius:6px;border:none;background:rgba(255,255,255,.92);color:var(--pine);
+      font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;">
+      + Створити
+    </button>
   </div>
-  <div id="dash-kpi" class="dash-grid"></div>
-  <div class="card" id="dash-alerts-card" style="display:none">
-    <div class="card-title">⚠️ Потребує уваги</div>
-    <div id="dash-alerts"></div>
+
+  <!-- 4 KPI tiles -->
+  <div id="dash-kpi" class="dash-grid" style="grid-template-columns:repeat(4,1fr);gap:14px;"></div>
+
+  <!-- Chart + Recent docs -->
+  <div class="dash-chart-row" style="display:grid;grid-template-columns:1fr 320px;gap:14px;">
+    <div class="card" style="margin:0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink)">Виручка по місяцях</div>
+          <div style="font-size:11px;color:var(--ink4);margin-top:2px" id="dash-chart-subtitle"></div>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;">
+          <!-- Period -->
+          <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+            <button onclick="setChartPeriod(6)" id="chart-period-6"
+              style="padding:4px 10px;border:none;background:var(--pine);color:#fff;font-size:11px;cursor:pointer;font-family:inherit;">6м</button>
+            <button onclick="setChartPeriod(12)" id="chart-period-12"
+              style="padding:4px 10px;border:none;background:none;color:var(--ink3);font-size:11px;cursor:pointer;font-family:inherit;">12м</button>
+          </div>
+          <!-- Mode -->
+          <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+            <button onclick="setChartMode('revenue')" id="chart-mode-revenue"
+              style="padding:4px 9px;border:none;background:var(--pine);color:#fff;font-size:11px;cursor:pointer;font-family:inherit;">₴</button>
+            <button onclick="setChartMode('profit')" id="chart-mode-profit"
+              style="padding:4px 9px;border:none;background:none;color:var(--ink3);font-size:11px;cursor:pointer;font-family:inherit;">%</button>
+            <button onclick="setChartMode('units')" id="chart-mode-units"
+              style="padding:4px 9px;border:none;background:none;color:var(--ink3);font-size:11px;cursor:pointer;font-family:inherit;">шт</button>
+          </div>
+        </div>
+      </div>
+      <div id="stats-chart-svg" style="width:100%;overflow-x:auto;min-height:80px"></div>
+    </div>
+    <div class="card" style="margin:0;">
+      <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:12px;">Останні документи</div>
+      <div id="dash-recent-docs"></div>
+      <button onclick="switchTab('docs');setTimeout(function(){switchDocsSub('journal');},80)"
+        style="margin-top:12px;width:100%;padding:8px;background:var(--accent-light);
+        border:1px solid var(--border);border-radius:7px;color:var(--pine);
+        font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">
+        Всі документи →
+      </button>
+    </div>
   </div>
-  <div class="row" style="gap:14px">
-    <div style="flex:1;min-width:280px"><div class="card"><div id="dash-top-buyers"></div></div></div>
-    <div style="flex:1;min-width:280px"><div class="card"><div id="dash-top-products"></div></div></div>
+
+  <!-- Alerts -->
+  <div class="card" id="dash-alerts-card" style="display:none;margin:0;
+    background:rgba(200,168,75,.08);border-color:var(--gold);">
+    <div style="display:flex;gap:10px;align-items:flex-start;">
+      <span style="font-size:18px;flex-shrink:0;margin-top:1px;">⚠️</span>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;">Потребує уваги</div>
+        <div id="dash-alerts"></div>
+      </div>
+    </div>
   </div>
-  <div class="card"><div id="dash-forecast"></div></div>
-  <div class="card"><div id="dash-warehouse-summary"></div></div>
+
+  <!-- Bottom row: top buyers + top products -->
+  <div class="dash-two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div class="card" style="margin:0;"><div id="dash-top-buyers"></div></div>
+    <div class="card" style="margin:0;"><div id="dash-top-products"></div></div>
+  </div>
+
+  <!-- Warehouse summary -->
+  <div class="card" style="margin:0;"><div id="dash-warehouse-summary"></div></div>
+
 </div>
 
 <!-- ═══ DOCS (Form + Preview + Journal) ═══ -->
 <div id="pane-docs" style="display:none">
-  <div id="draft-banner" style="display:none;background:rgba(200,168,75,.12);border:1px solid var(--gold);border-radius:var(--r2);padding:10px 14px;margin-bottom:12px;align-items:center;gap:10px;flex-wrap:wrap">
-    <span style="font-size:13px;flex:1">Є незбережена чернетка накладної</span>
-    <button class="btn btn-moss btn-sm" onclick="restoreDraft()">Вiдновити</button>
+  <!-- Draft banner -->
+  <div id="draft-banner" style="display:none;background:rgba(200,168,75,.08);border-bottom:1px solid var(--gold);padding:10px 20px;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-size:13px;flex:1;color:var(--ink)">📝 Є незбережена чернетка</span>
+    <button class="btn btn-moss btn-sm" onclick="restoreDraft()">Відновити</button>
     <button class="btn btn-gray btn-sm" onclick="discardDraft()">Викинути</button>
   </div>
-  <div style="display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:8px">
-    <button class="btn btn-gray btn-sm" id="docs-sub-form" onclick="switchDocsSub('form')" style="font-weight:700;background:var(--moss2);color:var(--pine)">✏️ Нова</button>
-    <button class="btn btn-gray btn-sm" id="docs-sub-preview" onclick="switchDocsSub('preview')">👁 Перегляд</button>
-    <button class="btn btn-gray btn-sm" id="docs-sub-journal" onclick="switchDocsSub('journal')">📚 Журнал</button>
+  <!-- Page header — Journal view -->
+  <div id="docs-journal-header" style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px 0;gap:10px;flex-wrap:wrap;">
+    <div>
+      <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0;" id="docs-journal-title">Журнал документів</h2>
+      <div style="font-size:12px;color:var(--ink3);margin-top:3px;" id="docs-journal-meta"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-gray btn-sm" onclick="switchDocsSub('form')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Новий рахунок
+      </button>
+      <button class="btn btn-moss btn-sm" onclick="switchDocsSub('form')" style="color:#fff;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Нова накладна
+      </button>
+    </div>
   </div>
   <div id="docs-form">
   <div class="card">
@@ -717,49 +1019,57 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 </div>
 
 <!-- ═══ ORDERS ═══ -->
-<div id="pane-orders" style="display:none">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-      <strong style="font-size:14px">📬 Вхідні замовлення</strong>
-      <div style="display:flex;gap:8px;align-items:center">
-        <select id="orders-filter" onchange="renderOrders()" style="padding:5px 8px;font-size:12px;border:1px solid var(--border);border-radius:var(--r2)">
-          <option value="all">Всі статуси</option>
-          <option value="new">Нові</option>
-          <option value="confirmed">Підтверджені</option>
-          <option value="declined">Відхилені</option>
-        </select>
-        <button class="btn btn-gray btn-sm" onclick="loadOrders()">🔄 Оновити</button>
-      </div>
+<div id="pane-orders" style="display:none;padding:18px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+    <div>
+      <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0;">Замовлення</h2>
+      <div id="orders-meta" style="font-size:12px;color:var(--ink3);margin-top:3px;"></div>
     </div>
-    <div id="orders-list"></div>
+    <button class="btn btn-gray btn-sm" onclick="loadOrders()" style="flex-shrink:0;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+      Оновити
+    </button>
   </div>
+  <div id="orders-list"></div>
 </div>
 
 <!-- ═══ RETAIL POINTS (standalone tab) ═══ -->
-<div id="pane-retail" style="display:none">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-      <strong style="font-size:14px">🏬 Залишки на точках роздрібу</strong>
-      <button class="btn btn-moss btn-sm" onclick="openSalesReportModal()">✏️ Ввести продажі</button>
+<div id="pane-retail" style="display:none;padding:18px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+    <div>
+      <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0;">Роздрібні точки</h2>
+      <div id="retail-meta" style="font-size:12px;color:var(--ink3);margin-top:3px;"></div>
     </div>
-    <div id="retail-store-grid"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">📋 Історія звітів продажів</div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <select id="retail-history-filter" onchange="renderRetailHistory()" style="width:auto;padding:5px 8px;font-size:12px"><option value="">Всі точки</option></select>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-gray btn-sm" onclick="openAddRetailModal()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Додати точку
+      </button>
+      <button class="btn btn-moss btn-sm" onclick="openSalesReportModal()" style="color:#fff;">
+        ✏️ Ввести продажі
+      </button>
     </div>
-    <div id="retail-history-list"></div>
   </div>
+  <div id="retail-store-grid" style="margin-bottom:20px;"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+    <div style="font-size:13px;font-weight:600;color:var(--ink);">Історія звітів</div>
+    <select id="retail-history-filter" onchange="renderRetailHistory()" style="padding:5px 10px;font-size:12px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);">
+      <option value="">Всі точки</option>
+    </select>
+  </div>
+  <div id="retail-history-list"></div>
 </div>
 
 <!-- ═══ CATALOG (Buyers + Products + Suppliers) ═══ -->
-<div id="pane-catalog" style="display:none">
+<div id="pane-catalog" style="display:none;padding:18px;">
   <!-- BUYERS -->
-  <div class="card">
+  <div class="card" id="catalog-buyers-section">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <strong style="font-size:14px">👥 Покупці / Точки</strong>
-      <button class="btn btn-moss btn-sm" onclick="showBuyerForm(null)">+ Додати</button>
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--ink);">Покупці</div>
+        <div id="catalog-buyers-meta" style="font-size:12px;color:var(--ink3);margin-top:2px;"></div>
+      </div>
+      <button class="btn btn-moss btn-sm" onclick="showBuyerForm(null)" style="color:#fff;">+ Новий покупець</button>
     </div>
     <div class="manage-list" id="buyers-list"></div>
     <div id="buyer-form" style="display:none" class="manage-form">
@@ -793,10 +1103,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
   </div>
 
   <!-- PRODUCTS -->
-  <div class="card">
+  <div class="card" id="catalog-products-section">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <strong style="font-size:14px">🌿 Товари</strong>
-      <button class="btn btn-moss btn-sm" onclick="showProductForm(null)">+ Додати</button>
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--ink);">Товари</div>
+        <div id="catalog-products-meta" style="font-size:12px;color:var(--ink3);margin-top:2px;"></div>
+      </div>
+      <button class="btn btn-moss btn-sm" onclick="showProductForm(null)" style="color:#fff;">+ Новий товар</button>
     </div>
     <div class="manage-list" id="products-list"></div>
     <div id="product-form" style="display:none" class="manage-form">
@@ -822,8 +1135,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
   </div>
 
   <!-- SUPPLIERS -->
-  <div class="card">
-    <strong style="font-size:14px;display:block;margin-bottom:14px">🏭 Постачальники сировини</strong>
+  <div class="card" id="catalog-suppliers-section">
+    <div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:14px;">Постачальники</div>
     <div class="manage-list" id="suppliers-list" style="margin-bottom:10px"></div>
     <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap">
       <input id="new-supplier-name" placeholder="Назва нового постачальника" style="flex:1;min-width:200px">
@@ -835,12 +1148,73 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss2);
 </div>
 
 <!-- ═══ SETTINGS ═══ -->
-<div id="pane-settings" style="display:none">
-  <div class="card">
-    <strong style="font-size:14px;display:block;margin-bottom:14px">⚙️ Налаштування</strong>
-    <label class="radio-label" style="margin-bottom:14px">
-      <input type="checkbox" id="setting-autoincrement" style="width:auto;margin-right:4px"> Автоматично збільшувати номер накладної
-    </label>
+<div id="pane-settings" style="display:none;padding:18px;max-width:680px;">
+  <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 20px;">Налаштування</h2>
+
+  <!-- Profile section -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);">
+    <div style="padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;">Профіль</div>
+    <div class="settings-row"><span class="settings-key">ФОП</span><span class="settings-val">Савчук Анастасія Борисівна</span></div>
+    <div class="settings-row"><span class="settings-key">ЄДРПОУ</span><span class="settings-val" style="font-family:ui-monospace,monospace;">3305200068</span></div>
+    <div class="settings-row"><span class="settings-key">IBAN</span><span class="settings-val" style="font-family:ui-monospace,monospace;font-size:11px;">UA893220010000026000340100278</span></div>
+    <div class="settings-row" style="border-bottom:none;"><span class="settings-key">Адреса</span><span class="settings-val">01030, м.Київ, вул. В.Липинського, 4В, кв.70</span></div>
+  </div>
+
+  <!-- Theme section -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);">
+    <div style="padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;">Тема інтерфейсу</div>
+    <div style="padding:12px 14px;display:flex;gap:8px;">
+      <button style="padding:8px 20px;border-radius:var(--r);border:2px solid var(--accent);background:var(--accent-light);color:var(--pine);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Washi</button>
+      <button style="padding:8px 20px;border-radius:var(--r);border:1px solid var(--border);background:none;color:var(--ink3);font-size:13px;cursor:pointer;font-family:inherit;">Світла</button>
+    </div>
+  </div>
+
+  <!-- Notifications section -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);">
+    <div style="padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;">Сповіщення</div>
+    <div class="settings-row toggle-row"><span style="font-size:13px;color:var(--ink);">Email при новому замовленні</span><div class="settings-toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+    <div class="settings-row toggle-row"><span style="font-size:13px;color:var(--ink);">Push при низьких залишках</span><div class="settings-toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+    <div class="settings-row toggle-row" style="border-bottom:none;"><span style="font-size:13px;color:var(--ink);">Тижневий звіт по неділях</span><div class="settings-toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+  </div>
+
+  <!-- Export section -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);">
+    <div style="padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;">Експорт</div>
+    <div style="padding:12px 14px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-gray btn-sm" onclick="exportJournalExcel()">📊 Журнал Excel</button>
+      <button class="btn btn-gray btn-sm" onclick="exportBackup()">💾 Бекап JSON</button>
+      <button class="btn btn-gray btn-sm" onclick="document.getElementById('import-file').click()">📂 Відновити</button>
+      <button class="btn btn-gray btn-sm" onclick="document.getElementById('merge-file').click()">☁️ Merge backup</button>
+    </div>
+  </div>
+
+  <!-- Auto-increment + other -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);">
+    <div style="padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;">Документи</div>
+    <div class="settings-row toggle-row" style="border-bottom:none;">
+      <span style="font-size:13px;color:var(--ink);">Автоматично збільшувати номер накладної</span>
+      <div class="settings-toggle on" id="toggle-autoincrement" onclick="toggleAutoincrement()"><div class="toggle-knob"></div></div>
+    </div>
+  </div>
+
+  <!-- Hidden inputs -->
+  <input type="hidden" id="setting-autoincrement">
+  <input type="file" id="merge-file" accept=".json" style="display:none" onchange="mergeImportBackup(this)">
+  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(this)">
+
+  <!-- Danger zone -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow);">
+    <div style="padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;">Небезпечна зона</div>
+    <div style="padding:12px 14px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-danger btn-sm" onclick="clearJournal()">🗑 Очистити журнал</button>
+      <button class="btn btn-danger btn-sm" onclick="resetAll()">⚠️ Скинути все</button>
+    </div>
+  </div>
+
+  <div style="display:none;"><!-- legacy settings below hidden -->
+  <label class="radio-label" style="margin-bottom:14px">
+    <input type="checkbox" id="setting-autoincrement-legacy" style="width:auto;margin-right:4px"> Автоматично збільшувати номер накладної
+  </label>
     <div class="section-divider">Форма замовлень — Firestore Rules</div>
     <div style="margin-bottom:16px;font-size:12px;color:var(--ink3);line-height:1.7">
       <div style="margin-bottom:8px">Вставте в <strong>Firebase Console → Firestore → Rules</strong> і натисніть Publish.</div>
@@ -865,17 +1239,7 @@ service cloud.firestore {
       <button class="btn btn-moss btn-sm" onclick="migrateSupplierToAroma()">🔄 Розподілити палички по ароматах</button>
       <div id="migration-status" style="font-size:12px;color:var(--ink4);margin-top:6px"></div>
     </div>
-    <div class="section-divider">Дані</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-moss btn-sm" onclick="exportBackup()">💾 Резервна копія</button>
-      <button class="btn btn-gray btn-sm" onclick="document.getElementById('import-file').click()">📂 Відновити</button>
-      <button class="btn btn-moss btn-sm" onclick="document.getElementById('merge-file').click()">☁️ Merge backup</button>
-      <input type="file" id="merge-file" accept=".json" style="display:none" onchange="mergeImportBackup(this)">
-      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(this)">
-      <button class="btn btn-danger btn-sm" onclick="clearJournal()">🗑 Очистити журнал</button>
-      <button class="btn btn-danger btn-sm" onclick="resetAll()">⚠️ Скинути все</button>
-    </div>
-  </div>
+  </div><!-- end legacy hidden -->
 </div>
 
 <!-- AROMA MODAL -->
@@ -886,6 +1250,64 @@ service cloud.firestore {
       <button class="modal-close" onclick="closeModal('modal-aroma')">x</button>
     </div>
     <div id="modal-aroma-content"></div>
+  </div>
+</div>
+
+
+<!-- ═══ QUICK ORDER MODAL ═══ -->
+<div class="modal-overlay" id="modal-quickorder" style="align-items:flex-end;">
+  <div class="modal qo-modal">
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <h3 style="font-size:15px;font-weight:700;color:var(--pine);margin:0;">⚡ Швидке замовлення</h3>
+      <button onclick="closeQuickOrder()" style="background:var(--surface2);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:16px;color:var(--ink3);display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+
+    <!-- Source + note — flex row, стискається на мобільному -->
+    <div class="qo-top-row">
+      <div class="qo-source-block">
+        <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;">Джерело</div>
+        <div style="display:flex;gap:5px;" id="qo-source-btns">
+          <button onclick="qoSetSource('Instagram')" id="qo-src-Instagram"
+            class="btn btn-moss btn-sm" style="flex:1;justify-content:center;padding:6px 8px;">Inst</button>
+          <button onclick="qoSetSource('Сайт')" id="qo-src-Сайт"
+            class="btn btn-gray btn-sm" style="flex:1;justify-content:center;padding:6px 8px;">Сайт</button>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;">Примітка</div>
+        <input id="qo-note" placeholder="@nickname або коментар"
+          style="width:100%;padding:6px 10px;border:1px solid var(--border2);border-radius:var(--r);
+          background:var(--surface);color:var(--ink);font-size:13px;font-family:inherit;">
+      </div>
+    </div>
+
+    <!-- Product picker — scrollable area -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);
+      padding:10px;margin-bottom:12px;overflow-y:auto;max-height:52vh;-webkit-overflow-scrolling:touch;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-size:11px;font-weight:600;color:var(--ink2);">Аромати та кількість</span>
+        <span style="font-size:10px;color:var(--ink4);">полиця 100%</span>
+      </div>
+      <div id="qo-product-grid"></div>
+    </div>
+
+    <!-- Summary bar — sticky внизу -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 12px;background:var(--accent-light);border:1px solid var(--border);
+      border-radius:var(--r2);">
+      <div>
+        <div style="font-size:10px;color:var(--ink3);font-weight:500;" id="qo-count-lbl">0 шт.</div>
+        <div style="font-size:20px;font-weight:700;color:var(--pine);font-family:ui-monospace,monospace;line-height:1.2;" id="qo-total">0 ₴</div>
+      </div>
+      <button onclick="submitQuickOrder()" id="qo-submit"
+        style="padding:10px 16px;border-radius:8px;border:none;background:var(--pine);
+        color:#fff;font-size:13px;font-weight:700;cursor:pointer;
+        font-family:inherit;opacity:.4;white-space:nowrap;" disabled>
+        ✓ Створити НН
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -1086,31 +1508,40 @@ function aromaSupplier(aromaId){ return suppliers.find(function(s){return s.arom
 
 var generated=null, currentJournalItem=null;
 var chartMode='revenue';
+var chartPeriod=6;
 var reorderPoints={};
 var opexStore={};
+function setChartPeriod(p){
+  chartPeriod=p;
+  [6,12].forEach(function(n){
+    var b=document.getElementById('chart-period-'+n);
+    if(!b)return;
+    b.style.background = n===p ? 'var(--pine)' : '';
+    b.style.color      = n===p ? '#fff' : 'var(--ink3)';
+  });
+  renderMonthlyChart();
+  // оновлюємо subtitle
+  var sub=document.getElementById('dash-chart-subtitle');
+  if(sub){
+    var now=new Date(),MN=['Січ','Лют','Бер','Кві','Тра','Чер','Лип','Сер','Вер','Жов','Лис','Гру'];
+    var start=new Date(now.getFullYear(),now.getMonth()-(p-1),1);
+    sub.textContent=MN[start.getMonth()]+(start.getFullYear()!==now.getFullYear()?' '+start.getFullYear():'')
+      +' — '+MN[now.getMonth()]+' '+now.getFullYear();
+  }
+}
 function setChartMode(m){
   chartMode=m;
   ['revenue','profit','units'].forEach(function(id){
     var b=document.getElementById('chart-mode-'+id);
     if(!b)return;
-    b.style.background=id===m?'var(--pine)':'';
-    b.style.color=id===m?'white':'';
+    b.style.background = id===m ? 'var(--pine)' : '';
+    b.style.color      = id===m ? '#fff' : 'var(--ink3)';
   });
   renderMonthlyChart();
 }
 var chartMode='revenue';
 var reorderPoints={};
 var opexStore={};
-function setChartMode(m){
-  chartMode=m;
-  ['revenue','profit','units'].forEach(function(id){
-    var b=document.getElementById('chart-mode-'+id);
-    if(!b)return;
-    b.style.background=id===m?'var(--pine)':'';
-    b.style.color=id===m?'white':'';
-  });
-  renderMonthlyChart();
-}
 var items=[{id:Date.now(),productId:"",qty:1,customPrice:""}];
 
 // CLOUD STATE
@@ -1535,23 +1966,103 @@ function getDaysOfStock(pid){
 // TAB SWITCHING
 // ============================================================
 var ALL_TABS=["dashboard","docs","warehouse","sales","orders","retail","catalog","settings"];
+function updateBreadcrumb(tab, sub) { /* removed */ }
+
+/* Sub-nav definitions */
+var SUB_NAVS = {
+  docs:      [{id:"all",    label:"Всі"},     {id:"form",    label:"Нова"},     {id:"journal", label:"Журнал"}],
+  warehouse: [{id:"raw",    label:"Сировина"},{id:"receive", label:"Прийом"},   {id:"history",  label:"Журнал"}],
+  sales:     [{id:"stats",  label:"Огляд"},   {id:"margin",  label:"Маржа"},    {id:"retail",   label:"Точки"}],
+  catalog:   [{id:"buyers", label:"Покупці"}, {id:"products",label:"Товари"},   {id:"suppliers",label:"Постачальники"}],
+  orders:    [{id:"all",    label:"Всі"},     {id:"new",     label:"Нові"},     {id:"confirmed",label:"Підтверджені"}],
+};
+var currentSubTab = {};
+
+function renderSubNav(tab) {
+  var subNav = document.getElementById("sub-nav");
+  var inner  = document.getElementById("sub-nav-inner");
+  var defs   = SUB_NAVS[tab];
+  if (!defs) { subNav.style.display = "none"; return; }
+  subNav.style.display = "";
+  var active = currentSubTab[tab] || defs[0].id;
+  inner.innerHTML = defs.map(function(s) {
+    return '<button class="sub-tab' + (s.id===active?' active':'') + '" ' +
+      'onclick="switchSubTab(\''+ tab +'\',\''+ s.id +'\')">' + s.label + '</button>';
+  }).join("");
+}
+
+function switchSubTab(tab, sub) {
+  currentSubTab[tab] = sub;
+  renderSubNav(tab);
+  updateBreadcrumb(tab, sub);
+  /* route to existing handlers */
+  if (tab==="docs") {
+    if (sub==="form")    switchDocsSub("form");
+    else if (sub==="journal") switchDocsSub("journal");
+    else { switchDocsSub("journal"); }
+  }
+  if (tab==="warehouse") {
+    if (sub==="raw")     { renderRawMaterials(); }
+    if (sub==="receive") { renderReceiveHistory(); }
+    if (sub==="history") { renderReceiveHistory(); }
+  }
+  if (tab==="sales") {
+    if (sub==="stats")  renderStats();
+    if (sub==="retail") renderRetailTab();
+  }
+  if (tab==="catalog") {
+    if (sub==="buyers")    { renderBuyersList(); }
+    if (sub==="products")  { renderProductsList(); }
+    if (sub==="suppliers") { renderSuppliersList(); }
+  }
+  if (tab==="orders") loadOrders();
+}
+
+function updateNavBadges() {
+  /* Orders badge */
+  var newOrders = typeof ordersData !== "undefined"
+    ? ordersData.filter(function(o){return o.status==="new";}).length : 0;
+  var bOrders = document.getElementById("badge-orders");
+  if (bOrders) {
+    bOrders.style.display = newOrders > 0 ? "" : "none";
+    bOrders.textContent   = newOrders;
+  }
+  /* Warehouse badge — low stock */
+  var lowCount = 0;
+  Object.keys(AROMAS||{}).forEach(function(a){
+    var k="sticks_"+a;
+    var qty=(rawStock[k]&&rawStock[k].qty)||0;
+    if(qty<1) lowCount++;
+  });
+  var bWH = document.getElementById("badge-warehouse");
+  if (bWH) {
+    bWH.style.display = lowCount > 0 ? "" : "none";
+    bWH.textContent   = lowCount;
+  }
+}
+
 function switchTab(tab){
   ALL_TABS.forEach(function(t){
     var p=document.getElementById("pane-"+t); if(p)p.style.display=(t===tab?"":"none");
   });
-  document.querySelectorAll(".tabs .tab").forEach(function(el,i){el.classList.toggle("active",ALL_TABS[i]===tab);});
-  if(tab==="dashboard")  renderDashboard();
-  if(tab==="docs")       {renderJournal();checkDraftBanner();}
-  if(tab==="warehouse")  {renderRawMaterials();renderReceiveHistory();renderCogs();}
+  document.querySelectorAll(".tabs .tab").forEach(function(el){
+    el.classList.toggle("active", el.dataset.tab===tab);
+  });
+  renderSubNav(tab);
+  updateBreadcrumb(tab, currentSubTab[tab]);
+  if(tab==="dashboard")  { renderDashboard(); updateNavBadges(); }
+  if(tab==="docs")       { renderJournal(); checkDraftBanner(); switchDocsSub("journal"); }
+  if(tab==="warehouse")  { renderRawMaterials(); renderReceiveHistory(); renderCogs(); }
   if(tab==="sales")      {
     var nm=new Date(),ym=nm.getFullYear()+"-"+String(nm.getMonth()+1).padStart(2,"0");
     var om=document.getElementById("opex-month");if(om&&!om.value)om.value=ym;
-    loadOpexForMonth();renderStats();renderRetailTab();setTimeout(function(){setChartMode(chartMode);;setTimeout(function(){setChartMode(chartMode);},50);},50);
+    loadOpexForMonth();renderStats();renderRetailTab();
+    setTimeout(function(){setChartMode(chartMode);},50);
   }
-  if(tab==="orders")     {loadOrders();}
-  if(tab==="retail")     {renderRetailStoreGrid();renderRetailHistory();}
-  if(tab==="catalog")    {renderBuyersList();renderProductsList();renderSuppliersList();}
-  if(tab==="settings")   {loadSettings();}
+  if(tab==="orders")     { loadOrders(); }
+  if(tab==="retail")     { renderRetailStoreGrid(); renderRetailHistory(); }
+  if(tab==="catalog")    { renderBuyersList(); renderProductsList(); renderSuppliersList(); }
+  if(tab==="settings")   { loadSettings(); }
 }
 function switchDocsSub(sub){
   ["form","preview","journal"].forEach(function(s){
@@ -1648,30 +2159,6 @@ function checkDraftBanner(){
 function restoreDraft(){if(loadDraft()){document.getElementById("draft-banner").style.display="none";switchDocsSub("form");}}
 function discardDraft(){clearDraft();document.getElementById("draft-banner").style.display="none";}
 function onFormFieldChange(){saveDraft();}
-function getOpexBreakdown(){
-  function v(id){return parseFloat((document.getElementById(id)||{}).value)||0;}
-  return {ads:v('opex-ads'),rent:v('opex-rent'),salary:v('opex-salary'),delivery:v('opex-delivery'),other:v('opex-other')};
-}
-function getOpexMonth(){
-  var el=document.getElementById('opex-month');
-  if(el&&el.value)return el.value;
-  var n=new Date(); return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');
-}
-function loadOpexForMonth(){
-  var m=getOpexMonth(),d=opexStore[m]||{ads:0,rent:0,salary:0,delivery:0,other:0};
-  ['ads','rent','salary','delivery','other'].forEach(function(k){var el=document.getElementById('opex-'+k);if(el)el.value=d[k]||0;});
-  updateOpexTotal();
-}
-function saveOpexForMonth(){
-  opexStore[getOpexMonth()]=getOpexBreakdown();
-  localStorage.setItem('atik5_opex',JSON.stringify(opexStore));
-}
-function updateOpexTotal(){
-  var b=getOpexBreakdown(),total=b.ads+b.rent+b.salary+b.delivery+b.other;
-  var h=document.getElementById('stats-opex');if(h)h.value=total;
-  var d=document.getElementById('opex-total-display');if(d)d.textContent=total.toLocaleString('uk-UA')+' грн';
-  saveOpexForMonth(); renderStats();
-}
 function getOpexBreakdown(){
   function v(id){return parseFloat((document.getElementById(id)||{}).value)||0;}
   return {ads:v('opex-ads'),rent:v('opex-rent'),salary:v('opex-salary'),delivery:v('opex-delivery'),other:v('opex-other')};
@@ -1837,10 +2324,10 @@ function hideLoader(){if(_plt){clearInterval(_plt);_plt=null;}var el=document.ge
 // ============================================================
 function generate(){
   var filled=items.filter(function(i){return i.productId&&i.qty>0;});
-  if(!filled.length){showToast("Додайте хоча б один товар","warning");return;}
+  if(!filled.length){alert("Додайте хоча б один товар");return;}
   var sel=document.getElementById("buyer-select");
   var buyer=buyers.find(function(b){return b.id===sel.value;});
-  if(!buyer){showToast("Оберіть покупця","warning");return;}
+  if(!buyer){alert("Оберіть покупця");return;}
   var dt=document.querySelector('input[name="doctype"]:checked').value;
   var total=getTotal();
 var priceLabel={
@@ -2014,7 +2501,7 @@ function exportJournalExcel(){
   var list=filterByPeriod(journal,period);
   if(dtype!=="all")list=list.filter(function(j){return j.docType===dtype;});
   if(q)list=list.filter(function(j){return(j.buyer&&j.buyer.name||"").toLowerCase().indexOf(q)>=0||(j.invoiceNum||"").indexOf(q)>=0;});
-  if(!list.length){showToast("Немає документів","warning");return;}
+  if(!list.length){alert("Немає документiв");return;}
   var rev=list.reduce(function(s,j){return s+j.total;},0);
   var cogs=list.reduce(function(s,j){return s+j.items.reduce(function(ss,it){return ss+(it.cogs||0)*it.qty;},0);},0);
   var gross=rev-cogs,margin=rev>0?(gross/rev*100).toFixed(1):"0";
@@ -2056,60 +2543,7 @@ function exportJournalExcel(){
     +Object.entries(bmap).sort(function(a,b){return b[1].t-a[1].t;}).map(function(e){
       return '<tr><td style="'+H.td+'">'+esc(e[0])+'</td><td style="'+H.td+';'+H.R+'">'+e[1].n+'</td>'
         +'<td style="'+H.td+';'+H.R+';'+H.B+'">'+e[1].t.toFixed(2)+'</td></tr>';
-    }).join("")+'</table>
-<!-- ── TOAST CONTAINER ───────────────────────────── -->
-<div id="toast-container"></div>
-
-<!-- ── QUICK ORDER MODAL ─────────────────────────── -->
-<div id="modal-qo" class="modal-overlay" style="display:none">
-<div class="modal" style="max-width:720px;max-height:90vh;overflow-y:auto">
-  <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <h3 style="font-size:15px;font-weight:700;color:var(--pine);margin:0">⚡ Швидке замовлення</h3>
-    <button class="modal-close" onclick="closeQuickOrder()" style="border:none;background:var(--surface3);border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>
-  </div>
-
-  <!-- Source + note -->
-  <div style="display:grid;grid-template-columns:180px 1fr;gap:12px;margin-bottom:14px">
-    <div>
-      <label style="font-size:11px;font-weight:700;color:var(--ink3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Джерело</label>
-      <div style="display:flex;gap:6px">
-        <button id="qo-src-ig" onclick="setQoSource('instagram')" class="btn btn-sm"
-          style="flex:1;background:var(--moss4);color:var(--pine);border:1.5px solid var(--moss2);font-weight:700">Instagram</button>
-        <button id="qo-src-site" onclick="setQoSource('site')" class="btn btn-sm"
-          style="flex:1;background:var(--surface2);color:var(--ink3);border:1px solid var(--border)">Сайт</button>
-      </div>
-    </div>
-    <div>
-      <label style="font-size:11px;font-weight:700;color:var(--ink3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">
-        Примітка <span style="font-weight:400;text-transform:none;color:var(--ink4)">(нікнейм або коментар)</span>
-      </label>
-      <input id="qo-note" placeholder="@nickname або деталі" style="width:100%;padding:7px 10px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:inherit;background:var(--surface)">
-    </div>
-  </div>
-
-  <!-- Product picker -->
-  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:14px">
-    <div style="font-size:11.5px;font-weight:700;color:var(--ink3);margin-bottom:10px;display:flex;justify-content:space-between">
-      <span>Оберіть аромати та кількість</span>
-      <span style="font-weight:400;color:var(--ink4)">Ціна полиці 100%</span>
-    </div>
-    <div id="qo-product-list"></div>
-  </div>
-
-  <!-- Summary + submit -->
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px;background:rgba(61,107,74,.08);border:1px solid var(--moss3);border-radius:var(--r2)">
-    <div>
-      <div style="font-size:11px;color:var(--ink3);font-weight:500">Підсумок · <span id="qo-item-count">0</span> шт.</div>
-      <div id="qo-total" style="font-size:22px;font-weight:700;color:var(--pine);font-family:'IBM Plex Mono',monospace;line-height:1.2">0 ₴</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button onclick="closeQuickOrder()" class="btn btn-gray">Скасувати</button>
-      <button onclick="submitQuickOrder()" class="btn btn-moss" id="qo-submit-btn" disabled>✓ Створити накладну</button>
-    </div>
-  </div>
-</div>
-</div>
-</body></html>';
+    }).join("")+'</table></body></html>';
   var blob=new Blob(["﻿",xls],{type:"application/vnd.ms-excel;charset=utf-8"});
   var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;
   a.download="ATIK_Journal_"+new Date().toISOString().slice(0,10)+".xls";a.click();URL.revokeObjectURL(url);
@@ -2346,7 +2780,7 @@ function copyInvoiceText(g){
   var lines=[docTitleStr(g)+" від "+formatDate(g.invoiceDate),"","Покупець: "+(b.fullName||b.name)];
   g.items.forEach(function(it,i){lines.push((i+1)+". "+it.name+" — "+it.qty+" шт. × "+it.price.toFixed(2)+" = "+it.sum.toFixed(2)+" грн");});
   lines.push("","Всього: "+g.total.toFixed(2)+" грн",g.totalWords);
-  navigator.clipboard.writeText(lines.join("\n")).then(function(){showToast("Скопійовано!","success");});
+  navigator.clipboard.writeText(lines.join("\n")).then(function(){alert("Скопійовано!");});
 }
 
 // ============================================================
@@ -2359,6 +2793,12 @@ function renderJournal(){
   var list=filterByPeriod(journal,period);
   if(dtype!=="all")list=list.filter(function(j){return j.docType===dtype;});
   if(q)list=list.filter(function(j){return(j.buyer&&j.buyer.name||"").toLowerCase().indexOf(q)>=0||(j.invoiceNum||"").indexOf(q)>=0;});
+  // Update page header meta
+  var metaEl=document.getElementById("docs-journal-meta");
+  if(metaEl){
+    var total=list.reduce(function(s,j){return s+j.total;},0);
+    metaEl.innerHTML=list.length+" документів &nbsp;·&nbsp; сумарно <strong style='color:var(--ink);font-family:ui-monospace,monospace'>"+fmt(total)+" ₴</strong>";
+  }
   var el=document.getElementById("journal-list");
   if(!list.length){el.innerHTML='<div class="empty-state"><div class="icon">📚</div>Журнал порожній</div>';return;}
   el.innerHTML='<div class="journal-list">'+list.map(function(j){
@@ -2518,13 +2958,13 @@ function receiveGoods(){
   var rawQty=parseFloat(document.getElementById("recv-raw-qty").value)||0;
   var priceUah=parseFloat(document.getElementById("recv-raw-price").value)||0;
   var supplier=document.getElementById("recv-supplier").value;
-  if(rawQty<=0){showToast("Вкажіть кількість","warning");return;}
-  if(priceUah<=0){showToast("Вкажіть ціну в ₴","warning");return;}
+  if(rawQty<=0){alert("Вкажіть кількість");return;}
+  if(priceUah<=0){alert("Вкажіть ціну в ₴");return;}
 
   var rawKey, unit, sticks=0, aroma=null;
   if(t==="sticks"){
     aroma=document.getElementById("recv-aroma").value;
-    if(!aroma){showToast("Оберіть аромат","warning");return;}
+    if(!aroma){alert("Оберіть аромат");return;}
     rawKey="sticks_"+aroma; unit="кг";
     sticks=Math.round(rawQty*2000);
   } else if(t==="tubes")  {rawKey="tubes";  unit="шт";}
@@ -2554,7 +2994,7 @@ function receiveGoods(){
     priceUah:priceUah,totalUah:totalUah,supplier:supplier,
     aroma:aroma,note:note,savedAt:new Date().toISOString()});
   save();renderRawMaterials();renderReceiveHistory();
-  showToast("✅ Прийнято "+rawQty+" "+unit+(t==="sticks"?" "+aromaLabel+" (≈"+sticks+" паличок)":"")+" за "+priceUah+" ₴/"+unit);
+  alert("✅ Прийнято "+rawQty+" "+unit+(t==="sticks"?" "+aromaLabel+" (≈"+sticks+" паличок)":"")+" за "+priceUah+" ₴/"+unit);
 }
 
 
@@ -2819,7 +3259,7 @@ function saveRawEdits(){
   save();
   renderRawMaterials();
   document.getElementById("raw-edit-panel").style.display="none";
-  showToast("✅ Залишки оновлено","success");
+  alert("✅ Залишки оновлено");
 }
 
 function renderReceiveHistory(){
@@ -3090,7 +3530,7 @@ function renderSalesReportItems(){
 function saveSalesReport(){
   var bid=document.getElementById("sales-buyer-id").value;
   var month=document.getElementById("sales-month").value;
-  if(!bid||!month){showToast("Оберіть точку та місяць","warning");return;}
+  if(!bid||!month){alert("Оберіть точку та місяць");return;}
 
   // Aggregate by productId — multiple rows with same pid get summed
   var soldMap={};
@@ -3103,7 +3543,7 @@ function saveSalesReport(){
   });
 
   var reportItems=Object.keys(soldMap).map(function(k){return soldMap[k];});
-  if(!reportItems.length){showToast("Введіть хоча б одну продану позицію","warning");return;}
+  if(!reportItems.length){alert("Введіть хоча б одну продану позицію");return;}
 
   // Deduct from retail stock
   reportItems.forEach(function(item){
@@ -3122,7 +3562,7 @@ function saveSalesReport(){
   var buyerObj=buyers.find(function(b){return b.id===bid;});
   salesReports.unshift({id:uid(),buyerId:bid,buyerName:buyerObj&&buyerObj.name||bid,
     month:month,items:reportItems,savedAt:new Date().toISOString()});
-  save();closeModal("modal-sales");renderRetailTab();showToast("✅ Звіт збережено!","success");
+  save();closeModal("modal-sales");renderRetailTab();alert("✅ Звіт збережено!");
 }
 
 // ============================================================
@@ -3139,140 +3579,181 @@ function renderDashboard(){
     var pm=mo===0?11:mo-1,py=mo===0?y-1:y;
     return d.getFullYear()===py&&d.getMonth()===pm&&j.docType==="invoice";
   });
-  var revenue=thisMonth.reduce(function(s,j){return s+j.total;},0);
-  var revPrev=prevMonth.reduce(function(s,j){return s+j.total;},0);
-  var revChange=revPrev>0?((revenue-revPrev)/revPrev*100).toFixed(0):"—";
-
-  var totalCogs=thisMonth.reduce(function(s,j){return s+j.items.reduce(function(ss,it){return ss+getEstItemCogs(it)*it.qty;},0);},0);
-
-  var unitsSold=thisMonth.reduce(function(s,j){return s+j.items.reduce(function(ss,it){return ss+it.qty;},0);},0);
-  var unitsPrev=prevMonth.reduce(function(s,j){return s+j.items.reduce(function(ss,it){return ss+it.qty;},0);},0);
-  var unitsChange=unitsPrev>0?((unitsSold-unitsPrev)/unitsPrev*100).toFixed(0):"—";
-  var profit=revenue-totalCogs;
-  var profitPrev=revPrev-(prevMonth.reduce(function(s,j){return s+j.items.reduce(function(ss,it){return ss+getEstItemCogs(it)*it.qty;},0);},0));
+  var revenue   = thisMonth.reduce(function(s,j){return s+j.total;},0);
+  var revPrev   = prevMonth.reduce(function(s,j){return s+j.total;},0);
+  var revChange = revPrev>0?((revenue-revPrev)/revPrev*100).toFixed(0):"—";
+  var totalCogs = thisMonth.reduce(function(s,j){
+    return s+j.items.reduce(function(ss,it){return ss+getEstItemCogs(it)*it.qty;},0);},0);
+  var unitsSold = thisMonth.reduce(function(s,j){
+    return s+j.items.reduce(function(ss,it){return ss+it.qty;},0);},0);
+  var unitsPrev = prevMonth.reduce(function(s,j){
+    return s+j.items.reduce(function(ss,it){return ss+it.qty;},0);},0);
+  var unitsChange = unitsPrev>0?((unitsSold-unitsPrev)/unitsPrev*100).toFixed(0):"—";
+  var profit    = revenue-totalCogs;
+  var profitPrev= revPrev-(prevMonth.reduce(function(s,j){
+    return s+j.items.reduce(function(ss,it){return ss+getEstItemCogs(it)*it.qty;},0);},0));
   var profitChange=profitPrev>0?((profit-profitPrev)/profitPrev*100).toFixed(0):"—";
+  var unpaidBills  = journal.filter(function(j){return j.docType==="bill"&&j.status!=="paid";});
+  var unpaidSum    = unpaidBills.reduce(function(s,j){return s+j.total;},0);
+  var unshippedInv = journal.filter(function(j){return j.docType==="invoice"&&j.status!=="shipped";});
+  var newOrders    = typeof ordersData!=="undefined"
+    ? ordersData.filter(function(o){return o.status==="new";}).length : 0;
 
-  // Status KPIs
-  var unpaidBills=journal.filter(function(j){return j.docType==="bill"&&j.status!=="paid";});
-  var unpaidSum=unpaidBills.reduce(function(s,j){return s+j.total;},0);
-  var unshippedInv=journal.filter(function(j){return j.docType==="invoice"&&j.status!=="shipped";});
+  // ── 4 KPI tiles ─────────────────────────────────────────────
+  var kpis = [
+    { label:"Виручка місяця",      val:fmt(revenue)+" ₴",
+      sub: revChange!=="—" ? (revChange>0?"↑ +":"")+revChange+"% до минулого" : "немає даних минулого місяця",
+      icon:"📈", grad:"var(--kpi-g1)",
+      onclick:"switchTab('sales')" },
+    { label:"Нові замовлення",     val:newOrders+" шт.",
+      sub: newOrders>0 ? "Потребують підтвердження" : "Немає нових",
+      icon:"📬", grad:"var(--kpi-g4)", alert:newOrders>0,
+      onclick:"switchTab('orders')" },
+    { label:"Рахунки неоплачені",  val:unpaidBills.length+" шт.",
+      sub: unpaidBills.length>0 ? fmt(unpaidSum)+" ₴ очікується" : "Всі оплачені",
+      icon:"💳", grad:"var(--kpi-g2)", alert:unpaidBills.length>0,
+      onclick:"switchTab('docs');setTimeout(function(){switchDocsSub('journal');document.getElementById('j-doctype').value='bill';renderJournal();},80)" },
+    { label:"Не відвантажено",     val:unshippedInv.length+" шт.",
+      sub: unshippedInv.length>0 ? "До відвантаження" : "Всі відвантажені",
+      icon:"🚚", grad:"var(--kpi-g3)", alert:unshippedInv.length>0,
+      onclick:"switchTab('docs');setTimeout(function(){switchDocsSub('journal');document.getElementById('j-doctype').value='invoice';renderJournal();},80)" },
+  ];
 
-  document.getElementById("dash-kpi").innerHTML=[
-    {icon:"🌿",val:fmt(revenue)+" ₴",label:"Виручка (місяць)",sub:revChange!=="—"?(revChange>0?"↑ +"+revChange+"% vs попередній":"↓ "+revChange+"% vs попередній"):""},
-    {icon:"💰",val:fmt(profit)+" ₴",label:"Прибуток (місяць)",sub:profitChange!=="—"?(profitChange>0?"↑ +"+profitChange+"% vs попередній":"↓ "+profitChange+"% vs попередній"):""},
-    {icon:"📦",val:unitsSold+" шт.",label:"Продано (місяць)",sub:unitsChange!=="—"?(unitsChange>0?"↑ +"+unitsChange+"% vs попередній":"↓ "+unitsChange+"% vs попередній"):""},
-    {icon:"💳",val:unpaidBills.length+" шт.",label:"Рахунки неоплачені",sub:unpaidBills.length>0?fmt(unpaidSum)+" ₴ очікується":"",alert:unpaidBills.length>0,onclick:"switchTab(\'docs\');setTimeout(function(){switchDocsSub(\'journal\');document.getElementById(\'j-doctype\').value=\'bill\';renderJournal();},80)"},
-    {icon:"🚚",val:unshippedInv.length+" шт.",label:"Накладні не відвантажені",sub:"",alert:unshippedInv.length>0,onclick:"switchTab(\'docs\');setTimeout(function(){switchDocsSub(\'journal\');document.getElementById(\'j-doctype\').value=\'invoice\';renderJournal();},80)"},
-    {icon:"📬",val:(typeof ordersData!=="undefined"?ordersData.filter(function(o){return o.status==="new";}).length:0)+" шт.",
-     label:"Нові замовлення",
-     sub:(typeof ordersData!=="undefined"&&ordersData.filter(function(o){return o.status==="new";}).length>0
-       ?fmt(ordersData.filter(function(o){return o.status==="new";}).reduce(function(s,o){return s+(o.totalDiscounted||0);},0))+" ₴ оптова":""),
-     alert:(typeof ordersData!=="undefined"&&ordersData.filter(function(o){return o.status==="new";}).length>0),
-     onclick:"switchTab('orders')"},
-  ].map(function(k){
-    var border=k.alert?"border-color:var(--cedar);":"";
-    var cursor=k.onclick?"cursor:pointer;":"";
-    var onclick=k.onclick?' onclick="'+k.onclick+'"':"";
-    return '<div class="kpi-card" style="'+border+cursor+'"'+onclick+'><div class="kpi-icon">'+k.icon+'</div>'
-      +'<div class="kpi-val" style="'+(k.alert?"color:var(--cedar)":"")+'">'+esc(String(k.val))+'</div>'
-      +'<div class="kpi-label">'+esc(k.label)+'</div>'
-      +(k.sub?'<div style="font-size:11px;color:var(--ink4);margin-top:2px">'+esc(k.sub)+'</div>':"")
+  document.getElementById("dash-kpi").innerHTML = kpis.map(function(k,i){
+    var alertStyle = k.alert ? "border-color:var(--cedar);" : "";
+    var onclick    = k.onclick ? ' onclick="'+k.onclick+'"' : "";
+    var subColor   = k.alert ? "var(--cedar)" : "var(--ink3)";
+    return '<div class="kpi-card" style="background:'+k.grad+';'+alertStyle+'cursor:pointer;"'+onclick+'>'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">'
+      +'<span style="font-size:11.5px;color:var(--ink3);font-weight:500;line-height:1.3;max-width:130px;">'+esc(k.label)+'</span>'
+      +'<span style="font-size:20px;flex-shrink:0;">'+k.icon+'</span>'
+      +'</div>'
+      +'<div style="font-size:24px;font-weight:700;color:'+(k.alert?"var(--cedar)":"var(--pine)")+';font-family:ui-monospace,monospace;line-height:1.1;margin-bottom:4px;">'+esc(String(k.val))+'</div>'
+      +'<div style="font-size:11px;color:'+subColor+';">'+esc(k.sub)+'</div>'
       +'</div>';
   }).join("");
 
-  // Top buyers
+  // ── Останні документи ────────────────────────────────────────
+  var recent = journal.slice(0,5);
+  document.getElementById("dash-recent-docs").innerHTML = recent.length===0
+    ? '<div style="color:var(--ink4);font-size:12px;padding:8px 0">Документів ще немає</div>'
+    : recent.map(function(j,i){
+        var isBill = j.docType==="bill";
+        var st = j.status||"created";
+        var stTxt = st==="paid"?"оплачено":st==="shipped"?"відвантажено":"створено";
+        var stCol = st==="paid"?"var(--moss)":st==="shipped"?"var(--sky)":"var(--gold)";
+        return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;'
+          +'border-bottom:'+(i<recent.length-1?"1px solid var(--border)":"none")+';cursor:pointer;"'
+          +' onclick="switchTab(\'docs\');setTimeout(function(){switchDocsSub(\'journal\');},80)">'
+          +'<div style="width:32px;height:32px;border-radius:8px;background:'+(isBill?"rgba(90,138,165,.14)":"var(--accent-light)")+';'
+          +'display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;">'
+          +(isBill?"🧾":"📦")+'</div>'
+          +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:12.5px;font-weight:600;color:var(--ink);font-family:ui-monospace,monospace;">'+esc(j.invoiceNum)+'</div>'
+          +'<div style="font-size:11px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(j.buyer&&j.buyer.name||"—")+'</div>'
+          +'</div>'
+          +'<div style="text-align:right;flex-shrink:0;">'
+          +'<div style="font-size:12.5px;font-weight:700;color:var(--pine);font-family:ui-monospace,monospace;">'+fmt(j.total)+' ₴</div>'
+          +'<div style="font-size:10px;color:'+stCol+';font-weight:600;">'+stTxt+'</div>'
+          +'</div>'
+          +'</div>';
+      }).join("");
+
+  // ── Chart subtitle + period init ─────────────────────────────
+  setChartPeriod(chartPeriod||6);
+
+  // ── Top buyers ───────────────────────────────────────────────
   var bmap={};
   filterByPeriod(journal.filter(function(j){return j.docType==="invoice";}), "year").forEach(function(j){
-    var k=j.buyer&&j.buyer.name||"—";bmap[k]=(bmap[k]||0)+j.total;
+    var k=j.buyer&&j.buyer.name||"—"; bmap[k]=(bmap[k]||0)+j.total;
   });
   var btop=Object.entries(bmap).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
   var bmax=btop[0]?btop[0][1]:1;
-  document.getElementById("dash-top-buyers").innerHTML='<div class="card-title">🏅 Топ покупців (рік)</div>'
-    +btop.map(function(e){return '<div class="bar-row"><div class="bar-label">'+esc(e[0])+'</div><div class="bar-bg"><div class="bar-fill" style="width:'+((e[1]/bmax)*100).toFixed(1)+'%"></div></div><div class="bar-val">'+fmt(e[1])+' ₴</div></div>';}).join("")
+  document.getElementById("dash-top-buyers").innerHTML
+    ='<div class="card-title" style="margin-bottom:10px;">🏅 Топ покупців (рік)</div>'
+    +btop.map(function(e){
+      return '<div class="bar-row"><div class="bar-label">'+esc(e[0])+'</div>'
+        +'<div class="bar-bg"><div class="bar-fill" style="width:'+((e[1]/bmax)*100).toFixed(1)+'%"></div></div>'
+        +'<div class="bar-val">'+fmt(e[1])+' ₴</div></div>';
+    }).join("")
     +(btop.length===0?'<div style="color:var(--ink4);font-size:12px">Немає даних</div>':"");
 
-  // Top products
+  // ── Top products ─────────────────────────────────────────────
   var pmap={};
   filterByPeriod(journal.filter(function(j){return j.docType==="invoice";}), "year").forEach(function(j){
     j.items.forEach(function(it){var k=shortName(it.name);pmap[k]=(pmap[k]||0)+it.qty;});
   });
   var ptop=Object.entries(pmap).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
   var pmax=ptop[0]?ptop[0][1]:1;
-  document.getElementById("dash-top-products").innerHTML='<div class="card-title">🌿 Топ товарів (рік, шт.)</div>'
-    +ptop.map(function(e){return '<div class="bar-row"><div class="bar-label">'+esc(e[0])+'</div><div class="bar-bg"><div class="bar-fill" style="width:'+((e[1]/pmax)*100).toFixed(1)+'%"></div></div><div class="bar-val">'+e[1]+' шт.</div></div>';}).join("")
+  document.getElementById("dash-top-products").innerHTML
+    ='<div class="card-title" style="margin-bottom:10px;">🌿 Топ товарів (рік, шт.)</div>'
+    +ptop.map(function(e){
+      return '<div class="bar-row"><div class="bar-label">'+esc(e[0])+'</div>'
+        +'<div class="bar-bg"><div class="bar-fill" style="width:'+((e[1]/pmax)*100).toFixed(1)+'%"></div></div>'
+        +'<div class="bar-val">'+e[1]+' шт.</div></div>';
+    }).join("")
     +(ptop.length===0?'<div style="color:var(--ink4);font-size:12px">Немає даних</div>':"");
 
-  // Forecast — based on rawStock sticks per aroma
-  var forecastItems=products.filter(function(p){return p.group==="tube20"||p.group==="tube40";}).map(function(p){
-    var days=getDaysOfStock(p.id);
-    var aromaId=PRODUCT_AROMA[p.id];
-    var bom=bomData[p.group]||DEFAULT_BOM[p.group]||{};
-    var sticksPerPack=bom.sticks||0;
-    var sticks=aromaId?((rawStock["sticks_"+aromaId]&&rawStock["sticks_"+aromaId].sticks)||Math.round((rawStock["sticks_"+aromaId]&&rawStock["sticks_"+aromaId].qty||0)*2000)):0;
-    var availPacks=sticksPerPack>0?Math.floor(sticks/sticksPerPack):0;
-    return{name:shortName(p.name),days:days,qty:availPacks};
-  }).filter(function(f){return f.days<60;}).sort(function(a,b){return a.days-b.days;}).slice(0,10);
-  if(forecastItems.length){
-    document.getElementById("dash-forecast").innerHTML='<div class="card-title">⏱ Прогноз залишків (SKU < 60 днів)</div>'
-      +forecastItems.map(function(f){
-        var cls=f.days<14?"days-danger":f.days<30?"days-warn":"days-ok";
-        var daysTxt=f.days===999?"∞":f.days+" д.";
-        return '<div class="forecast-row"><span class="forecast-days '+cls+'">'+daysTxt+'</span>'
-          +'<span style="flex:1;color:var(--ink2)">'+esc(f.name)+'</span>'
-          +'<span style="color:var(--ink4);font-size:11px">'+f.qty.toLocaleString("uk-UA")+' пачок зі стиків</span></div>';
-      }).join("");
-  }else{
-    document.getElementById("dash-forecast").innerHTML='<div class="card-title">⏱ Прогноз залишків</div>'
-      +'<div style="color:var(--ink4);font-size:12px;padding:8px 0">Всі SKU в нормі (> 60 днів) або немає даних продажів</div>';
-  }
-
-  // Warehouse mini-summary (rawStock only — no finished goods)
+  // ── Warehouse summary ─────────────────────────────────────────
   var totalSticksDash=0;
   Object.keys(AROMAS).forEach(function(a){
     var k="sticks_"+a;
     totalSticksDash+=(rawStock[k]&&rawStock[k].sticks)||Math.round((rawStock[k]&&rawStock[k].qty||0)*2000);
   });
-  var tubesDash=Math.round(rawStock.tubes&&rawStock.tubes.qty||0);
-  var possible20=Math.floor(Math.min(totalSticksDash/20, tubesDash));
-  var possible40=Math.floor(Math.min(totalSticksDash/40, tubesDash));
-  updateTabBadges();
-  document.getElementById("dash-warehouse-summary").innerHTML='<div class="card-title">📦 Сировина (зведення)</div>'
-    +'<div style="display:flex;gap:16px;flex-wrap:wrap">'
-    +'<div><div style="font-size:11px;color:var(--ink4)">Палички (всього)</div><div style="font-size:20px;font-weight:700;color:var(--pine)">'+totalSticksDash.toLocaleString("uk-UA")+'</div></div>'
-    +'<div><div style="font-size:11px;color:var(--ink4)">Тубуси порожні</div><div style="font-size:20px;font-weight:700;color:var(--pine)">'+tubesDash.toLocaleString("uk-UA")+'</div></div>'
-    +'<div><div style="font-size:11px;color:var(--ink4)">Можливо пачок 20шт</div><div style="font-size:20px;font-weight:700;color:var(--moss)">'+possible20.toLocaleString("uk-UA")+'</div></div>'
-    +'<div><div style="font-size:11px;color:var(--ink4)">Можливо пачок 40шт</div><div style="font-size:20px;font-weight:700;color:var(--moss)">'+possible40.toLocaleString("uk-UA")+'</div></div>'
+  var tubesDash  = Math.round(rawStock.tubes&&rawStock.tubes.qty||0);
+  var possible20 = Math.floor(Math.min(totalSticksDash/20, tubesDash));
+  var possible40 = Math.floor(Math.min(totalSticksDash/40, tubesDash));
+  document.getElementById("dash-warehouse-summary").innerHTML
+    ='<div class="card-title" style="margin-bottom:12px;">📦 Сировина (зведення)</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +[
+      {lbl:"Палички", val:totalSticksDash.toLocaleString("uk-UA"), unit:"шт", col:"var(--pine)"},
+      {lbl:"Тубуси",  val:tubesDash.toLocaleString("uk-UA"),       unit:"шт", col:"var(--pine)"},
+      {lbl:"Пачок 20шт", val:possible20.toLocaleString("uk-UA"),   unit:"можл.", col:"var(--moss)"},
+      {lbl:"Пачок 40шт", val:possible40.toLocaleString("uk-UA"),   unit:"можл.", col:"var(--moss)"},
+    ].map(function(s){
+      return '<div style="background:var(--surface2);border-radius:var(--r);padding:10px 12px;">'
+        +'<div style="font-size:10.5px;color:var(--ink4);margin-bottom:4px;">'+s.lbl+'</div>'
+        +'<div style="font-size:20px;font-weight:700;color:'+s.col+';font-family:ui-monospace,monospace;line-height:1;">'+s.val+'</div>'
+        +'<div style="font-size:10px;color:var(--ink4);">'+s.unit+'</div>'
+        +'</div>';
+    }).join("")
     +'</div>';
 
+  // ── Forecast ─────────────────────────────────────────────────
 
-  // ── Alerts: low raw materials ────────────────────────────────
+
+  // ── Alerts ───────────────────────────────────────────────────
   var alerts=[];
   Object.keys(AROMAS).forEach(function(aId){
     var k="sticks_"+aId;
     var qty=(rawStock[k]&&rawStock[k].qty)||0;
-    if(qty<1) alerts.push({icon:"🌿",name:AROMAS[aId].en+" ("+AROMAS[aId].uk+")",val:qty.toFixed(2)+" кг",level:qty<=0?"zero":"low"});
+    if(qty<1) alerts.push({icon:"🌿",name:AROMAS[aId].en,val:qty.toFixed(2)+" кг",level:qty<=0?"zero":"low"});
   });
   if(rawStock.tubes&&rawStock.tubes.qty<100) alerts.push({icon:"🧪",name:"Тубуси",val:Math.round(rawStock.tubes.qty)+" шт",level:rawStock.tubes.qty<=0?"zero":"low"});
   else if(!rawStock.tubes) alerts.push({icon:"🧪",name:"Тубуси",val:"0 шт",level:"zero"});
-  if(rawStock.labels&&rawStock.labels.qty<100) alerts.push({icon:"🏷",name:"Наліпки",val:Math.round(rawStock.labels.qty)+" шт",level:rawStock.labels.qty<=0?"zero":"low"});
-  else if(!rawStock.labels) alerts.push({icon:"🏷",name:"Наліпки",val:"0 шт",level:"zero"});
+  if(rawStock.labels&&rawStock.labels.qty<100) alerts.push({icon:"🏷",name:"Наліпки",val:Math.round(rawStock.labels&&rawStock.labels.qty||0)+" шт",level:!rawStock.labels||rawStock.labels.qty<=0?"zero":"low"});
 
   var alertCard=document.getElementById("dash-alerts-card");
-  var alertEl=document.getElementById("dash-alerts");
+  var alertEl  =document.getElementById("dash-alerts");
   if(alerts.length>0){
     alertCard.style.display="";
-    alertEl.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">'
+    alertEl.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;">'
       +alerts.map(function(a){
-        var bg=a.level==="zero"?"var(--red2)":"#fff8e1";
-        var col=a.level==="zero"?"var(--red)":"var(--cedar)";
-        return '<div style="padding:10px 12px;border-radius:var(--r2);background:'+bg+';border:1px solid '+col+'22;display:flex;align-items:center;gap:8px">'
-          +'<span style="font-size:18px">'+a.icon+'</span>'
-          +'<div><div style="font-weight:700;font-size:12px;color:'+col+'">'+esc(a.name)+'</div>'
-          +'<div style="font-size:13px;font-weight:700;color:'+col+'">'+esc(a.val)+'</div></div></div>';
+        var bg  = a.level==="zero"?"var(--red2)":"rgba(200,168,75,.12)";
+        var col = a.level==="zero"?"var(--red)":"var(--cedar)";
+        return '<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;'
+          +'border-radius:var(--r);background:'+bg+';border:1px solid '+col+'33;">'
+          +'<span>'+a.icon+'</span>'
+          +'<span style="font-size:12px;font-weight:600;color:'+col+';">'+esc(a.name)+'</span>'
+          +'<span style="font-size:11px;color:'+col+';font-family:ui-monospace,monospace;">'+esc(a.val)+'</span>'
+          +'</div>';
       }).join("")+'</div>';
   } else {
     alertCard.style.display="none";
   }
+
+  updateNavBadges();
 }
 
 // ============================================================
@@ -3282,57 +3763,8 @@ function renderMonthlyChart(){
   var el=document.getElementById('stats-chart-svg');
   if(!el)return;
   var now=new Date(), months=[];
-  for(var i=11;i>=0;i--){
-    var d=new Date(now.getFullYear(),now.getMonth()-i,1);
-    var MN=['Сiч','Лют','Бер','Кви','Тра','Чер','Лип','Сер','Вер','Жов','Лис','Гру'];
-    months.push({key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),label:MN[d.getMonth()],revenue:0,cogs:0,units:0});
-  }
-  journal.filter(function(j){return j.docType==='invoice'&&j.status==='shipped';}).forEach(function(j){
-    var mk=j.invoiceDate&&j.invoiceDate.substring(0,7);
-    var mo=months.find(function(m){return m.key===mk;});
-    if(!mo)return;
-    mo.revenue+=j.total;
-    mo.units+=j.items.reduce(function(s,it){return s+it.qty;},0);
-    mo.cogs+=j.items.reduce(function(s,it){return s+getEstItemCogs(it)*it.qty;},0);
-  });
-  var values=months.map(function(m){
-    if(chartMode==='profit')return m.revenue-m.cogs;
-    if(chartMode==='units')return m.units;
-    return m.revenue;
-  });
-  var maxVal=Math.max.apply(null,values.map(function(v){return Math.abs(v);}));
-  if(!maxVal)maxVal=1;
-  var curKey=(function(){var n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');})();
-  var W=Math.max(el.clientWidth||320,300),isMobile=W<520;
-  var H=200,PL=44,PR=8,PT=22,PB=32,cW=W-PL-PR,cH=H-PT-PB;
-  var bW=Math.floor(cW/months.length*0.62),gap=(cW-bW*months.length)/(months.length+1);
-  function fmtY(v){return chartMode==='units'?(v>=1000?Math.round(v/1000)+'k':v):(v>=1000?(v/1000).toFixed(v>=10000?0:1)+'k':v);}
-  var svg='<text x="'+(W-PR)+'" y="14" text-anchor="end" font-size="11" fill="var(--ink4)" font-weight="600">'+now.getFullYear()+'</text>';
-  for(var gi=0;gi<=4;gi++){
-    var gv=Math.round(maxVal/4*gi),gy=PT+cH-Math.round(cH*gi/4);
-    svg+='<line x1="'+PL+'" y1="'+gy+'" x2="'+(W-PR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>';
-    svg+='<text x="'+(PL-4)+'" y="'+(gy+4)+'" text-anchor="end" font-size="10" fill="var(--ink4)">'+fmtY(gv)+'</text>';
-  }
-  months.forEach(function(mo,i){
-    var v=values[i],isNeg=v<0,isCur=mo.key===curKey;
-    var bh=Math.round(cH*Math.abs(v)/maxVal),bx=PL+gap+(bW+gap)*i;
-    var fill=isNeg?'var(--red)':isCur?'var(--pine)':'var(--moss3)';
-    var by=isNeg?PT+cH:PT+cH-bh;
-    if(bh>0)svg+='<rect x="'+bx+'" y="'+by+'" width="'+bW+'" height="'+bh+'" rx="3" fill="'+fill+'" opacity="'+(isCur?1:0.72)+'"><title>'+mo.label+': '+v.toLocaleString('uk-UA')+(chartMode==='units'?' шт':' грн')+'</title></rect>';
-    if(bh>20&&Math.abs(v)>0)svg+='<text x="'+(bx+bW/2)+'" y="'+(by-(isNeg?-12:4))+'" text-anchor="middle" font-size="9" fill="var(--ink3)" font-weight="600">'+fmtY(Math.abs(v))+'</text>';
-    svg+='<text x="'+(bx+bW/2)+'" y="'+(H-4)+'" text-anchor="middle" font-size="'+(isMobile?8:10)+'" fill="'+(isCur?'var(--pine)':'var(--ink4)')+'" font-weight="'+(isCur?700:400)+'">'+mo.label+'</text>';
-  });
-  el.innerHTML='<svg width="100%" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
-}
-
-// ============================================================
-// MONTHLY CHART
-// ============================================================
-function renderMonthlyChart(){
-  var el=document.getElementById('stats-chart-svg');
-  if(!el)return;
-  var now=new Date(), months=[];
-  for(var i=11;i>=0;i--){
+  var period=chartPeriod||6;
+  for(var i=period-1;i>=0;i--){
     var d=new Date(now.getFullYear(),now.getMonth()-i,1);
     var MN=['Сiч','Лют','Бер','Кви','Тра','Чер','Лип','Сер','Вер','Жов','Лис','Гру'];
     months.push({key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),label:MN[d.getMonth()],revenue:0,cogs:0,units:0});
@@ -3576,6 +4008,8 @@ function renderStats(){
 // BUYERS MANAGE
 // ============================================================
 function renderBuyersList(){
+  var metaEl = document.getElementById('catalog-buyers-meta');
+  if(metaEl) metaEl.textContent = buyers.length + ' записів';
   document.getElementById("buyers-list").innerHTML=buyers.map(function(b){
     return '<div class="manage-item">'
       +'<div class="manage-item-info"><div class="manage-item-name">'+esc(b.name)+(b.custom?'<span class="tag tag-custom">власний</span>':"")+'</div>'
@@ -3607,7 +4041,7 @@ function saveBuyer(){
   var name=document.getElementById("nb-name").value.trim();
   var fullName=document.getElementById("nb-fullName").value.trim();
   var receiver=document.getElementById("nb-receiver").value.trim();
-  if(!name||!fullName||!receiver){showToast("Заповніть обов'язкові поля: Коротка назва, Повна назва, ПІБ отримувача","warning");return;}
+  if(!name||!fullName||!receiver){alert("Заповніть обов'язкові поля: Коротка назва, Повна назва, ПІБ отримувача");return;}
   // Auto-extract retail name from parentheses: "ФОП Сибіга Яна (Інтегралісt)" → "Інтегралісt"
   var retailNameInput=document.getElementById("nb-retailname").value.trim();
   var autoRetailName=name.match(/\(([^)]+)\)/);
@@ -3648,7 +4082,7 @@ function renderSuppliersList(){
 }
 function addSupplier(){
   var name=document.getElementById("new-supplier-name").value.trim();
-  if(!name){showToast("Введіть назву постачальника","warning");return;}
+  if(!name){alert("Введіть назву постачальника");return;}
   var aromasStr=(document.getElementById("new-supplier-aromas").value||"").trim();
   var aromas=aromasStr?aromasStr.split(",").map(function(a){return a.trim().toLowerCase();}).filter(function(a){return AROMAS[a];}):[];
   suppliers.push({id:uid(),name:name,aromas:aromas,custom:true});
@@ -3707,6 +4141,8 @@ function migrateSupplierToAroma(){
 // PRODUCTS MANAGE
 // ============================================================
 function renderProductsList(){
+  var metaEl = document.getElementById('catalog-products-meta');
+  if(metaEl) metaEl.textContent = products.length + ' записів';
   document.getElementById("products-list").innerHTML=products.slice(0,50).map(function(p){
     return '<div class="manage-item">'
       +'<div class="manage-item-info"><div class="manage-item-name">'+esc(shortName(p.name))+(p.custom?'<span class="tag tag-custom">власний</span>':"")+'</div>'
@@ -3731,7 +4167,7 @@ function saveProduct(){
   var editId=document.getElementById("edit-product-id").value;
   var name=document.getElementById("np-name").value.trim();
   var shelf=parseFloat(document.getElementById("np-shelf").value)||0;
-  if(!name||!shelf){showToast("Вкажіть назву і ціну полиці","warning");return;}
+  if(!name||!shelf){alert("Вкажіть назву і ціну полиці");return;}
   var pack=parseInt(document.getElementById("np-pack").value)||null;
   var group=document.getElementById("np-group").value||"other";
   var data={id:editId||uid(),name:name,shelf:shelf,price:Math.round(shelf*0.6),unit:"шт.",pack:pack,group:group,custom:true};
@@ -3748,7 +4184,19 @@ function deleteProduct(id){
 // ============================================================
 // SETTINGS
 // ============================================================
-function loadSettings(){document.getElementById("setting-autoincrement").checked=settings.autoincrement;}
+function loadSettings(){
+  var cb = document.getElementById("setting-autoincrement");
+  if(cb) cb.checked = settings.autoincrement;
+  var tog = document.getElementById('toggle-autoincrement');
+  if(tog) tog.classList.toggle('on', !!settings.autoincrement);
+}
+function toggleAutoincrement(){
+  settings.autoincrement = !settings.autoincrement;
+  var tog = document.getElementById('toggle-autoincrement');
+  if(tog) tog.classList.toggle('on', settings.autoincrement);
+  save();
+}
+
 document.addEventListener("change",function(e){if(e.target.id==="setting-autoincrement"){settings.autoincrement=e.target.checked;save();}});
 
 function exportBackup(){
@@ -3954,13 +4402,253 @@ function mergeImportBackup(input){
   reader.readAsText(file);
 }
 
-function clearJournal(){if(!confirm("Очистити журнал?"))return;journal=[];save();renderJournal();showToast("Журнал очищено","info");}
+function clearJournal(){if(!confirm("Очистити журнал?"))return;journal=[];save();renderJournal();alert("Журнал очищено");}
 function resetAll(){if(!confirm("Скинути ВСІ дані?"))return;if(!confirm("Підтвердіть!"))return;localStorage.clear();location.reload();}
 // ============================================================
 // MODAL
 // ============================================================
+
+// ============================================================
+// QUICK ORDER MODAL
+// ============================================================
+var qoSource = 'Instagram';
+var qoPicks  = {};  /* productId → qty */
+
+function openQuickOrder(){
+  qoPicks  = {};
+  qoSource = 'Instagram';
+  document.getElementById('qo-note').value = '';
+  qoSetSource('Instagram');
+  qoRenderGrid();
+  qoUpdateSummary();
+  document.getElementById('modal-quickorder').classList.add('open');
+}
+
+function closeQuickOrder(){
+  document.getElementById('modal-quickorder').classList.remove('open');
+}
+
+function qoSetSource(src){
+  qoSource = src;
+  ['Instagram','Сайт'].forEach(function(s){
+    var btn = document.getElementById('qo-src-'+s);
+    if(!btn) return;
+    if(s===src){
+      btn.className='btn btn-moss btn-sm';
+      btn.style.flex='1';btn.style.justifyContent='center';
+    } else {
+      btn.className='btn btn-gray btn-sm';
+      btn.style.flex='1';btn.style.justifyContent='center';
+    }
+  });
+}
+
+function qoRenderGrid(){
+  var grid = document.getElementById('qo-product-grid');
+  if(!grid) return;
+
+  /* Group products: tube20, tube40, stand */
+  var groups = [
+    { key:'tube20', label:'Палички 20шт',  items: products.filter(function(p){return p.group==='tube20'&&p.id!=='tester20';}) },
+    { key:'tube40', label:'Палички 40шт',  items: products.filter(function(p){return p.group==='tube40';}) },
+    { key:'stand',  label:'Підставки',     items: products.filter(function(p){return p.group==='stand';}) },
+  ];
+
+  var html = '';
+  groups.forEach(function(g){
+    if(!g.items.length) return;
+    html += '<div style="font-size:10.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;'
+          + 'letter-spacing:.08em;margin-bottom:8px;margin-top:10px;">' + g.label + '</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;margin-bottom:4px;">';
+    g.items.forEach(function(p){
+      var qty  = qoPicks[p.id] || 0;
+      var sel  = qty > 0;
+      var name = qoShortName(p.name);
+      var aId  = PRODUCT_AROMA[p.id];
+      var icon = aId ? qoAromaEmoji(aId) : '🪴';
+      html += '<div class="qo-product'+(sel?' sel':'')+'" id="qop-'+p.id+'">'
+            + '<span style="font-size:18px;line-height:1;flex-shrink:0;">'+icon+'</span>'
+            + '<div style="flex:1;min-width:0;">'
+            +   '<div style="font-size:12px;font-weight:500;color:var(--ink);'
+            +       'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(name)+'</div>'
+            +   '<div style="font-size:10.5px;color:var(--ink3);font-family:ui-monospace,monospace;">'+p.shelf+' ₴/шт</div>'
+            + '</div>'
+            + '<div class="qo-qty">'
+            +   '<button class="qo-qty-btn" onclick="qoStep(\''+p.id+'\',-1)">−</button>'
+            +   '<div class="qo-qty-val" id="qo-qty-'+p.id+'" style="color:'+(sel?'var(--pine)':'var(--ink3)')+'">'+qty+'</div>'
+            +   '<button class="qo-qty-btn" onclick="qoStep(\''+p.id+'\',1)">+</button>'
+            + '</div>'
+            + '</div>';
+    });
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+
+function qoShortName(name) {
+  // "Cherry Bloom, Цвіт Вишні (20шт)" → "Cherry Bloom (20шт)"
+  // "Підставка ATIK&Anumo · кругла" → "Anumo Round"
+  var m = name.match(/^([^,]+)/);
+  var q = name.match(/\((\d+шт)\)/);
+  if (m) return m[1].trim() + (q ? ' ' + q[1] : '');
+  return name.substring(0, 30);
+}
+
+function qoAromaEmoji(aromaId){
+  var map = {
+    cherry:'🌸', osmanthus:'🌼', camphor:'🌿', sandalwood:'🪵',
+    blacksandal:'🖤', musk:'✨', temple:'🏯', hydrangea:'🫖',
+    honeysandal:'🍯', agarwood:'🌑', frankincense:'🔥', gardentree:'🌳',
+  };
+  return map[aromaId] || '🪴';
+}
+
+function qoStep(pid, delta){
+  var cur  = qoPicks[pid] || 0;
+  var next = Math.max(0, cur + delta);
+  if(next === 0) delete qoPicks[pid];
+  else qoPicks[pid] = next;
+  /* Update just this card without full re-render */
+  var valEl = document.getElementById('qo-qty-'+pid);
+  var card  = document.getElementById('qop-'+pid);
+  if(valEl){
+    valEl.textContent = next;
+    valEl.style.color = next > 0 ? 'var(--pine)' : 'var(--ink3)';
+  }
+  if(card){
+    card.classList.toggle('sel', next > 0);
+  }
+  qoUpdateSummary();
+}
+
+function qoUpdateSummary(){
+  var total = 0, count = 0;
+  Object.keys(qoPicks).forEach(function(pid){
+    var q = qoPicks[pid];
+    var p = products.find(function(x){return x.id===pid;});
+    if(p && q>0){ total += p.shelf * q; count += q; }
+  });
+  var totalEl  = document.getElementById('qo-total');
+  var countEl  = document.getElementById('qo-count-lbl');
+  var submitEl = document.getElementById('qo-submit');
+  if(totalEl)  totalEl.textContent  = fmt(total)+' ₴';
+  if(countEl)  countEl.textContent  = count+' шт. · '+Object.keys(qoPicks).filter(function(k){return qoPicks[k]>0;}).length+' позицій';
+  if(submitEl){
+    var ok = count > 0;
+    submitEl.disabled       = !ok;
+    submitEl.style.opacity  = ok ? '1' : '.4';
+    submitEl.style.cursor   = ok ? 'pointer' : 'not-allowed';
+  }
+}
+
+function submitQuickOrder(){
+  var count = Object.values(qoPicks).reduce(function(s,q){return s+q;},0);
+  if(count === 0){ alert('Оберіть хоча б один товар'); return; }
+
+  var itemsList = Object.keys(qoPicks).filter(function(k){return qoPicks[k]>0;}).map(function(pid){
+    var q = qoPicks[pid];
+    var p = products.find(function(x){return x.id===pid;});
+    return { id:p.id, name:p.name, qty:q, price:p.shelf, shelf:p.shelf, sum:p.shelf*q, cogs:getWHCogs(p.id)||0 };
+  });
+
+  var total   = itemsList.reduce(function(s,it){return s+it.sum;},0);
+  var num     = 'НН-'+String(43+Math.floor(Math.random()*100)).padStart(4,'0');
+  var today   = new Date().toISOString().slice(0,10);
+  var note    = (document.getElementById('qo-note').value||'').trim();
+
+  var isInsta = qoSource === 'Instagram';
+  var buyer   = {
+    id:       isInsta ? 'd2c_instagram' : 'd2c_site',
+    name:     isInsta ? '📷 Інстаграм (D2C)' : '🌐 Сайт (D2C)',
+    fullName: isInsta ? 'Продаж через Instagram' : 'Продаж через сайт',
+    isD2C:    true,
+    note:     note,
+    receiver: '—',
+  };
+
+  /* Auto-increment invoice number if setting enabled */
+  if(settings.autoincrement){
+    var maxN = journal.reduce(function(m,j){return Math.max(m,parseInt(j.invoiceNum)||0);},0);
+    if(maxN > 0) num = String(maxN+1);
+  }
+
+  var doc = {
+    id:          'q'+Date.now(),
+    invoiceNum:  num,
+    invoiceDate: today,
+    docType:     'invoice',
+    status:      'created',
+    buyer:       buyer,
+    items:       itemsList,
+    total:       total,
+    totalWords:  mkWords(total),
+    priceLabel:  'полиця 100%',
+    note:        note,
+    source:      qoSource,
+    savedAt:     new Date().toISOString(),
+  };
+
+  /* Deduct raw materials */
+  deductRawForItems(itemsList);
+
+  /* Add to retail stock if buyer is D2C (no retail deduction) */
+
+  journal.unshift(doc);
+
+  /* Auto-increment for next */
+  if(settings.autoincrement){
+    var el = document.getElementById('inv-num');
+    if(el) el.value = (parseInt(num)||0)+1;
+  }
+
+  save();
+  closeQuickOrder();
+
+  /* Toast-style alert */
+  addToast('Накладну '+num+' створено', 'success', count+' шт. · '+fmt(total)+' ₴ · списано зі складу');
+
+  /* Navigate to docs journal */
+  switchTab('docs');
+  setTimeout(function(){ switchDocsSub('journal'); renderJournal(); }, 80);
+}
+
+
+// ============================================================
+// TOAST SYSTEM
+// ============================================================
+function addToast(msg, type, sub) {
+  type = type || 'success';
+  var colors = {success:'var(--moss)',error:'var(--red)',warning:'var(--gold)',info:'var(--sky)'};
+  var icons  = {success:'✓', error:'!', warning:'⚠', info:'i'};
+  var id = 't'+Date.now()+Math.random().toString(36).slice(2,6);
+  var container = document.getElementById('atik-toast-container');
+  if(!container) return;
+  var el = document.createElement('div');
+  el.className = 'atik-toast';
+  el.id = id;
+  el.innerHTML = '<div class="atik-toast-ico" style="background:'+colors[type]+'">'+icons[type]+'</div>'
+    + '<div class="atik-toast-body"><div class="atik-toast-msg">'+esc(msg)+'</div>'
+    + (sub ? '<div class="atik-toast-sub">'+esc(sub)+'</div>' : '')
+    + '</div>'
+    + '<button class="atik-toast-close" onclick="removeToast(\''+id+'\')">×</button>';
+  container.appendChild(el);
+  setTimeout(function(){ removeToast(id); }, 4000);
+}
+function removeToast(id) {
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.classList.add('removing');
+  setTimeout(function(){ el.remove(); }, 180);
+}
+
 function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove("open");}
 document.addEventListener("click",function(e){if(e.target.classList.contains("modal-overlay"))closeModal(e.target.id);});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){
+    ["modal-journal","modal-sales","modal-aroma","modal-quickorder","modal-retail-detail"].forEach(closeModal);
+  }
+});
 
 
 // ============================================================
@@ -4188,7 +4876,7 @@ function saveCogsMaterials() {
   onBomChange();
   saveCogsPrices();
   // also update warehouseStock avgCogs for products that have 0 recorded cogs
-  showToast("✅ Збережено! Собівартість оновлено.","success");
+  alert("✅ Збережено! Собівартість оновлено.");
   renderCogsResult();
 }
 
@@ -4365,6 +5053,9 @@ window.addEventListener("DOMContentLoaded",function(){
     if(maxNum>0)document.getElementById("inv-num").value=maxNum+1;
   }
   renderDashboard();
+  renderSubNav("dashboard");
+  updateNavBadges();
+  updateBreadcrumb("dashboard");
 });
 
 // ============================================================
@@ -4532,229 +5223,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js');
   });
 }
-
-// ============================================================
-// TOAST NOTIFICATIONS
-// ============================================================
-function showToast(msg, type, sub) {
-  type = type || "success";
-  var icons = {success:"✓", error:"!", warning:"⚠", info:"ℹ"};
-  var c = document.getElementById("toast-container");
-  if (!c) { c = document.createElement("div"); c.id = "toast-container"; document.body.appendChild(c); }
-  var t = document.createElement("div");
-  t.className = "toast " + type;
-  t.innerHTML = '<div class="toast-ic">' + (icons[type]||"✓") + '</div>'
-    + '<div style="flex:1"><div class="toast-msg">' + msg + '</div>'
-    + (sub ? '<div class="toast-sub">' + sub + '</div>' : '') + '</div>'
-    + '<button class="toast-x" onclick="this.parentNode.remove()">×</button>';
-  c.appendChild(t);
-  setTimeout(function(){ if(t.parentNode) t.remove(); }, 4200);
-}
-
-// ============================================================
-// TAB BADGES
-// ============================================================
-function updateTabBadges() {
-  // Orders badge
-  var ordersTab = document.getElementById("tab-orders");
-  if (ordersTab) {
-    var newCount = (typeof ordersData !== "undefined") ? ordersData.filter(function(o){ return o.status === "new"; }).length : 0;
-    var ex = ordersTab.querySelector(".tab-badge");
-    if (newCount > 0) {
-      if (!ex) { var b = document.createElement("span"); b.className = "tab-badge"; ordersTab.appendChild(b); ex = b; }
-      ex.textContent = newCount;
-    } else if (ex) { ex.remove(); }
-  }
-  // Warehouse badge (low raw stock)
-  var whTab = document.getElementById("tab-warehouse");
-  if (whTab) {
-    var lowCount = 0;
-    if (typeof rawStock !== "undefined" && typeof AROMAS !== "undefined") {
-      Object.keys(AROMAS).forEach(function(a) {
-        var k = "sticks_" + a;
-        var rs = rawStock[k];
-        if (!rs) return;
-        var qty = rs.qty || 0;
-        var min = rs.min || 0;
-        if (min > 0 && qty < min) lowCount++;
-      });
-    }
-    var exw = whTab.querySelector(".tab-badge");
-    if (lowCount > 0) {
-      if (!exw) { var bw = document.createElement("span"); bw.className = "tab-badge"; bw.style.background = "var(--cedar)"; whTab.appendChild(bw); exw = bw; }
-      exw.textContent = "!";
-    } else if (exw) { exw.remove(); }
-  }
-}
-
-// ============================================================
-// QUICK ORDER MODAL
-// ============================================================
-var _qoPicks = {};
-var _qoSource = "instagram";
-
-function openQuickOrder() {
-  _qoPicks = {};
-  _qoSource = "instagram";
-  var note = document.getElementById("qo-note");
-  if (note) note.value = "";
-  setQoSource("instagram");
-  renderQoProducts();
-  updateQoSummary();
-  var m = document.getElementById("modal-qo");
-  if (m) { m.style.display = "flex"; m.classList.add("open"); }
-}
-
-function closeQuickOrder() {
-  var m = document.getElementById("modal-qo");
-  if (m) { m.style.display = "none"; m.classList.remove("open"); }
-}
-
-function setQoSource(src) {
-  _qoSource = src;
-  var ig = document.getElementById("qo-src-ig");
-  var si = document.getElementById("qo-src-site");
-  if (!ig || !si) return;
-  if (src === "instagram") {
-    ig.style.background = "var(--moss4)"; ig.style.color = "var(--pine)"; ig.style.borderColor = "var(--moss2)"; ig.style.fontWeight = "700";
-    si.style.background = "var(--surface2)"; si.style.color = "var(--ink3)"; si.style.borderColor = "var(--border)"; si.style.fontWeight = "400";
-  } else {
-    si.style.background = "var(--moss4)"; si.style.color = "var(--pine)"; si.style.borderColor = "var(--moss2)"; si.style.fontWeight = "700";
-    ig.style.background = "var(--surface2)"; ig.style.color = "var(--ink3)"; ig.style.borderColor = "var(--border)"; ig.style.fontWeight = "400";
-  }
-}
-
-function renderQoProducts() {
-  var el = document.getElementById("qo-product-list");
-  if (!el) return;
-  var aromaEmoji = {osmanthus:"🌼",cherry:"🌸",sandalwood:"🪵",camphor:"🌳",hydrangea:"💠",
-    blacksandal:"⚫",musk:"🦌",frankincense:"🕯",temple:"⛩",honeysandal:"🍯",gardentree:"🌲",agarwood:"🪨"};
-  var groups = [
-    { label: "Палички 20шт", filter: function(p){ return p.group === "tube20"; } },
-    { label: "Палички 40шт", filter: function(p){ return p.group === "tube40"; } },
-    { label: "Підставки",    filter: function(p){ return p.group === "stand" || p.group === "other"; } },
-  ];
-  var prods = (typeof products !== "undefined") ? products : [];
-  var html = "";
-  groups.forEach(function(g) {
-    var grpProds = prods.filter(g.filter);
-    if (!grpProds.length) return;
-    html += '<div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;margin-top:10px">' + g.label + '</div>';
-    html += '<div class="qo-product-grid">';
-    grpProds.forEach(function(p) {
-      var emoji = p.aroma ? (aromaEmoji[p.aroma] || "🌿") : "🪴";
-      var qty = _qoPicks[p.id] || 0;
-      var on = qty > 0 ? " on" : "";
-      html += '<div class="qo-product-row' + on + '" id="qo-row-' + p.id + '">'
-        + '<span class="qo-product-aroma">' + emoji + '</span>'
-        + '<div style="flex:1;min-width:0">'
-        + '<div class="qo-product-name" title="' + esc(p.name) + '">' + esc(p.name) + '</div>'
-        + '<div class="qo-product-price">' + (p.shelf||0) + ' ₴/шт</div>'
-        + '</div>'
-        + '<div class="qo-qty">'
-        + '<button onclick="qoSetQty('' + p.id + '',' + (qty-1) + ')">−</button>'
-        + '<span id="qo-qty-' + p.id + '">' + qty + '</span>'
-        + '<button onclick="qoSetQty('' + p.id + '',' + (qty+1) + ')">+</button>'
-        + '</div>'
-        + '</div>';
-    });
-    html += '</div>';
-  });
-  el.innerHTML = html || '<div style="color:var(--ink4);font-size:12px">Немає товарів</div>';
-}
-
-function qoSetQty(pid, qty) {
-  qty = Math.max(0, qty);
-  if (qty === 0) delete _qoPicks[pid]; else _qoPicks[pid] = qty;
-  // Update just this row qty display
-  var qtyEl = document.getElementById("qo-qty-" + pid);
-  if (qtyEl) qtyEl.textContent = qty;
-  var rowEl = document.getElementById("qo-row-" + pid);
-  if (rowEl) { if (qty > 0) rowEl.classList.add("on"); else rowEl.classList.remove("on"); }
-  updateQoSummary();
-}
-
-function updateQoSummary() {
-  var prods = (typeof products !== "undefined") ? products : [];
-  var total = 0, count = 0;
-  Object.keys(_qoPicks).forEach(function(pid) {
-    var p = prods.find(function(x){ return x.id === pid; });
-    if (p) { total += (p.shelf || 0) * _qoPicks[pid]; count += _qoPicks[pid]; }
-  });
-  var totEl = document.getElementById("qo-total");
-  var cntEl = document.getElementById("qo-item-count");
-  var btn = document.getElementById("qo-submit-btn");
-  if (totEl) totEl.textContent = fmt(total) + " ₴";
-  if (cntEl) cntEl.textContent = count;
-  if (btn) btn.disabled = (count === 0);
-}
-
-function submitQuickOrder() {
-  var prods = (typeof products !== "undefined") ? products : [];
-  var picks = Object.keys(_qoPicks).filter(function(pid){ return _qoPicks[pid] > 0; });
-  if (!picks.length) { showToast("Оберіть хоча б один товар", "warning"); return; }
-  var note = (document.getElementById("qo-note")||{}).value || "";
-  var today = new Date().toISOString().slice(0, 10);
-  var srcName = _qoSource === "instagram" ? "📷 Інстаграм" : "🌐 Сайт";
-  var buyer = {
-    id: "d2c_" + _qoSource,
-    name: srcName + (note ? " (" + note + ")" : ""),
-    fullName: srcName + " — пряма реалізація",
-    isRetail: false,
-    receiver: note
-  };
-  // Use the app's #inv-num input (stays in sync with the whole app)
-  var invNumEl = document.getElementById("inv-num");
-  var invNum = invNumEl ? invNumEl.value : "1";
-  var docItems = picks.map(function(pid) {
-    var p = prods.find(function(x){ return x.id === pid; });
-    var qty = _qoPicks[pid];
-    var price = p ? (p.shelf || 0) : 0;
-    var cogs = (typeof getWHCogs === "function") ? (getWHCogs(pid) || 0) : 0;
-    return {
-      id: pid,
-      name: p ? p.name : pid,
-      qty: qty,
-      priceType: "shelf",
-      price: price,
-      shelf: p ? (p.shelf || 0) : 0,
-      sum: price * qty,
-      cogs: cogs
-    };
-  });
-  var total = docItems.reduce(function(s, it){ return s + it.sum; }, 0);
-  var itemCount = docItems.reduce(function(s, it){ return s + it.qty; }, 0);
-  var doc = {
-    id: uid(),
-    invoiceNum: invNum,
-    invoiceDate: today,
-    docType: "invoice",
-    status: "created",
-    priceType: "shelf",
-    priceLabel: "Полична",
-    buyer: buyer,
-    items: docItems,
-    total: total,
-    totalWords: mkWords(total),
-    note: note,
-    source: _qoSource,
-    savedAt: new Date().toISOString()
-  };
-  // Deduct raw materials — same as regular invoice submit
-  deductRawForItems(doc.items);
-  journal.unshift(doc);
-  // Auto-increment invoice number — same logic as regular submit
-  if (settings.autoincrement && invNumEl) {
-    invNumEl.value = (parseInt(invNum) || 0) + 1;
-  }
-  save();
-  closeQuickOrder();
-  renderDashboard();
-  showToast("Накладну " + doc.invoiceNum + " створено", "success",
-    itemCount + " шт. на " + fmt(total) + " ₴ · списано зі складу");
-  updateTabBadges();
-}
-
 </script>
+<div id="atik-toast-container"></div>
 </body>
 </html>
